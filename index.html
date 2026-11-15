@@ -269,6 +269,12 @@ details.ctx .fig{margin-top:12px}
 .opt[disabled]{cursor:default}
 @keyframes okpulse{40%{transform:scale(1.025);box-shadow:0 0 0 6px rgba(95,211,160,.18)}}
 @keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.reloj{font-weight:700;font-variant-numeric:tabular-nums;color:var(--gold-l);padding:4px 10px;border-radius:999px;background:rgba(227,203,107,.12);white-space:nowrap}
+.reloj.poco{color:var(--bad-t);background:var(--bad-bg)}
+.codigo{width:100%;min-height:96px;resize:vertical;border-radius:14px;border:1px solid var(--line-2);background:rgba(0,0,0,.25);color:var(--ink);font:500 .8rem/1.4 ui-monospace,monospace;padding:10px;word-break:break-all}
+.diag-res .big{font-family:var(--serif);font-weight:800;font-size:clamp(3rem,12vw,4.6rem);line-height:1;font-variant-numeric:tabular-nums}
+.diag-res .big small{font-size:1.1rem;color:var(--muted);font-weight:600}
+.estado{font-size:.9rem;color:var(--ok-t)}
 .fb{border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;max-width:760px;animation:pop .35s var(--ease)}
 .fb.ok{background:var(--ok-bg);border:1.5px solid var(--ok-t)} .fb.bad{background:var(--bad-bg);border:1.5px solid var(--bad-t)}
 .fb h3{color:var(--ok-t);font-family:var(--sans);font-weight:700;font-size:1.12rem} .fb.bad h3{color:var(--bad-t)}
@@ -1969,7 +1975,7 @@ const TEMAS={
  ]
 };
 
-const META=1250, KEY="ruta1250-v1", L="ABCDE", NOMBRE="Jean Carlo", FOTO="assets/campus.webp", DIAS=[0,1,3,7,14];
+const META=1250, MAXP=1800, KEY="ruta1250-v1", L="ABCDE", NOMBRE="Jean Carlo", FOTO="assets/campus.webp", DIAS=[0,1,3,7,14];
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const fmt=n=>Math.round(n).toLocaleString("es-PE").replace(/,/g," ");
@@ -2051,6 +2057,12 @@ function saludo(){const h=new Date().getHours(); return h<12?"Buenos días":h<19
 function fecha(){const s=new Date().toLocaleDateString("es-PE",{weekday:"long",day:"numeric",month:"long"}); return s.charAt(0).toUpperCase()+s.slice(1)}
 function shuffle(a){a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]} return a}
 const plural=(n,s,p)=>n===1?s:(p||s+"s");
+// alternativas mezcladas para no memorizar la letra; no se mezclan si están en la imagen o se nombran entre sí
+const NOMEZ=/\b[A-E]\s*(y|e|o|,)\s*[A-E]\b|\b(ambas|todas las anteriores|ninguna de las anteriores|todas son correctas|ninguna es correcta)\b|gr[aá]fica\s+[A-E]\b|^\s*[A-E]\s*$/i;
+const mezclable=p=>!p.fqa&&!p.o.some(o=>NOMEZ.test(o));
+const nuevoOrden=p=>mezclable(p)?shuffle(p.o.map((_,i)=>i)):p.o.map((_,i)=>i);
+function orden(id){ses.ord=ses.ord||{}; return ses.ord[id]||(ses.ord[id]=nuevoOrden(Q[id]))}
+const opciones=(p,ord,cls,attr)=>ord.map((oi,k)=>`<button class="opt ${cls(oi)}" data-act="${attr}" data-i="${oi}"><span class="l">${L[k]}</span><span class="t">${esc(p.o[oi])}</span></button>`).join("");
 
 // ---- mazos de tarjetas
 function mazoHoy(){return shuffle(pendientes()).slice(0,20)}
@@ -2084,10 +2096,10 @@ const chips=()=>`<div class="chips"><span class="chip" title="Días seguidos est
 const topbar=()=>`<div class="topbar"><img src="${ESCUDO}" alt="Escudo de la UNMSM"><div><div class="t">Ruta 1250</div><div class="s">Área C · Computación</div></div>${chips()}</div>`;
 const head=(kicker,title,extra="")=>topbar()+`<div class="pagehead"><div class="grow"><div class="kicker">${kicker}</div><h1>${title}</h1>${extra}</div>${chips()}</div>`;
 const N=(n,suf="")=>`<span data-n="${n}" data-suf="${suf}">${fmt(n)}${suf}</span>`;
-function scoreBand(){const e=estimado(); const w=Math.min(100,e.pts/2000*100);
-  return `<div class="score"><span class="num">${N(e.pts)}</span><span class="lbl">puntos estimados de 2000<br>tu meta: ${fmt(META)}</span></div>
-  <div class="track"><div class="fill" style="width:${w}%"></div><div class="mk min" style="left:45%" title="Mínimo 900"></div><div class="mk" style="left:${META/2000*100}%" title="Meta ${META}"></div></div>
-  <div class="scale"><span>0</span><span>900 mínimo</span><span>${fmt(META)} meta</span><span>2000</span></div>`}
+function scoreBand(){const e=estimado(); const w=Math.min(100,e.pts/MAXP*100);
+  return `<div class="score"><span class="num">${N(e.pts)}</span><span class="lbl">puntos estimados de ${fmt(MAXP)}<br>tu meta: ${fmt(META)}</span></div>
+  <div class="track"><div class="fill" style="width:${w}%"></div><div class="mk min" style="left:50%" title="900 puntos"></div><div class="mk" style="left:${META/MAXP*100}%" title="Meta ${META}"></div></div>
+  <div class="scale"><span>0</span><span>900</span><span>${fmt(META)} meta</span><span>${fmt(MAXP)}</span></div>`}
 function barAcierto(s){const p=s.p===null?0:Math.round(s.p*100); const cls=s.p===null?"":p<50?"low":p<75?"mid":"hi"; return `<div class="bar"><i class="${cls}" style="width:${p}%"></i></div>`}
 function barNivel(x,conTexto=true){const pc=Math.round(x.p*100);
   return `<div class="lv"><div class="bar"><i class="b${x.l}" style="width:${pc}%"></i></div>${conTexto?`<span class="lvl l${x.l}">${NIVELES[x.l]}${x.v?" · "+pc+"%":""}</span>`:""}</div>`}
@@ -2133,6 +2145,7 @@ function vInicio(){const e=estimado(), t=totales(), pend=pendientes().length, pl
       ${cta}
     </div>
   </section>
+  ${diagCard()}
   <div class="tiles">
     <a class="tile" href="#tarjetas"><b>${N(pend)}</b><span>tarjetas para hoy</span></a>
     <div class="tile"><b>${N(t.v?Math.round(t.ok/t.v*100):0,"%")}</b><span>de aciertos</span></div>
@@ -2196,13 +2209,14 @@ function vCurso(cid){const c=C[cid], ids=idsCurso(cid), x=nivel(ids), e=extremos
   </section>
   <p class="muted small">El dominio sube cuando aciertas una pregunta y la vuelves a recordar en días distintos. Más exámenes cargados = frecuencias más confiables.</p>`}
 
-function vProgreso(){let g="",h=head("Progreso","Cómo vas hacia 1250")+`<section class="card wine">${scoreBand()}</section>
+function vProgreso(){let g="",h=head("Progreso","Cómo vas hacia 1250")+`<section class="card wine">${scoreBand()}</section>${historialDiag()}
   <section class="card"><div class="row"><h2 class="grow">Dominio por curso</h2>${legend}</div>`;
   DATA.cursos.forEach(c=>{const s=statCurso(c.id); if(c.g!==g){g=c.g;h+=`<div class="group-label">${esc(g)}</div>`}
     h+=`<div class="crow"><span class="n"><a href="#c-${c.id}" style="color:inherit">${esc(c.n)}</a> <small>· ${c.peso} preg.</small></span>${barNivel(nivel(idsCurso(c.id)),false)}<span class="pct">${s.p===null?"—":Math.round(s.p*100)+"%"}</span></div>`});
   h+=`<p class="muted small">La barra es tu dominio; el porcentaje, tu acierto en el último intento. Toca un curso para ver sus temas.</p></section>
   <section class="card"><h2>Meta diaria</h2><p class="muted small">Respuestas por día (tarjetas y preguntas). 20 toma unos 15 minutos.</p><div class="row">${[10,20,30,50].map(m=>`<button class="btn ${S.metaDia===m?"gold":"ghost"}" data-act="meta" data-m="${m}">${m}</button>`).join("")}</div></section>
   <section class="card"><h2>Últimas sesiones</h2>${S.hist.length?S.hist.slice(-8).reverse().map(x=>`<div class="crow"><span class="n">${esc(x.t)} <small>· ${x.d}</small></span><div class="bar"><i class="hi" style="width:${Math.round(x.ok/x.n*100)}%"></i></div><span class="pct">${x.ok}/${x.n}</span></div>`).join(""):`<p class="muted">Todavía no hay sesiones. Empieza por tu plan de hoy en Inicio.</p>`}</section>
+  ${respaldoCard()}
   <section class="card"><h3>Borrar mi progreso</h3><p class="muted small">Se guarda solo en este navegador. Si lo borras no se puede recuperar.</p><button class="btn ghost" data-act="reset">${resetArmed?"Toca otra vez para confirmar":"Borrar progreso"}</button></section>`;
   return h}
 
@@ -2228,10 +2242,11 @@ function vSesion(){const id=ses.cola[0], p=Q[id], tx=p.x?DATA.textos[p.x]:null;
   let h=`<div class="lesson-top"><button class="x" data-act="exit" aria-label="Salir">${I.x}</button><div class="prog"><i style="width:${ses.hechas/ses.total*100}%"></i></div><span class="count">${Math.min(ses.hechas+1,ses.total)}/${ses.total}</span></div>
   <div class="row"><span class="tag">${esc(C[p.c].n)}</span><span class="muted small">${esc(p.t)} · pregunta ${esc(p.n)} del ${esc(p.ex)}</span></div>`;
   if(tx) h+=`<details class="ctx" ${ses.ctxOpen===p.x?"":"open"}><summary>${esc(tx.titulo)}</summary>${figura(tx.f)}<p>${esc(tx.cuerpo)}</p></details>`;
-  h+=`${enun(p)}<div class="opts">`+p.o.map((o,i)=>{let cls=""; if(ses.done){if(i===p.a) cls="ok"; else if(i===ses.sel) cls="bad"} else if(i===ses.sel) cls="sel";
-    return `<button class="opt ${cls}" data-act="pick" data-i="${i}" ${ses.done?"disabled":""}><span class="l">${L[i]}</span><span class="t">${esc(o)}</span></button>`}).join("")+`</div>`;
+  const ord=orden(id);
+  h+=`${enun(p)}<div class="opts">`+ord.map((i,k)=>{let cls=""; if(ses.done){if(i===p.a) cls="ok"; else if(i===ses.sel) cls="bad"} else if(i===ses.sel) cls="sel";
+    return `<button class="opt ${cls}" data-act="pick" data-i="${i}" ${ses.done?"disabled":""}><span class="l">${L[k]}</span><span class="t">${esc(p.o[i])}</span></button>`}).join("")+`</div>`;
   if(ses.done){const ok=ses.sel===p.a, bl=ses.sel===null;
-    h+=`<div class="fb ${ok?"ok":"bad"}"><h3>${ok?"¡Correcto!":bl?"En blanco":"Respuesta: "+L[p.a]}${ses.tipo==="sim"?(ok?" · +20":bl?" · 0":" · −1,125"):ok?" · +10 XP":""}</h3>${ok?"":`<p><b>${L[p.a]}.</b> ${esc(p.o[p.a])}</p>`}${resol(p)}${p.nota?`<p class="muted small">${esc(p.nota)}</p>`:""}${!ok&&ses.tipo!=="sim"&&!bl?`<p class="small muted">Esta pregunta vuelve al final de la lección.</p>`:""}</div>
+    h+=`<div class="fb ${ok?"ok":"bad"}"><h3>${ok?"¡Correcto!":bl?"En blanco":"Respuesta: "+L[ord.indexOf(p.a)]}${ses.tipo==="sim"?(ok?" · +20":bl?" · 0":" · −1,125"):ok?" · +10 XP":""}</h3>${ok?"":`<p><b>${L[ord.indexOf(p.a)]}.</b> ${esc(p.o[p.a])}</p>`}${resol(p)}${p.nota?`<p class="muted small">${esc(p.nota)}</p>`:""}${!ok&&ses.tipo!=="sim"&&!bl?`<p class="small muted">Esta pregunta vuelve al final de la lección.</p>`:""}</div>
     <div class="dock"><button class="btn" data-act="next">Continuar</button></div>`}
   else h+=`<div class="dock">${ses.tipo==="sim"?`<button class="btn dash" data-act="blank">En blanco</button>`:""}<button class="btn" data-act="check" ${ses.sel===null?"disabled":""}>Comprobar</button></div>`;
   return h}
@@ -2312,6 +2327,102 @@ const soltar=e=>{if(!drag) return; const d=drag; drag=null; d.el.classList.remov
   if(Math.abs(d.dx)>100) calificarTarjeta(d.dx>0?2:0); else d.el.style.transform=""};
 document.addEventListener("pointerup",soltar); document.addEventListener("pointercancel",soltar);
 
+
+// ---- simulacro diagnóstico: 90 preguntas con la proporción real, en 3 bloques de 30 (60 min cada uno)
+// Se puede pausar. Las respuestas y el puntaje se muestran solo al terminar los 3 bloques, para no contaminar la medición.
+const BLOQ=3, MINB=60;
+let dg=null, reloj=null, cpMsg="", bk={txt:"",msg:"",abrir:false,pend:null}, dropArmed=false;
+const mmss=ms=>{const t=Math.ceil(ms/1000); return Math.floor(t/60)+":"+String(t%60).padStart(2,"0")};
+const diagEnCurso=()=>S.diag&&S.diag.bl;
+const bloqueSig=()=>diagEnCurso()?S.diag.hecho.indexOf(false):-1;
+function armarDiag(){const todas=[];
+  DATA.cursos.forEach(c=>{const ids=idsCurso(c.id);
+    const nuevas=shuffle(ids.filter(id=>!S.r[id])), vistas=shuffle(ids.filter(id=>S.r[id])).sort((a,b)=>(S.r[a].box||0)-(S.r[b].box||0));
+    nuevas.concat(vistas).slice(0,c.peso).forEach(id=>todas.push(id))});
+  const bl=[[],[],[]]; todas.forEach((id,k)=>bl[k%BLOQ].push(id));
+  const oc={}; DATA.cursos.forEach((c,i)=>oc[c.id]=i);
+  bl.forEach(b=>b.sort((x,y)=>oc[Q[x].c]-oc[Q[y].c]));
+  const ord={}; todas.forEach(id=>ord[id]=nuevoOrden(Q[id]));
+  S.diag={n:(S.diags||[]).length+1,ini:Date.now(),bl,hecho:[false,false,false],resp:{},ms:[0,0,0],pos:[0,0,0],ord}; save()}
+function abrirBloque(b){ses=null; fl=null; dg={b,t0:Date.now(),sel:undefined}; const id=S.diag.bl[b][S.diag.pos[b]]; dg.sel=S.diag.resp[id];
+  draw(); window.scrollTo(0,0); clearInterval(reloj); reloj=setInterval(latido,1000)}
+const usado=()=>S.diag.ms[dg.b]+(Date.now()-dg.t0);
+const restante=()=>Math.max(0,MINB*6e4-usado());
+function guardarTiempo(){if(!dg||dg.fin) return; S.diag.ms[dg.b]=usado(); dg.t0=Date.now(); save()}
+function latido(){if(!dg||dg.fin||!diagEnCurso()){clearInterval(reloj); return} if(document.hidden) return; const r=restante(), el=$("#reloj");
+  if(el){el.textContent=mmss(r); el.classList.toggle("poco",r<5*6e4)} if(r<=0) cerrarBloque()}
+function diagSiguiente(paso){const d=S.diag, b=dg.b, id=d.bl[b][d.pos[b]];
+  if(paso>0){if(dg.sel!==undefined&&dg.sel!==null){if(!(id in d.resp)) tocarRacha(); d.resp[id]=dg.sel} else delete d.resp[id]}
+  d.pos[b]=Math.max(0,d.pos[b]+paso); guardarTiempo();
+  if(d.pos[b]>=d.bl[b].length){d.pos[b]=d.bl[b].length-1; cerrarBloque(); return}
+  dg.sel=d.resp[d.bl[b][d.pos[b]]]; draw(); window.scrollTo(0,0)}
+function cerrarBloque(){const d=S.diag; guardarTiempo(); clearInterval(reloj); d.hecho[dg.b]=true; save();
+  if(d.hecho.every(Boolean)) dg={fin:true,res:cerrarDiag()}; else dg={fin:true,b:dg.b};
+  draw(); window.scrollTo(0,0)}
+function cerrarDiag(){const d=S.diag, ids=d.bl.flat(); let ok=0,bad=0,bl=0; const pc={};
+  ids.forEach(id=>{const p=Q[id], r=d.resp[id], o=pc[p.c]||(pc[p.c]=[0,0,0]); o[2]++;
+    if(r===undefined||r===null){bl++; registrar(id,false)} else if(r===p.a){ok++; o[0]++; registrar(id,true)} else {bad++; o[1]++; registrar(id,false)}});
+  const res={n:d.n,f:hoy(),pts:ok*20-bad*1.125,ok,bad,bl,min:Math.round(d.ms.reduce((a,b)=>a+b,0)/6e4),dias:Math.max(1,Math.round((Date.now()-d.ini)/864e5)+1),pc,err:shuffle(ids.filter(id=>d.resp[id]!==Q[id].a))};
+  S.diags=(S.diags||[]).concat([res]); S.diag=null;
+  S.hist.push({t:"Simulacro diagnóstico "+res.n,d:hoy(),ok,n:ids.length,tipo:"diag"}); if(S.hist.length>60) S.hist.shift(); save(); return res}
+function vDiag(){const d=S.diag, b=dg.b, pos=d.pos[b], n=d.bl[b].length, id=d.bl[b][pos], p=Q[id], tx=p.x?DATA.textos[p.x]:null, r=restante();
+  const ord=d.ord[id]||(d.ord[id]=nuevoOrden(p));
+  let h=`<div class="lesson-top"><button class="x" data-act="dg-pause" aria-label="Pausar">${I.x}</button><div class="prog"><i style="width:${pos/n*100}%"></i></div><span class="count">${pos+1}/${n}</span><span id="reloj" class="reloj ${r<5*6e4?"poco":""}" title="Tiempo que queda en este bloque">${mmss(r)}</span></div>
+  <div class="row"><span class="tag">Bloque ${b+1} de ${BLOQ}</span><span class="tag">${esc(C[p.c].n)}</span></div>`;
+  if(tx) h+=`<details class="ctx" open><summary>${esc(tx.titulo)}</summary>${figura(tx.f)}<p>${esc(tx.cuerpo)}</p></details>`;
+  h+=`${enun(p)}<div class="opts">${opciones(p,ord,i=>i===dg.sel?"sel":"","dg-pick")}</div>
+  <div class="dock">${pos?`<button class="btn ghost" data-act="dg-prev">Anterior</button>`:""}<button class="btn dash" data-act="dg-blank">En blanco</button><button class="btn" data-act="dg-next" ${dg.sel===undefined||dg.sel===null?"disabled":""}>${pos===n-1?"Terminar bloque":"Siguiente"}</button></div>
+  <p class="muted small">Sin correcciones hasta terminar los 3 bloques. Si te interrumpen, toca × para pausar: el reloj se detiene.</p>`;
+  return h}
+function vDiagEntre(){const d=S.diag, b=dg.b, sig=bloqueSig(), resp=d.bl[b].filter(id=>d.resp[id]!==undefined&&d.resp[id]!==null).length;
+  return `<section class="card wine fin-card"><img src="${ESCUDO}" alt=""><h1>Bloque ${b+1} listo</h1>
+  <div class="tiles" style="width:100%"><div class="tile"><b>${resp}/${d.bl[b].length}</b><span>respondidas</span></div><div class="tile"><b>${Math.round(d.ms[b]/6e4)} min</b><span>de ${MINB}</span></div><div class="tile"><b>${d.hecho.filter(Boolean).length}/${BLOQ}</b><span>bloques</span></div></div>
+  <p class="small" style="color:var(--ink-2)">Tu puntaje y las respuestas salen al terminar los ${BLOQ} bloques. Trata de hacer el siguiente en los próximos días y no estudies estas preguntas mientras tanto.</p>
+  <button class="btn gold wide" data-act="dg-go" data-b="${sig}">Seguir con el bloque ${sig+1} ahora</button><button class="btn ghost wide" data-act="home">Lo hago después</button></section>`}
+function resumenDiag(r){return [`Simulacro diagnóstico ${r.n} · ${r.f}`,`Puntaje: ${fmt(r.pts)} de ${fmt(MAXP)} (meta ${fmt(META)})`,
+  `Buenas ${r.ok} · Malas ${r.bad} · En blanco ${r.bl} · ${r.min} min en ${r.dias} ${plural(r.dias,"día")}`,
+  "Por curso (buenas/malas/total): "+DATA.cursos.filter(c=>r.pc[c.id]).map(c=>`${c.n} ${r.pc[c.id][0]}/${r.pc[c.id][1]}/${r.pc[c.id][2]}`).join(", ")].join("\n")}
+function vDiagFin(){const r=dg.res, falta=Math.max(0,META-r.pts), prev=(S.diags||[]).length>1?S.diags[S.diags.length-2]:null;
+  const filas=DATA.cursos.filter(c=>r.pc[c.id]).map(c=>{const [ok,bad,n]=r.pc[c.id]; return {c,ok,bad,n,pierde:(n-ok)*20+bad*1.125}}).sort((a,b)=>b.pierde-a.pierde);
+  return `<section class="card wine diag-res">${r.pts>=META?burst():""}<div class="kicker">Simulacro diagnóstico ${r.n}</div>
+  <div class="big">${N(Math.round(r.pts))}<small> / ${fmt(MAXP)}</small></div>
+  <p style="color:var(--ink-2)">${falta?`Te faltan <b>${fmt(falta)} puntos</b> para ${fmt(META)}: unas ${Math.ceil(falta/20)} respuestas correctas más.`:"Estás sobre tu meta. Ahora toca sostenerlo."}${prev?` En el anterior sacaste ${fmt(prev.pts)} (${r.pts>=prev.pts?"+":""}${fmt(r.pts-prev.pts)}).`:""}</p>
+  <div class="tiles"><div class="tile"><b>${r.ok}</b><span>buenas</span></div><div class="tile"><b>${r.bad}</b><span>malas</span></div><div class="tile"><b>${r.bl}</b><span>en blanco</span></div><div class="tile"><b>${r.min}</b><span>minutos</span></div></div>
+  <button class="btn gold wide" data-act="dg-copy">${cpMsg||"Copiar resultado para enviárselo a Claude"}</button></section>
+  <section class="card"><h2>Dónde perdiste más puntos</h2>${filas.map(o=>`<div class="crow"><span class="n">${esc(o.c.n)} <small>· ${o.ok}/${o.n}</small></span><div class="bar"><i class="${o.ok/o.n<.5?"low":o.ok/o.n<.75?"mid":"hi"}" style="width:${Math.round(o.ok/o.n*100)}%"></i></div><span class="pct">−${fmt(o.pierde)}</span></div>`).join("")}
+  <p class="muted small">El número de la derecha son los puntos que dejaste de ganar en ese curso. Las que fallaste ya están en tus tarjetas.</p></section>
+  <div class="row">${r.err.length?`<button class="btn" data-act="dg-err">Practicar mis errores (${Math.min(15,r.err.length)})</button>`:""}<button class="btn ghost" data-act="home">Listo</button></div>`}
+function diagCard(){const hist=S.diags||[], ult=hist[hist.length-1];
+  if(diagEnCurso()){const d=S.diag, b=bloqueSig(), quedan=Math.max(0,MINB*6e4-d.ms[b]), empezado=d.pos[b]>0||d.ms[b]>0;
+    return `<section class="card wine"><div class="row">${I.reloj}<div class="grow"><b style="font-size:1.08rem">Simulacro diagnóstico ${d.n} · bloque ${b+1} de ${BLOQ}</b><p class="small" style="color:var(--ink-2)">${empezado?`Pausado en la pregunta ${d.pos[b]+1} de 30 · te quedan ${mmss(quedan)}`:`30 preguntas · ${MINB} minutos · sin correcciones hasta el final`}</p></div></div>
+    <div class="row"><button class="btn gold" data-act="dg-go" data-b="${b}">${empezado?"Continuar bloque":"Empezar bloque "+(b+1)}</button><button class="btn dash sm" data-act="dg-drop">${dropArmed?"Toca otra vez para descartarlo":"Descartar simulacro"}</button></div></section>`}
+  return `<section class="card wine"><div class="row">${I.reloj}<div class="grow"><b style="font-size:1.08rem">Simulacro diagnóstico</b><p class="small" style="color:var(--ink-2)">${ult?`El último (${ult.f}): <b>${fmt(ult.pts)}</b> de ${fmt(MAXP)}. Repítelo cada 2 semanas para ver si subes.`:`90 preguntas como el examen real, en 3 bloques de 1 hora que puedes hacer en días distintos. Te da tu puntaje real de ${fmt(MAXP)}.`}</p></div></div>
+  <button class="btn gold" data-act="dg-new">${ult?"Nuevo simulacro":"Empezar bloque 1"}</button></section>`}
+function historialDiag(){const h=S.diags||[]; if(!h.length) return "";
+  const max=Math.max(META,...h.map(r=>r.pts));
+  return `<section class="card"><h2>Tus simulacros</h2>${h.slice(-8).map(r=>`<div class="crow"><span class="n">Simulacro ${r.n} <small>· ${r.f}</small></span><div class="bar"><i class="${r.pts>=META?"hi":r.pts>=META*.8?"mid":"low"}" style="width:${Math.max(2,Math.round(r.pts/MAXP*100))}%"></i></div><span class="pct">${fmt(r.pts)}</span></div>`).join("")}
+  <p class="muted small">Puntaje sobre ${fmt(MAXP)}. La meta es ${fmt(META)}.</p></section>`}
+
+// ---- respaldo del progreso: un código para guardar en WhatsApp o notas y restaurarlo en otro navegador
+async function codigoProgreso(){const json=JSON.stringify(S);
+  if(window.CompressionStream){const st=new Blob([json]).stream().pipeThrough(new CompressionStream("gzip")); const u=new Uint8Array(await new Response(st).arrayBuffer());
+    let b=""; for(let i=0;i<u.length;i+=8192) b+=String.fromCharCode.apply(null,u.subarray(i,i+8192)); return "R1250z:"+btoa(b)}
+  return "R1250:"+btoa(unescape(encodeURIComponent(json)))}
+async function leerCodigo(c){c=(c||"").replace(/\s+/g,"");
+  if(c.startsWith("R1250z:")){const bin=atob(c.slice(7)), u=new Uint8Array(bin.length); for(let i=0;i<bin.length;i++) u[i]=bin.charCodeAt(i);
+    const st=new Blob([u]).stream().pipeThrough(new DecompressionStream("gzip")); return JSON.parse(await new Response(st).text())}
+  if(c.startsWith("R1250:")) return JSON.parse(decodeURIComponent(escape(atob(c.slice(6)))));
+  throw new Error("formato")}
+async function copiarTexto(t){try{await navigator.clipboard.writeText(t); return true}catch(e){}
+  const ta=document.createElement("textarea"); ta.value=t; ta.setAttribute("readonly",""); ta.style.position="fixed"; ta.style.opacity="0"; document.body.appendChild(ta); ta.select();
+  let ok=false; try{ok=document.execCommand("copy")}catch(e){} ta.remove(); return ok}
+function respaldoCard(){const vistas=Object.keys(S.r).length;
+  return `<section class="card"><h2>Respaldo de tu progreso</h2><p class="muted small">Tu progreso vive solo en este navegador. Copia el código y guárdalo en WhatsApp o en tus notas; con él lo recuperas en otro celular o en la PC.</p>
+  <div class="row"><button class="btn" data-act="bk-copy">Copiar mi progreso</button><button class="btn ghost" data-act="bk-open">Restaurar con un código</button></div>
+  ${bk.msg?`<p class="estado">${esc(bk.msg)}</p>`:""}
+  ${bk.txt?`<textarea class="codigo" readonly aria-label="Código de tu progreso">${esc(bk.txt)}</textarea>`:""}
+  ${bk.abrir?`<textarea class="codigo" id="bk-in" placeholder="Pega aquí tu código R1250…" aria-label="Pega tu código"></textarea><div class="row"><button class="btn gold" data-act="bk-restore">${bk.pend?`Toca otra vez: reemplaza tus ${vistas} preguntas vistas por ${Object.keys(bk.pend.r||{}).length}`:"Restaurar"}</button></div>`:""}</section>`}
+
 // ---- render y eventos
 let lastKey="";
 function view(){const h=(location.hash||"#inicio").slice(1); if(h==="repaso") return "tarjetas"; if(h==="ruta") return "cursos";
@@ -2323,19 +2434,36 @@ function navs(v){const pend=pendientes().length, e=estimado();
   $("#nav").innerHTML=VISTAS.map(([k,t])=>`<a href="#${k}" class="${k===v?"on":""}">${I[k]}${t}${k==="tarjetas"&&pend?`<span class="dot">${pend}</span>`:""}</a>`).join("")}
 function contar(){if(QUIETO) return; document.querySelectorAll("#app [data-n]").forEach(el=>{const to=+el.dataset.n, suf=el.dataset.suf||""; if(!to) return;
   const t0=performance.now(), d=1000; const step=t=>{const k=Math.min(1,(t-t0)/d), q=1-Math.pow(1-k,3); el.textContent=fmt(to*q)+suf; if(k<1) requestAnimationFrame(step)}; el.textContent="0"+suf; requestAnimationFrame(step)})}
-function draw(){const app=$("#app"), nav=$("#nav"), side=$("#side"); const enSes=!!(ses||fl); document.body.classList.toggle("insession",enSes);
+function draw(){const app=$("#app"), nav=$("#nav"), side=$("#side"); const enSes=!!(ses||fl||dg); document.body.classList.toggle("insession",enSes);
   let key;
   if(enSes){nav.style.display="none"; side.style.display="none";
-    if(ses){key=ses.fin?"fin":"ses"; app.innerHTML=ses.fin?vFin():vSesion()}
+    if(dg){key=dg.res?"dgfin":dg.fin?"dgentre":"dg"; app.innerHTML=dg.res?vDiagFin():dg.fin?vDiagEntre():vDiag()}
+    else if(ses){key=ses.fin?"fin":"ses"; app.innerHTML=ses.fin?vFin():vSesion()}
     else {key=fl.fin?"ffin":"fl"; app.innerHTML=fl.fin?vFlashFin():vFlash(); fl.anim=false}}
   else {nav.style.display=""; side.style.display=""; const v=view(); key=v; navs(v.startsWith("c-")?"cursos":v);
     app.innerHTML=v.startsWith("c-")?vCurso(v.slice(2)):{inicio:vInicio,tarjetas:vTarjetas,cursos:vCursos,progreso:vProgreso,banco:vBanco}[v]()}
   const nueva=key!==lastKey; app.classList.toggle("enter",nueva&&key!=="ses"&&key!=="fl"); if(nueva) contar(); lastKey=key}
-function salir(){if(ses&&!ses.fin&&ses.xp){S.xp+=ses.xp; save()} if(fl&&!fl.fin&&fl.xp){S.xp+=fl.xp; save()} ses=null; fl=null; draw(); window.scrollTo(0,0)}
+function salir(){if(dg){guardarTiempo(); clearInterval(reloj); dg=null; cpMsg=""}
+  if(ses&&!ses.fin&&ses.xp){S.xp+=ses.xp; save()} if(fl&&!fl.fin&&fl.xp){S.xp+=fl.xp; save()} ses=null; fl=null; draw(); window.scrollTo(0,0)}
 document.addEventListener("click",ev=>{const b=ev.target.closest("[data-act]");
   if(!b){const c=ev.target.closest(".fcard"); if(c&&fl&&!fl.flip&&!ev.target.closest("summary,details,a")) voltear(); return}
   const a=b.dataset.act;
   if(a!=="reset"&&resetArmed){resetArmed=false}
+  if(a!=="dg-drop"&&dropArmed){dropArmed=false}
+  if(a==="dg-new"){armarDiag(); abrirBloque(0); return}
+  if(a==="dg-go"){if(diagEnCurso()) abrirBloque(+b.dataset.b); return}
+  if(a==="dg-pick"){dg.sel=+b.dataset.i; draw(); return}
+  if(a==="dg-next"){diagSiguiente(1); return}
+  if(a==="dg-prev"){const d=S.diag, id=d.bl[dg.b][d.pos[dg.b]]; if(dg.sel!==undefined&&dg.sel!==null) d.resp[id]=dg.sel; diagSiguiente(-1); return}
+  if(a==="dg-blank"){dg.sel=undefined; diagSiguiente(1); return}
+  if(a==="dg-pause"){salir(); return}
+  if(a==="dg-drop"){if(dropArmed){S.diag=null; save(); dropArmed=false} else dropArmed=true; draw(); return}
+  if(a==="dg-copy"){copiarTexto(resumenDiag(dg.res)).then(ok=>{cpMsg=ok?"Copiado ✓ · pégalo en el chat con Claude":"No se pudo copiar: toma una captura"; draw()}); return}
+  if(a==="dg-err"){const e=dg.res.err.slice(0,15); dg=null; cpMsg=""; start("leccion",e,"Errores del simulacro"); return}
+  if(a==="bk-copy"){codigoProgreso().then(c=>{bk.txt=c; return copiarTexto(c)}).then(ok=>{bk.msg=ok?`Copiado ✓ (${Object.keys(S.r).length} preguntas vistas). Pégalo en WhatsApp o en tus notas.`:"Copia el código de abajo manteniéndolo presionado."; draw()}).catch(()=>{bk.msg="No se pudo generar el código."; draw()}); return}
+  if(a==="bk-open"){bk.abrir=!bk.abrir; bk.pend=null; bk.msg=""; draw(); return}
+  if(a==="bk-restore"){if(bk.pend){S=Object.assign({xp:0,racha:0,dia:"",r:{},hechas:{},hist:[],dias:{},metaDia:20},bk.pend); save(); bk={txt:"",msg:"Progreso restaurado ✓",abrir:false,pend:null}; draw(); return}
+    const el=$("#bk-in"); leerCodigo(el&&el.value).then(o=>{if(!o||typeof o.r!=="object") throw 0; bk.pend=o; bk.msg=""; draw()}).catch(()=>{bk.msg="Ese código no es válido. Cópialo completo, desde R1250."; draw()}); return}
   if(a==="temaq"){const tm=TM[b.dataset.id]; if(tm) start("leccion",ordenar(tm.ids,10),C[tm.c].n+" · "+tm.n)}
   else if(a==="cursoq"){const c=b.dataset.id; start("leccion",ordenar(idsCurso(c),10),C[c].n)}
   else if(a==="review"){const p=pendientes(); if(p.length) start("repaso",shuffle(p).slice(0,10),"Repaso")}
@@ -2359,10 +2487,15 @@ document.addEventListener("keydown",ev=>{if(fl&&ev.target.closest&&ev.target.clo
     else if(fl.flip&&"123".includes(k)&&k.length===1){calificarTarjeta(+k-1)}
     else if(k==="Escape") salir();
     return}
+  if(dg&&!dg.fin){const k=ev.key.toUpperCase(), id=S.diag.bl[dg.b][S.diag.pos[dg.b]];
+    if("ABCDE".includes(k)&&k.length===1){const o=S.diag.ord[id][ "ABCDE".indexOf(k)]; if(o!==undefined){dg.sel=o; draw()}}
+    else if(ev.key==="Enter"&&dg.sel!==undefined&&dg.sel!==null){ev.preventDefault(); diagSiguiente(1)}
+    return}
   if(!ses||ses.fin) return; const k=ev.key.toUpperCase();
-  if(!ses.done&&"ABCDE".includes(k)&&k.length===1){ses.sel="ABCDE".indexOf(k); draw()}
+  if(!ses.done&&"ABCDE".includes(k)&&k.length===1){const o=orden(ses.cola[0])["ABCDE".indexOf(k)]; if(o!==undefined){ses.sel=o; draw()}}
   else if(ev.key==="Enter"){ev.preventDefault(); if(ses.done) avanzar(); else if(ses.sel!==null) responder(ses.sel)}});
-window.addEventListener("hashchange",()=>{if(!ses&&!fl){draw(); window.scrollTo(0,0)}});
+window.addEventListener("hashchange",()=>{if(!ses&&!fl&&!dg){draw(); window.scrollTo(0,0)}});
+document.addEventListener("visibilitychange",()=>{if(dg&&!dg.fin){if(document.hidden) guardarTiempo(); else dg.t0=Date.now()}});
 draw();
 </script>
 <script>
