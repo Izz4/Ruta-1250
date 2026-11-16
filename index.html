@@ -241,6 +241,26 @@ a.tile:hover{transform:translateY(-3px);background:rgba(248,244,238,.1)}
   .crs{grid-template-columns:minmax(0,1fr) auto 18px;gap:6px 12px}.crs .lv{grid-column:1/-1;grid-row:2}
   .csum{grid-template-columns:1fr}
 }
+/* biblioteca: unidades */
+.ulist{display:flex;flex-direction:column;gap:2px}
+.un{display:grid;grid-template-columns:34px minmax(0,1fr) auto 18px;gap:14px;align-items:center;padding:12px 8px;border-top:1px solid var(--line);color:var(--ink);text-decoration:none;border-radius:14px;transition:background .2s}
+.un:first-child{border-top:0}
+.un:hover{background:rgba(248,244,238,.06)}
+.un .nu{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:.9rem;border:1px solid var(--line-2);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.un.ok .nu{background:var(--gold);color:#1f1315;border-color:var(--gold)}
+.un.sig{background:rgba(192,169,43,.12);border:1px solid rgba(227,203,107,.4)}
+.un b{font-weight:600;line-height:1.25}
+.un small{display:block;color:var(--muted);font-size:.82rem;margin-top:2px;line-height:1.35}
+.un>svg{width:18px;height:18px;color:var(--muted)}
+.un .lvl{text-align:right}
+.stars{color:var(--gold-l);font-size:.78rem;letter-spacing:1px;margin-left:6px;white-space:nowrap}
+.sigue{display:inline-block;font-size:.72rem;font-weight:700;color:#1f1315;background:var(--gold-l);border-radius:999px;padding:1px 8px;margin-left:6px;vertical-align:2px}
+.aviso{display:block;color:var(--bad-t);font-size:.8rem;margin-top:3px;font-weight:600}
+.lecd{display:inline-block;font-size:.74rem;font-weight:700;color:var(--gold-l);margin-top:4px}
+.subs{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
+.subs span{font-size:.84rem;padding:5px 11px;border-radius:999px;background:rgba(0,0,0,.22);border:1px solid var(--line)}
+.fuentes a{color:var(--gold-l);font-weight:600}
+@media (max-width:700px){.un{grid-template-columns:30px minmax(0,1fr) 16px;gap:4px 10px;padding:12px 4px}.un .nu{width:30px;height:30px;grid-row:1/3}.un .lvl{grid-column:2;grid-row:2;text-align:left}.un>svg{grid-column:3;grid-row:1/3}}
 
 /* ---------- sesión de preguntas ---------- */
 .lesson-top{display:flex;align-items:center;gap:10px;padding-top:14px}
@@ -745,6 +765,439 @@ const FICHAS={
     {q:"Una pregunta de extrapolación te pide…",o:["aplicar la lógica del texto a una situación hipotética o distinta","copiar la idea principal","dar tu opinión personal sobre el tema","encontrar el significado de una palabra"],a:0,e:"Extrapolar = «si ocurriera X, entonces…», según la lógica del texto."},
     {q:"Texto: «El parásito X solo sobrevive a más de 20 °C; por eso la enfermedad es común en la selva y rara en la sierra.» Si la sierra se calentara por encima de 20 °C todo el año, entonces…",o:["la enfermedad podría volverse frecuente en la sierra","la enfermedad desaparecería de la selva","el parásito dejaría de necesitar calor","la sierra se convertiría en selva","nada cambiaría en la sierra"],a:0,e:"La condición quita la barrera del frío. Con la regla del texto, el parásito sobreviviría en la sierra."}]}
   ]}
+,
+"qui:Soluciones, ácidos y equilibrio":{
+  fuente:"Preguntas reales del banco (2025-II a 2027-I) y sus resoluciones. Teoría redactada para Ruta 1250 y verificada con cálculo.",
+  bloques:[
+  {id:"sol",t:"Concentración y dilución",ts:["Soluciones","Soluciones - unidades de concentración"],
+   concepto:"Una solución es una mezcla homogénea de soluto (lo que se disuelve) y solvente (casi siempre agua). La concentración dice cuánto soluto hay; la más usada es la molaridad: M = moles de soluto ÷ litros de solución.",
+   explica:[
+    "Molaridad: M = n ÷ V (V en litros). Si te dan masa, pásala a moles: n = masa ÷ masa molar. Despeja lo que pidan: n = M·V y masa = M·V·(masa molar).",
+    "Normalidad: N = M·θ. θ es el número de H⁺ de un ácido (HCl 1, H₂SO₄ 2), de OH⁻ de una base (NaOH 1, Ca(OH)₂ 2) o la carga total del catión en una sal. En una neutralización, N_ácido·V_ácido = N_base·V_base.",
+    "Diluir es agregar solvente: los moles de soluto no cambian, por eso M₁·V₁ = M₂·V₂. Ojo: V₂ es el volumen final total (100 mL + 900 mL de agua = 1000 mL).",
+    "Porcentajes: % en masa = masa de soluto ÷ masa de solución × 100; % en volumen = volumen de soluto ÷ volumen de solución × 100. Un etanol al 55 % en volumen tiene 55 % de etanol y 45 % de agua.",
+    "Si una fórmula tiene subíndices, úsalos para pasar de moles del compuesto a moles de un elemento: 1 mol de Al₂(SO₄)₃ tiene 2 mol de Al."],
+   claves:[["Molaridad (M)","M = moles de soluto ÷ litros de solución (mol/L)."],
+     ["Normalidad (N)","N = M × θ. θ = H⁺ que libera el ácido, OH⁻ de la base o carga total del catión en una sal."],
+     ["Dilución","Los moles de soluto no cambian: M₁·V₁ = M₂·V₂ (V₂ = volumen final total)."],
+     ["% en masa y % en volumen","% m/m = masa soluto ÷ masa solución × 100. % v/v = volumen soluto ÷ volumen solución × 100."]],
+   ejemplo:{id:"25II-89",pasos:[
+     "Primera parte: n = M × V = 0,17 mol/L × 5 L = 0,85 mol de alumbre.",
+     "Masa = n × masa molar = 0,85 × 948,0 = 805,8 g.",
+     "Segunda parte: en 100 mL (0,1 L) hay 0,17 × 0,1 = 0,017 mol de alumbre.",
+     "Cada fórmula de alumbre tiene 2 Al (en Al₂(SO₄)₃): 0,034 mol de Al. Cada Al₂O₃ usa 2 Al, así que se forman 0,017 mol de Al₂O₃.",
+     "Masa de Al₂O₃ = 0,017 × 102 = 1,73 g. Respuesta: 805,8 y 1,73."],
+     idea:"Pasa todo a moles: M·V te da los moles y la fórmula te dice cuántos átomos de cada elemento hay."},
+   guiada:[
+    {id:"27I-91",pistas:["La mezcla de separación es 20/80: 20 partes de etanol al 75 % y 80 de ácido fórmico al 5 %. ¿Cuánto es el 20 % de 300 mL?","Un etanol acuoso al 55,10 % tiene 55,10 % de etanol y el resto es agua. ¿Y qué pH tiene una mezcla con ácido fórmico?"],
+     pasos:["I: 20 % de 300 mL = 0,20 × 300 = 60 mL de etanol al 75 %. Verdadera.","II: «al 55,10 %» significa 55,10 % de etanol y 44,9 % de agua. La proposición lo invierte: falsa.","III: la mezcla contiene ácido fórmico, así que su pH es ácido, no alcalino. Falsa.","Solo I es verdadera."],
+     mal:{0:"II es falsa: el 44,9 % es agua, no etanol.",2:"III es falsa: con ácido fórmico el pH es ácido (menor que 7).",3:"Las dos son falsas: el 44,9 % es agua y con ácido fórmico el pH es ácido. Además I sí es verdadera.",4:"III es falsa, y I sí es verdadera: 20 % de 300 mL = 60 mL."}}],
+   chequeo:[
+    {q:"¿Cuántos moles de soluto hay en 250 mL de una solución 2 M?",o:["0,5 mol","8 mol","0,125 mol","500 mol","2 mol"],a:0,e:"n = M × V = 2 mol/L × 0,25 L = 0,5 mol."},
+    {q:"Se diluyen 200 mL de HCl 3 M con agua hasta un volumen final de 600 mL. ¿Cuál es la molaridad final?",o:["3 M","1 M","9 M","0,5 M","1,5 M"],a:1,e:"M₁V₁ = M₂V₂ → 3 × 200 = M₂ × 600 → M₂ = 1 M."},
+    {q:"¿Cuál es la normalidad de una solución de H₂SO₄ 0,5 M?",o:["0,25 N","0,5 N","1 N","2 N","1,5 N"],a:2,e:"El H₂SO₄ libera 2 H⁺ (θ = 2): N = 0,5 × 2 = 1 N."}]},
+  {id:"ph",t:"pH, ácidos, bases y neutralización",ts:["Ácidos y bases","Soluciones (neutralización)"],
+   concepto:"El pH mide la acidez: pH = −log[H⁺]. A 25 °C, pH + pOH = 14. Menos de 7 es ácido, 7 es neutro y más de 7 es básico.",
+   explica:[
+    "Ácido (Arrhenius): libera H⁺ en agua. Base: libera OH⁻. Los ácidos fuertes (HCl, HNO₃, H₂SO₄) y las bases fuertes (NaOH, KOH) se disocian por completo: [H⁺] o [OH⁻] es igual a su concentración (multiplicada por θ).",
+    "Si la concentración es una potencia de 10, el pH sale directo: [H⁺] = 10⁻³ → pH = 3. Si no, usa logaritmos: [OH⁻] = 2 × 10⁻⁴ → pOH = 4 − log 2 = 4 − 0,3 = 3,7.",
+    "Con una base calcula primero el pOH y luego pH = 14 − pOH. El error más común es dar el pOH como si fuera el pH.",
+    "Diluir acerca el pH a 7 pero no lo cruza: un ácido diluido sigue siendo ácido y una base diluida sigue siendo básica.",
+    "Mezcla de ácido fuerte con base fuerte: calcula los equivalentes (N × V) de cada uno y réstalos. Lo que sobra se divide entre el volumen TOTAL. Si son iguales, el pH es 7."],
+   claves:[["pH y pOH","pH = −log[H⁺]; pOH = −log[OH⁻]; a 25 °C, pH + pOH = 14."],
+     ["Escala de pH","Menor que 7: ácido. Igual a 7: neutro. Mayor que 7: básico."],
+     ["Ácidos y bases fuertes","Se disocian por completo (HCl, HNO₃, H₂SO₄, NaOH, KOH): [H⁺] o [OH⁻] = concentración × θ."],
+     ["Mezcla ácido fuerte + base fuerte","Resta equivalentes (N·V); el exceso se divide entre el volumen total."]],
+   ejemplo:{id:"25II-91",pasos:[
+     "Dilución: 0,01 M × 100 mL = M₂ × (100 + 900) mL → M₂ = 0,001 M = 10⁻³ M.",
+     "El HCl es un ácido fuerte: [H⁺] = 10⁻³ M → pH = 3.",
+     "Piden el pOH: 14 − 3 = 11."],
+     idea:"Lee si piden pH o pOH, y usa el volumen final total al diluir."},
+   guiada:[
+    {id:"26II-92",pistas:["Primero la molaridad inicial: 4 g de NaOH (masa molar 40 g/mol) en 1 L.","Al pasar 1 mL a 500 mL la concentración se divide entre 500. Es una base: calcula el pOH y luego el pH."],
+     pasos:["[NaOH] = (4 ÷ 40) mol ÷ 1 L = 0,1 M.","Dilución: 0,1 × 1 mL = M₂ × 500 mL → M₂ = 2 × 10⁻⁴ M = [OH⁻].","pOH = −log(2 × 10⁻⁴) = 4 − log 2 = 4 − 0,3 = 3,7.","pH = 14 − 3,7 = 10,3."],
+     mal:{0:"3,7 es el pOH. Es una base: pH = 14 − 3,7.",2:"11 saldría con [OH⁻] = 10⁻³ M. Revisa la dilución: de 1 mL a 500 mL la concentración se divide entre 500.",3:"13 es el pH de la solución sin diluir (0,1 M). Te faltó la dilución.",4:"Un pH ácido es imposible: el NaOH es una base, su pH es mayor que 7."}},
+    {id:"27I-93b",pistas:["Calcula los equivalentes: N × V (en litros) del ácido y de la base.","HNO₃: 0,50 × 0,6 = 0,30. KOH: 1,00 × 0,4 = 0,40. ¿Qué sobra y en qué volumen total?"],
+     pasos:["Equivalentes de HNO₃ = 0,50 × 0,600 L = 0,30.","Equivalentes de KOH = 1,00 × 0,400 L = 0,40.","Sobran 0,10 de OH⁻ en 1,000 L: [OH⁻] = 0,1 M.","pOH = 1 → pH = 14 − 1 = 13."],
+     mal:{0:"Para pH 12 tendría que quedar [OH⁻] = 0,01 M. Sobran 0,10 mol en 1 L: [OH⁻] = 0,1 M.",1:"1 es el pOH, no el pH. Como sobra base, el pH es mayor que 7.",3:"Sobra base (0,40 > 0,30): el pH no puede ser ácido.",4:"El pH sería 7 solo con equivalentes iguales; aquí sobra base."}}],
+   chequeo:[
+    {q:"¿Cuál es el pH de una solución de HCl 0,001 M?",o:["1","11","3","0,001","7"],a:2,e:"[H⁺] = 10⁻³ M → pH = 3."},
+    {q:"Una solución tiene pOH = 4. Entonces es…",o:["ácida, con pH 4","básica, con pH 10","neutra, con pH 7","ácida, con pH 10","básica, con pH 4"],a:1,e:"pH = 14 − 4 = 10, mayor que 7: básica."},
+    {q:"Se mezclan cantidades iguales de equivalentes de un ácido fuerte y una base fuerte. El pH de la mezcla es…",o:["menor que 7","7","mayor que 7","0","14"],a:1,e:"Se neutralizan por completo: queda una solución neutra, pH 7."}]}]},
+"bio:Ecología y recursos":{
+  fuente:"Preguntas reales del banco (2023-I a 2026-II) y sus resoluciones. Teoría redactada para Ruta 1250.",
+  bloques:[
+  {id:"rel",t:"Relaciones entre especies y ecosistema",ts:["Ecología","Reino plantae – ecología (antibiosis)"],
+   concepto:"Un ecosistema es la comunidad de seres vivos (biocenosis) junto con su ambiente físico (biotopo). Las relaciones entre especies se clasifican según quién gana (+), quién pierde (−) y a quién no le afecta (0).",
+   explica:[
+    "Mutualismo (+ +): ambas ganan (líquenes: alga + hongo; abejas y flores). Comensalismo (+ 0): una gana y a la otra no le afecta (la rémora y el tiburón).",
+    "Predación (+ −): una especie mata a otra para comer (el puma y la vicuña). Parasitismo (+ −): vive a costa del otro sin matarlo de inmediato (pulgas, tenias).",
+    "Competencia (− −): ambas se perjudican al disputar el mismo recurso. Amensalismo o antibiosis (0 −): un organismo libera sustancias que inhiben a otro, como el hongo Penicillium a las bacterias.",
+    "Cadena trófica: productores (plantas, algas) → consumidores primarios (herbívoros) → secundarios → terciarios. Los descomponedores reciclan la materia de todos los niveles.",
+    "Regla del 10 %: a cada nivel pasa cerca del 10 % de la energía del anterior. En preguntas con resultados de un experimento, concluye solo lo que muestran los datos."],
+   claves:[["Mutualismo","+ / +: ambas especies se benefician (líquenes: alga + hongo)."],
+     ["Comensalismo","+ / 0: una se beneficia y a la otra no le afecta (rémora y tiburón)."],
+     ["Predación vs. parasitismo","Predación: uno mata a otro para comer. Parasitismo: vive a costa del otro sin matarlo de inmediato."],
+     ["Competencia","− / −: ambas se perjudican al disputar el mismo recurso."],
+     ["Amensalismo (antibiosis)","0 / −: una especie libera sustancias que inhiben a otra (Penicillium y bacterias)."],
+     ["Regla del 10 %","A cada nivel trófico pasa cerca del 10 % de la energía del nivel anterior."]],
+   ejemplo:{id:"26II-98",pasos:[
+     "Traduce cada relación a signos: competencia (− −), predación (+ −, matando), comensalismo (+ 0).",
+     "«Cada especie actúa de modo desfavorable sobre la otra» = − −: competencia → Ib.",
+     "«Obtiene su alimento matando a otra» = predación → IIc.",
+     "«Una se beneficia y la otra no obtiene ventaja» = + 0: comensalismo → IIIa. Respuesta: Ib, IIc, IIIa."],
+     idea:"Clasifica cada relación por quién gana, quién pierde y a quién no le afecta."},
+   guiada:[
+    {id:"23I-100",pistas:["La efectividad se mide con el halo de inhibición: si hay halo, el extracto detuvo el crecimiento del microbio.","El gráfico muestra halos en los tres microorganismos (E. coli, S. aureus y C. albicans). ¿Qué se puede concluir sin inventar variables?"],
+     pasos:["El experimento mide una sola cosa: el halo de inhibición (en mm) frente a tres microorganismos.","Hay halo en los tres: el extracto inhibe a las dos bacterias y al hongo.","La conclusión que se apoya en los datos: el arrayán tiene actividad antimicrobiana frente a los patógenos evaluados.","Temperatura, dosis y medio de cultivo no se midieron: esas alternativas inventan variables."],
+     mal:{0:"El experimento no midió la temperatura: no se puede concluir nada sobre ella.",2:"Contradice los datos: hay halos de inhibición, así que sí fueron afectados.",3:"No se probaron distintas dosis; además, un halo mayor indica más inhibición, no menos.",4:"El medio de cultivo no fue una variable del estudio."}}],
+   chequeo:[
+    {q:"La rémora se adhiere al tiburón y come sus restos sin dañarlo. Es un caso de…",o:["mutualismo","comensalismo","parasitismo","predación","competencia"],a:1,e:"La rémora gana y al tiburón no le afecta (+ 0): comensalismo."},
+    {q:"Dos especies de aves comen las mismas semillas, que escasean, y ambas se perjudican. Es…",o:["mutualismo","comensalismo","competencia","amensalismo","predación"],a:2,e:"Ambas pierden por el mismo recurso (− −): competencia."},
+    {q:"Si los productores fijan 10 000 kcal, ¿cuánta energía llega aproximadamente a los consumidores secundarios?",o:["1 000 kcal","100 kcal","10 kcal","10 000 kcal","5 000 kcal"],a:1,e:"10 000 → 1 000 (primarios) → 100 kcal (secundarios), por la regla del 10 %."}]},
+  {id:"rec",t:"Recursos, contaminación y huella ecológica",ts:["Recursos naturales","Ecologia - biorremediación","Ecología"],
+   concepto:"Los recursos naturales son lo que el ser humano toma de la naturaleza. Se usan de forma sostenible si no se consumen más rápido de lo que se renuevan. La huella ecológica mide cuánta superficie necesita una población para su consumo.",
+   explica:[
+    "Renovables: se regeneran si se respeta su ritmo (bosques, peces, fauna silvestre, agua). No renovables: existen en cantidad fija (minerales como el cobre, petróleo, gas). Inagotables: energía solar y eólica.",
+    "Huella ecológica: hectáreas necesarias para producir lo que consume una población y absorber sus desechos. La aumentan la explosión demográfica y el consumo excesivo; la reducen el reciclaje y la economía circular (reusar, reparar, reciclar).",
+    "Biorremediación: usar microorganismos, hongos o plantas para degradar contaminantes. El contaminante debe poder ser atacado biológicamente y los productos deben ser inocuos (no dañinos); no tienen que ser comestibles.",
+    "Ciclo del nitrógeno: fijación (bacterias como Rhizobium convierten N₂ en amoniaco), amonificación (los descomponedores convierten restos orgánicos en amoniaco), nitrificación (amoniaco → nitritos → nitratos) y desnitrificación (nitratos → N₂ que vuelve al aire). El N₂ es cerca del 78 % del aire.",
+    "Consumo responsable de fauna silvestre: con planes de manejo comunal y desde zoocriaderos autorizados."],
+   claves:[["Recurso renovable vs. no renovable","Renovable: se regenera si se respeta su ritmo (bosque, peces). No renovable: cantidad fija (cobre, petróleo)."],
+     ["Huella ecológica","Superficie (ha) necesaria para sostener el consumo de una población y absorber sus desechos."],
+     ["Biorremediación","Uso de microorganismos, hongos o plantas para degradar contaminantes en productos inocuos."],
+     ["Amonificación","Los descomponedores transforman restos orgánicos (proteínas, aminoácidos) en amoniaco."],
+     ["Economía circular","Reusar, reparar y reciclar para que los materiales vuelvan al ciclo: reduce la huella ecológica."]],
+   ejemplo:{id:"24II-100",pasos:[
+     "I: para que un ser vivo degrade un contaminante, este debe ser susceptible a la acción biológica. V.",
+     "II: el objetivo es transformar el contaminante en productos inocuos (agua, CO₂, sales). V.",
+     "III: inocuo no significa apto para consumo humano; eso no es un requisito. F.",
+     "Respuesta: VVF."],
+     idea:"Biorremediar = degradar con seres vivos hasta productos inofensivos, no comestibles."},
+   guiada:[
+    {id:"23II-99",pistas:["Un indicador negativo es algo que AUMENTA la huella ecológica (más presión sobre los recursos).","¿Cuál de las alternativas significa más personas consumiendo recursos?"],
+     pasos:["La huella ecológica crece cuando aumenta el consumo de recursos.","El crecimiento de la población es uno de los factores con que se calcula: más personas, más hectáreas necesarias.","La explosión demográfica es el indicador negativo. La economía circular y la extracción sostenida la reducen."],
+     mal:{0:"«Regresión ecológica» no es un factor con que se mida la huella ecológica.",2:"La economía circular reduce la huella: es un indicador positivo.",3:"La extracción sostenida respeta el ritmo de renovación: no es negativa.",4:"«Recesión ecológica» no es un factor de la huella ecológica."}},
+    {id:"26I-98",pistas:["Piensa en consumo responsable: ¿qué proposiciones describen una práctica responsable y cuál describe un problema?","III es cierta como hecho, pero ¿es una forma de consumir de manera responsable?"],
+     pasos:["I: el aprovechamiento con acuerdos comunales en áreas naturales es manejo sostenible de un recurso renovable. Correcta.","II: la carne de zoocriaderos legales puede venderse: es consumo responsable. Correcta.","III: describe una presión sobre la fauna (un problema), no una práctica de consumo responsable.","Respuesta según la clave oficial: I y II."],
+     mal:{0:"Te falta I: el manejo con acuerdos comunales también es consumo responsable.",1:"III describe un problema, no una práctica de consumo responsable; y te falta I.",3:"III describe un problema, no una práctica responsable; y te falta II.",4:"III describe un problema; las prácticas responsables son I y II."}}],
+   chequeo:[
+    {q:"¿Cuál es un recurso natural no renovable?",o:["El cobre","Un bosque de eucaliptos","Los peces de río","El agua de lluvia","La energía solar"],a:0,e:"El cobre es un mineral: su cantidad es fija y no se regenera."},
+    {q:"¿Qué práctica reduce la huella ecológica?",o:["La explosión demográfica","La economía circular (reusar y reciclar)","La deforestación para cultivos","El consumo de productos descartables","La quema de combustibles fósiles"],a:1,e:"La economía circular devuelve los materiales al ciclo y baja el consumo de recursos."},
+    {q:"En el ciclo del nitrógeno, la transformación de restos orgánicos en amoniaco por los descomponedores se llama…",o:["fijación","nitrificación","amonificación","desnitrificación","fotosíntesis"],a:2,e:"Amonificación: restos orgánicos → amoniaco."}]}]},
+"len:Acentuación y fonología":{
+  fuente:"Preguntas reales del banco (2023-II a 2027-I) y sus resoluciones. Reglas según la Ortografía de la RAE (2010), redactadas para Ruta 1250.",
+  bloques:[
+  {id:"silaba",t:"Sílaba y secuencias vocálicas",ts:["Silabeo","Sílaba y reglas de silabeo","La sílaba","Concurrencia vocálica"],excl:["26II-50"],
+   concepto:"La sílaba es el grupo de sonidos que se pronuncia en un solo golpe de voz. Para separar sílabas manda cómo se juntan las vocales: el diptongo y el triptongo van en una sola sílaba; el hiato se separa.",
+   explica:[
+    "Vocales abiertas: a, e, o. Cerradas: i, u. Diptongo: dos vocales en la misma sílaba: abierta + cerrada átona (ai-re, cau-sa), cerrada átona + abierta (pia-no, cue-va) o dos cerradas distintas (ciu-dad, cons-truir).",
+    "Triptongo: cerrada + abierta + cerrada, con las cerradas átonas, en una sola sílaba: Pa-ra-guay, a-ve-ri-guáis, huai-no.",
+    "Hiato: las vocales van en sílabas distintas. Simple: dos abiertas (po-e-ma, ro-e-dor, a-é-re-o) o dos iguales (zo-o, chi-i-ta). Acentual: una cerrada tónica junto a una abierta; la cerrada siempre lleva tilde (Ca-ín, Lu-cí-a, pa-ís, ví-a).",
+    "La h intercalada no impide el diptongo: prohi-bi-do, ahi-ja-do, de-sahu-cio. Si la cerrada es tónica, hay hiato y lleva tilde: bú-ho, ahú-ma.",
+    "Consonantes: una sola consonante entre vocales va con la vocal siguiente (e-xhi-bi-ción). Los grupos bl, br, cl, cr, dr, fl, fr, gl, gr, pl, pr, tr no se separan (co-bre, a-trás)."],
+   claves:[["Vocales abiertas y cerradas","Abiertas: a, e, o. Cerradas: i, u."],
+     ["Diptongo","Dos vocales en una sílaba: abierta + cerrada átona, cerrada átona + abierta o dos cerradas distintas (ai-re, pia-no, ciu-dad)."],
+     ["Triptongo","Cerrada + abierta + cerrada, átonas las cerradas, en una sílaba (Pa-ra-guay, huai-no)."],
+     ["Hiato simple","Dos vocales abiertas (o iguales) en sílabas distintas (po-e-ma, zo-o)."],
+     ["Hiato acentual","Cerrada tónica + abierta: se separan y la cerrada lleva tilde (pa-ís, Lu-cí-a, Ca-ín)."]],
+   ejemplo:{id:"24II-50",pasos:[
+     "Construir: u + i, dos cerradas distintas en una sílaba (cons-truir) → diptongo: Ib.",
+     "Huaino: u (cerrada) + a (abierta) + i (cerrada) en una sílaba (huai-no) → triptongo: IIc.",
+     "Caín: la i es cerrada y tónica junto a la a → se separan (Ca-ín) y lleva tilde → hiato acentual: IIId.",
+     "Aerosol: a + e, dos abiertas → hiato simple (a-e-ro-sol): IVa. Respuesta: Ib, IIc, IIId, IVa."],
+     idea:"Marca cada vocal como abierta o cerrada y luego mira si la cerrada es tónica."},
+   guiada:[
+    {id:"24II-48",pistas:["Revisa cada palabra con dos vocales juntas: ¿es diptongo (no se separa) o hiato (se separa)?","Lucía tiene hiato acentual (í tónica) y poemas hiato simple (o + e). Busca los errores en entusiasmo, roedores, viajaron y Diógenes."],
+     pasos:["A: en-tu-sias-mo; «ia» con i átona es diptongo, no se separa. Mal.","B: ro-e-do-res; o y e son abiertas: hiato, sí se separan. Mal.","C: via-ja-ron; «ia» es diptongo. Mal.","E: Dió-ge-nes; la tilde está en la o (abierta), así que «io» sigue siendo diptongo. Mal.","D: Lu-cí-a (hiato acentual), es-cri-bió y sie-te (diptongos), po-e-mas (hiato simple). Correcta."],
+     mal:{0:"«Entusiasmo» se separa en-tu-sias-mo: «ia» con i átona es diptongo.",1:"«Roedores» se separa ro-e-do-res: o y e son abiertas y forman hiato.",2:"«Viajaron» se separa via-ja-ron: «ia» con i átona es diptongo.",4:"«Diógenes» se separa Dió-ge-nes: la tilde va en la o (abierta), así que «io» sigue siendo diptongo."}},
+    {id:"25II-50",pistas:["Busca en cada alternativa una palabra mal separada: ¿rompe un diptongo o junta un hiato?","La h intercalada no impide el diptongo (prohi-bi-do) y una consonante entre vocales va con la vocal siguiente."],
+     pasos:["A: «aeropuerto» se separa a-e-ro-puer-to: «ue» es diptongo y no se separa. Mal.","B: «exhortación» termina en -ción: «ci-ón» rompe el diptongo «io». Mal.","C: «zoología» se separa zo-o-lo-gí-a (o + o es hiato) y «biología», bio-lo-gí-a. Mal.","E: «desahuciado» se separa de-sahu-cia-do: rompe los diptongos «au» (con h intercalada) e «ia». Mal.","D: e-xhi-bi-ción, prohi-bi-do, ahi-ja-do. Correcta."],
+     mal:{0:"«Aeropuerto» se separa a-e-ro-puer-to: «ue» es diptongo.",1:"«Exhortación» termina en -ción: «io» es diptongo y no se separa.",2:"«Zoología» se separa zo-o-lo-gí-a (o + o es hiato) y «biología», bio-lo-gí-a.",4:"«Desahuciado» se separa de-sahu-cia-do: la h no rompe el diptongo «au», y «ia» también es diptongo."}}],
+   chequeo:[
+    {q:"¿Qué palabra tiene hiato acentual?",o:["cuidado","país","aire","peine","ciudad"],a:1,e:"Pa-ís: la i es cerrada y tónica junto a la a, por eso se separan y lleva tilde."},
+    {q:"¿Cuál es el silabeo correcto de «avión»?",o:["a-vi-ón","av-ión","a-vión","avi-ón","a-v-ión"],a:2,e:"«io» es diptongo (la tilde va en la o, abierta): a-vión."},
+    {q:"¿Qué palabra tiene triptongo?",o:["Perú","Paraguay","poema","reír","cuidado"],a:1,e:"Pa-ra-guay: u + a + y (sonido i) en una sola sílaba."}]},
+  {id:"tilde",t:"Tildación general y diacrítica",ts:["Tildación general","Tildación diacrítica","Tilde diacrítica","Tilde enfática","La acentuación y tildación"],
+   concepto:"La tilde marca la sílaba tónica según reglas fijas para agudas, graves y esdrújulas. Además, la tilde diacrítica distingue palabras que se escriben igual pero cumplen funciones distintas (tú/tu, sé/se).",
+   explica:[
+    "Agudas (tónica en la última sílaba): llevan tilde si terminan en n, s o vocal (can-ción, com-pás, ca-fé). Graves o llanas (penúltima): llevan tilde si NO terminan en n, s o vocal (ár-bol, lá-piz, cés-ped). Esdrújulas y sobresdrújulas: siempre (mú-si-ca, dí-ga-se-lo).",
+    "Los monosílabos no llevan tilde (fue, dio, vio, fe, ti), salvo los diacríticos: tú (pronombre) / tu (posesivo); él / el; mí / mi; sí (afirmación o pronombre) / si (condicional o nota musical); sé (saber o ser) / se; dé (dar) / de; té (bebida) / te; más (cantidad) / mas (pero).",
+    "Tilde enfática: qué, quién, cuál, cómo, cuándo, dónde y cuánto llevan tilde cuando preguntan o exclaman, también en preguntas indirectas («No sé dónde vive»). Sin valor interrogativo no la llevan («Cuando llegue, te aviso»).",
+    "Desde 2010, «solo» y los demostrativos (este, ese, aquel) no llevan tilde, y «guion» o «truhan» se escriben sin tilde por ser monosílabos ortográficos.",
+    "Hiato acentual: la vocal cerrada tónica lleva tilde aunque rompa la regla general (ma-íz, ba-úl, re-ír)."],
+   claves:[["Regla de las agudas","Tónica en la última sílaba; tilde si terminan en n, s o vocal (canción, café)."],
+     ["Regla de las graves (llanas)","Tónica en la penúltima; tilde si NO terminan en n, s o vocal (árbol, lápiz)."],
+     ["Esdrújulas","Tónica en la antepenúltima: siempre llevan tilde (música, pájaro)."],
+     ["Tilde diacrítica: sé / se","Sé: verbo saber o ser («No sé»). Se: pronombre («Se fue»)."],
+     ["Tilde diacrítica: dé / de, té / te","Dé: verbo dar. Té: bebida. De: preposición. Te: pronombre."],
+     ["Tilde enfática","Qué, cómo, dónde, cuándo… llevan tilde cuando preguntan o exclaman, también en preguntas indirectas."]],
+   ejemplo:{id:"26I-47",pasos:[
+     "I: «te» es pronombre (sin tilde) y «dé» es el verbo dar (con tilde). Correcta.",
+     "II: el primer «si» es afirmación: debe ser «Sí afinaré». La nota musical es «si», sin tilde. Está invertido: incorrecta.",
+     "III: «si» condicional (sin tilde), «sé» del verbo saber y «tú» pronombre (con tilde). Correcta.",
+     "Respuesta: I y III."],
+     idea:"Pregúntate qué función cumple la palabra en la oración: eso decide la tilde, no la palabra sola."},
+   guiada:[
+    {id:"23II-46",pistas:["En cada oración decide la función de las palabras con tilde o sin ella: ¿verbo, pronombre, interrogativo?","En II, «te» es pronombre. En IV, «cuando» introduce una idea de tiempo, no pregunta."],
+     pasos:["I: «sé» (verbo saber) y «qué» (interrogativo indirecto). Correcta.","II: «té» es la bebida; aquí es el pronombre («para que te llame»): sin tilde. Incorrecta.","III: «Él» pronombre con tilde, «ti» nunca lleva tilde y «te» pronombre. Correcta.","IV: «Cuando lo oí» indica tiempo, no pregunta: «cuando» va sin tilde. Incorrecta.","Respuesta: I y III."],
+     mal:{0:"II está mal: «para que te llame» usa el pronombre «te», sin tilde.",1:"IV está mal: «Cuando lo oí» indica tiempo, no pregunta; va sin tilde.",2:"II está mal: «té» con tilde es la bebida; aquí es el pronombre «te».",3:"II y IV están mal: «te» pronombre va sin tilde y «cuando» temporal también."}},
+    {id:"27I-49",pistas:["Una pregunta indirecta no lleva signos de interrogación, pero la palabra interrogativa sí lleva tilde.","¿En qué oraciones «cómo», «qué» o «donde» introducen algo que se pregunta o se desconoce?"],
+     pasos:["I: «pregunté… cómo está»: pregunta indirecta, «cómo» con tilde. Correcta.","II: «Nadie sabe qué sucedió»: pregunta indirecta, «qué» con tilde. Correcta.","III: «no sabe dónde vive» también es pregunta indirecta, así que debía llevar tilde. Incorrecta.","Respuesta: I y II."],
+     mal:{0:"III está mal: «no sabe dónde vive» es pregunta indirecta y necesita tilde.",1:"I también es correcta: «pregunté cómo está» es pregunta indirecta.",2:"II también es correcta: «Nadie sabe qué sucedió» es pregunta indirecta.",3:"III está mal: le falta la tilde a «dónde»."}}],
+   chequeo:[
+    {q:"¿Qué palabra está mal tildada?",o:["canción","árbol","música","examén","café"],a:3,e:"«Examen» es grave terminada en n: no lleva tilde."},
+    {q:"¿Qué oración tiene bien la tilde diacrítica?",o:["Tu sabes que el te está frío.","Tú sabes que el té está frío.","Tú sábes que el té esta frío.","Tu sabes que él té está frío.","Tú sabes que el te está frio."],a:1,e:"Tú (pronombre), té (bebida), está (verbo, aguda en vocal), frío (hiato acentual)."},
+    {q:"¿Qué oración usa bien la tilde enfática?",o:["No sé cuando empieza el examen.","No se cuándo empieza el examen.","No sé cuándo empieza el examen.","No sé cuándo empieza el exámen.","No se cuando empieza el examen."],a:2,e:"«Sé» del verbo saber y «cuándo» en pregunta indirecta; «examen» no lleva tilde."}]}]}
+};
+</script>
+<script>
+// Ruta 1250 · biblioteca de cursos (17 nov 2026)
+// Curso → unidad → subtemas. Orden: temario del ciclo CEPRE 2026-II, validado con el temario oficial de la
+// Prueba General de Admisión 2027-I (Reglamento 2027-I, pág. 83 y ss.).
+// Cada unidad: [título, subtemas, etiquetas del banco (regex sobre "t"), prioridad 0-3, extras]
+//   prioridad (★): según FIJAS (ABC) 2015-2025 (cuántas veces cayó el tema en admisión). 3 = de lo que más cae.
+//   extras: {pre:[ids de otras unidades que conviene saber antes], fi:"curso:Tema de ficha#bloque"}
+// seq:true = curso acumulativo: cada unidad pide la anterior (solo se recomienda, nunca se bloquea).
+// fuentes: libros del Drive para leer la teoría mientras la lección propia no esté lista.
+// Organización y prerrequisitos: propuesta editorial de Ruta 1250, no texto del CEPRE.
+const DRV="https://drive.google.com/file/d/", DRF="https://drive.google.com/drive/folders/";
+const BIBLIO={
+hv:{seq:false,f:[["Puro DECO · Razonamiento verbal",DRV+"1QtapDh7tOVG8wgi9I7lOWC7fHzT_Aew6/view"]],u:[
+ ["Textos con gráfico","Infografías, tablas y gráficos estadísticos: leer el dato antes de responder",/gr[aá]fic|infograf/,2],
+ ["Textos dialécticos","Dos posturas sobre un mismo problema: tesis, argumentos, punto de discrepancia y de convergencia",/dial[eé]ct|pol[eé]mica|discrepancia|convergencia|tesis|mixto/,2],
+ ["Textos en inglés","Nivel básico: idea principal, vocabulario, inferencia e incompatibilidad en inglés",/ingl[eé]s|traducci/,3],
+ ["Tema central e idea principal","Jerarquía textual, título, propósito del autor",/tema central|idea principal|jerarqu|t[ií]tulo|prop[oó]sito|tema de la/,3],
+ ["Cohesión y coherencia","Conectores, referentes, oraciones incompletas",/coheren|cohesi|oraciones incompletas/,1],
+ ["Sinonimia y antonimia contextual","Sentido de una palabra según el texto, denotación y connotación",/sentido contextual|antonimia|t[eé]rmino en contexto|vocabulario|sin[oó]nim|ant[oó]nimo/,2],
+ ["Compatibilidad e incompatibilidad","Literal (lo que dice) e inferencial (lo que se deduce)",/compatib|afirmaciones/,3],
+ ["Inferencia","Holística, de datos, léxica, causal, de intención y prospectiva",/inferen/,3,{fi:"hv:Inferencia y extrapolación#infer"}],
+ ["Extrapolación","Cognitiva y referencial: «si ocurriera X…»",/extrapol/,2,{fi:"hv:Inferencia y extrapolación#extra"}],
+ ["Argumentación, tono e intención","Tipos de argumento, falacias, actitud del autor, lectura crítica",/argument|falacia|cr[ií]tica|destinatario|intenci/,1]]},
+hlm:{seq:false,f:[["Puro DECO · Razonamiento matemático",DRV+"1jdagiD7lcBFkpqAFomHbNdb-46Sf25eF/view"],["PPTs RM (Prof. Flash)",DRF+"1AH9d-CWk4rslCwS0oQZfO10xD8ElZWm_"]],u:[
+ ["Deducción y orden de información","Deductivo simple y compuesto, ordenamiento lineal y circular, cuadro de categorías",/deduc|orden de informaci|ordenamiento|cuadro de categor/,3],
+ ["Verdades, mentiras y parentesco","Suposición de casos, lazos familiares",/verdades|parentesco|familiar/,2],
+ ["Situaciones lógicas y deportivas","Torneos, tablas de partidos, dados, dominó, cerillos",/deportiv|juegos l[oó]gicos|dado|domin|elementos recreativos/,3],
+ ["Planteo de ecuaciones y operadores","Simbolización, operadores matemáticos, edades, móviles",/planteo|simbolizaci|operadores|diof[aá]nt|cinem[aá]tica intuitiva/,3,{pre:["alg.u02"]}],
+ ["Arreglos numéricos y cuadrados mágicos","Distribuciones numéricas, sumas constantes",/arreglos|cuadrado m[aá]gico|distribuciones/,2],
+ ["Inducción y sucesiones","Inductivo numérico, verbal y geométrico; sucesiones y series",/inductiv|sucesi/,2],
+ ["Cronometría y calendarios","Adelantos y atrasos, campanadas, ángulos entre agujas, días de la semana",/cronometr|calendario/,3,{fi:"hlm:Problemas operativos#crono"}],
+ ["Certezas y frecuencia de sucesos","El peor de los casos, extracciones",/certeza|frecuencia de sucesos/,3,{fi:"hlm:Problemas operativos#cert"}],
+ ["Trasvases, pesadas y traslados","Recipientes sin marcas, balanzas con y sin pesas, traslados",/trasvas|pesadas|balanza|traslados/,2,{fi:"hlm:Problemas operativos#tras"}],
+ ["Máximos, mínimos y cortes","Cortes y estacas, pastillas, máximos y mínimos",/m[aá]ximos|cortes|seccionamiento/,2],
+ ["Trazos, rutas y perímetros","Figuras de un solo trazo, conteo de rutas, perímetros",/trazo|rutas|recorridos|euler|per[ií]metro/,2],
+ ["Conteo de figuras y cubos","Triángulos, cuadriláteros, cubos",/conteo de figuras|conteo de cubos/,2],
+ ["Visualización espacial","Rotación y traslación de figuras, simetrías, vistas de un sólido",/rotaci|simetr|reflexi|vistas|visualizaci|traslaci[oó]n de figuras|razonamiento geom/,2,{pre:["geo.u01"]}],
+ ["Ruedas, engranajes y puntos cardinales","Vueltas y sentidos de giro, rumbos",/ruedas|poleas|cardinales|rumbos/,1],
+ ["Gráficos, diagramas de flujo y suficiencia","Tablas y gráficos estadísticos, diagramas de flujo, suficiencia de datos",/gr[aá]fic|tabla|diagrama de flujo|suficiencia/,2]]},
+ari:{seq:true,f:[["Puro DECO · Aritmética",DRV+"1PtxqKIEoAVH21ksfPg9QJmgbtNZqfxSU/view"],["Apuntes digitales · Aritmética",DRF+"1GLAROMQH1ATjvl7Nsd2NkCmteuQ0a6h_"]],u:[
+ ["Lógica proposicional","Conectivos, tablas de verdad, tautología",/l[oó]gica proposicional/,1],
+ ["Conjuntos","Determinación, relaciones, operaciones, diagramas",/conjunto/,2],
+ ["Numeración y cuatro operaciones","Sistemas de numeración, operaciones, potenciación y radicación",/numeraci|cuatro operaciones|conteo de n[uú]meros|potenciaci/,3],
+ ["Divisibilidad","Algoritmo de la división, criterios de divisibilidad",/divisib/,2],
+ ["Números primos y divisores","Descomposición canónica, cantidad de divisores",/divisores|primos/,1],
+ ["MCD y MCM","Algoritmo de Euclides, problemas de reparto y coincidencia",/m[aá]ximo com[uú]n|mcd|m[ií]nimo com/,2],
+ ["Racionales y fracciones","Clases de fracciones, operaciones, decimales",/racional|fracci|decimal/,2],
+ ["Razones y proporciones","Razón aritmética y geométrica, series de razones iguales",/razones y proporciones/,3],
+ ["Magnitudes, regla de tres y reparto","Directa e inversamente proporcionales, regla de tres compuesta, reparto proporcional",/magnitud|regla de tres|reparto/,3],
+ ["Porcentajes, descuentos e interés","Tanto por ciento, aumentos y descuentos sucesivos, interés simple y compuesto",/tanto por ciento|porcentaj|descuento|inter[eé]s/,2],
+ ["Mezclas y aleaciones","Precio medio, ley de aleación",/mezcla|aleaci/,1],
+ ["Sucesiones y progresiones","Aritméticas y geométricas, sumatorias",/sucesi|progresi/,1],
+ ["Estadística y promedios","Media, mediana, moda, medidas de posición y dispersión, gráficos",/estad[ií]stic|promedio/,2],
+ ["Análisis combinatorio","Factorial, permutaciones, combinaciones",/combinatori/,1],
+ ["Probabilidades","Espacio muestral, regla de Laplace, probabilidad condicional",/probabilid/,2]]},
+alg:{seq:true,f:[["Puro DECO · Álgebra",DRV+"1YfpoeCQQs-9xhX6RJgBGRW5heW2P14Gn/view"],["Apuntes digitales · Álgebra",DRF+"1pSoJ6GLS9RIOm3oetbU3emL2N6oHiNnU"]],u:[
+ ["Exponentes, radicales y productos notables","Leyes de exponentes, radicales, productos notables",/producto|expresiones algebraicas|exponentes/,2],
+ ["Ecuaciones de primer y segundo grado","Ecuación lineal, cuadrática, discriminante, bicuadrada",/ecuaci[oó]n(es)? (lineal|cuadr|bicuadr)/,3],
+ ["Valor absoluto y números complejos","Ecuaciones con valor absoluto, operaciones con complejos",/valor absoluto|complejos/,2],
+ ["Polinomios","Grado, valor numérico, raíces y coeficientes",/^polinomios|ra[ií]ces de polinomios/,2],
+ ["División, cocientes notables y binomio","Ruffini, teorema del resto, cocientes notables, binomio de Newton",/cociente|binomio|divisi[oó]n algebr/,1],
+ ["Factorización","Factor común, aspa simple y doble",/factoriz/,1],
+ ["Ecuaciones de grado superior","Ecuaciones polinomiales, Cardano-Vieta",/polinomiales|grado superior/,2],
+ ["Inecuaciones","Lineales, cuadráticas, fraccionarias, de grado superior",/inecuaci|desigualdad/,2],
+ ["Sistemas de ecuaciones","Lineales 2×2 y 3×3, matrices y determinantes",/sistema de ecuaciones/,3],
+ ["Funciones","Dominio, rango, gráficas, función cuadrática e inversa",/^funci[oó]n(es)?( reales| inversa| cuadr[aá]tica)?$/,3],
+ ["Exponencial y logaritmos","Función exponencial y logarítmica, ecuaciones exponenciales",/exponencial|logar/,3],
+ ["Programación lineal","Región factible, máximo y mínimo de una función objetivo",/programaci[oó]n lineal/,2]]},
+geo:{seq:true,f:[["Puro DECO · Geometría",DRV+"1Ub7H2rbVv7DyT55NsBqNN_xvWOg8pXVt/view"],["Apuntes digitales · Geometría",DRF+"1Xrc-57LkbDPVzA0HV7LpnJUlKgBfB1rI"]],u:[
+ ["Segmentos y ángulos","Puntos medios, ángulos entre paralelas",/segment|[aá]ngulo entre/,1],
+ ["Triángulos","Clasificación, líneas y puntos notables, desigualdad triangular, triángulos notables",/^tri[aá]ngulos( notables)?$|desigualdad triangular|ortocentro/,2],
+ ["Congruencia de triángulos","Criterios y aplicaciones: bisectriz, mediatriz, base media",/congru/,3],
+ ["Cuadriláteros y polígonos","Paralelogramos, trapecios, ángulos en polígonos",/cuadril|pol[ií]gono/,1],
+ ["Circunferencia","Ángulos en la circunferencia, inscritas y circunscritas",/^circunferencia$|relaciones m[eé]tricas en la circ/,2],
+ ["Semejanza y relaciones métricas","Thales, semejanza, Pitágoras, bisectriz, mediana",/semejanza|relaciones m[eé]tricas$|tales/,2],
+ ["Áreas de regiones planas","Triangulares, cuadrangulares, circulares y sombreadas",/[aá]rea/,3],
+ ["Poliedros, prisma y pirámide","Áreas lateral y total, volúmenes, troncos",/prism|pir[aá]mide|poliedro/,2],
+ ["Cilindro, cono y esfera","Áreas y volúmenes, troncos de cono y cilindro",/cilindro|cono|esfera/,3],
+ ["Geometría analítica: recta","Plano cartesiano, distancia, pendiente, ecuación de la recta",/recta|plano cartesiano/,2,{pre:["alg.u02"]}],
+ ["Parábola y elipse","Elementos y ecuaciones",/elipse|par[aá]bola/,2]]},
+tri:{seq:true,f:[["Puro DECO · Trigonometría",DRV+"1snT3qDIN_a-QSL5lLpwbiy5WT7lDSXNI/view"],["Apuntes digitales · Trigonometría",DRF+"1L2V9J7XZuS8tvH4FxUtZprIqpBwfv98S"]],u:[
+ ["Sistemas de medida angular","Sexagesimal, centesimal y radial; conversiones",/medida|sistemas? angular/,2],
+ ["Longitud de arco y sector circular","L = θ·r, área del sector",/sector|arco/,1],
+ ["Razones trigonométricas de ángulos agudos","Triángulos notables, razones recíprocas y complementarias",/agudos|notables/,3,{pre:["geo.u02"]}],
+ ["Ángulos verticales y horizontales","Elevación y depresión",/verticales|horizontales/,2],
+ ["Ángulo en posición normal y reducción","Signos por cuadrante, reducción al primer cuadrante",/posici[oó]n normal|reducci/,1],
+ ["Identidades fundamentales","Pitagóricas, recíprocas y por cociente",/fundamentales/,1,{pre:["alg.u01"]}],
+ ["Ángulos compuestos, doble y mitad","Suma y diferencia, ángulo doble, mitad y triple",/compuesto|doble|mitad|triple/,3],
+ ["Transformaciones trigonométricas","Suma a producto y producto a suma",/transformaci/,1],
+ ["Ecuaciones trigonométricas","Solución general y en un intervalo",/ecuaciones trig/,3],
+ ["Resolución de triángulos oblicuángulos","Ley de senos, cosenos y tangentes",/oblicu|ley de/,2],
+ ["Circunferencia trigonométrica y funciones","Líneas trigonométricas, dominio, rango y gráficas",/^funciones trigonom[eé]tricas( directas)?$|rango|circunferencia trig/,2],
+ ["Funciones trigonométricas inversas","arcsen, arccos, arctan",/inversas/,1]]},
+fis:{seq:true,f:[["Puro DECO · Física",DRV+"1Kxx77MgrklnADw10HIe5tUeYeFxJOsvY/view"],["Apuntes digitales · Física (≈40 PDF por tema)",DRF+"1baa5DYY7gGt9376QAPns3TK5IU7MR5uf"]],u:[
+ ["Magnitudes, dimensiones y vectores","SI, análisis dimensional, suma y descomposición de vectores",/vector|dimensional/,2,{pre:["tri.u03"]}],
+ ["MRU, MRUV y caída libre","Ecuaciones del movimiento, gráficas",/\bmru\b|\bmruv\b|ca[ií]da|cinem/,3,{pre:["alg.u02"]}],
+ ["Movimiento parabólico y circular","Proyectiles, MCU y MCUV",/parab[oó]lico|mcu/,2,{pre:["tri.u03"]}],
+ ["Dinámica y estática","Leyes de Newton, rozamiento, equilibrio, torque",/^din[aá]mica|est[aá]tica/,3,{pre:["tri.u03"]}],
+ ["Trabajo, potencia y energía","Trabajo neto, energía mecánica y su conservación",/energ|trabajo|potencia$/,3],
+ ["Cantidad de movimiento y gravitación","Impulso, choques, leyes de Kepler, gravitación universal",/cantidad de movimiento|choques|impulso|kepler|gravitaci[oó]n universal/,2],
+ ["Fluidos","Presión, principio de Pascal y de Arquímedes, hidrodinámica",/hidrost|fluidos|arqu/,3],
+ ["Calor y temperatura","Calorimetría, cambios de fase, dilatación, termodinámica",/calor|temperatura|dilataci|termodin/,2],
+ ["Electrostática y condensadores","Ley de Coulomb, campo y potencial, condensadores",/electrost|condensador|potencial el/,3,{fi:"fis:Electricidad y magnetismo#cond"}],
+ ["Corriente y circuitos","Ley de Ohm, resistencias, Kirchhoff, efecto Joule",/electrodin|circuito/,2,{fi:"fis:Electricidad y magnetismo#elec"}],
+ ["Magnetismo","Campo magnético, fuerza sobre cargas y corrientes",/^electromagnetismo$|magn[eé]tic/,3,{fi:"fis:Electricidad y magnetismo#induc"}],
+ ["Inducción electromagnética","Flujo, ley de Faraday y de Lenz, transformadores",/faraday|lenz|inducci|transformador/,2,{fi:"fis:Electricidad y magnetismo#induc"}],
+ ["MAS y ondas mecánicas","Péndulo, resorte, ondas y sonido",/\bmas\b|p[eé]ndulo|ondas mec|sonido|ondas sonoras/,3],
+ ["Óptica y ondas electromagnéticas","Reflexión, refracción, espejos y lentes",/[oó]ptica|espejo|lente|electromagn[eé]ticas/,1],
+ ["Física moderna","Efecto fotoeléctrico, relatividad",/f[ií]sica moderna|relatividad|fotoel/,2]]},
+qui:{seq:true,f:[["Puro DECO · Química",DRV+"1yx8D-TMWubNwmWaX_IaSiwxSvyVxTNN4/view"],["Apuntes digitales · Química",DRF+"142diYcSXek1Bb-Xzw5OfY8ZD2OZw8Wyk"]],u:[
+ ["Materia, energía y SI","Propiedades, cambios de estado, unidades",/materia|cambios de fase|magnitudes/,1],
+ ["Átomo y tabla periódica","Modelos atómicos, configuración electrónica, propiedades periódicas, química nuclear",/at[oó]mic|tabla peri|nuclear/,2],
+ ["Enlace químico","Iónico, covalente, metálico; fuerzas intermoleculares",/enlace/,2],
+ ["Nomenclatura inorgánica","Óxidos, hidróxidos, ácidos, sales",/inorg[aá]nica$|nomenclatura/,1],
+ ["Unidades químicas de masa","Mol, masa molar, composición centesimal, fórmula empírica",/uqm|unidades qu[ií]micas|composici[oó]n centesimal|c[aá]lculos qu[ií]micos/,2,{pre:["ari.u08"]}],
+ ["Reacciones químicas y redox","Tipos de reacción, balanceo por tanteo y redox",/reacci|redox/,3],
+ ["Estequiometría","Relaciones mol-masa, reactivo limitante, rendimiento",/estequiometr[ií]a$|equivalentes/,3],
+ ["Electroquímica","Electrólisis, leyes de Faraday, celdas galvánicas",/electroqu|electr[oó]lisis/,1],
+ ["Gases","Ley general, ecuación de estado, Graham",/gas|graham/,2],
+ ["Soluciones","Molaridad, normalidad, % en masa y volumen, dilución",/soluci/,3,{fi:"qui:Soluciones, ácidos y equilibrio#sol",pre:["ari.u10"]}],
+ ["Cinética y equilibrio químico","Velocidad de reacción, Kc, principio de Le Châtelier",/cin[eé]tica|equilibrio/,2],
+ ["Ácidos, bases y pH","Teorías ácido-base, pH y pOH, neutralización",/[aá]cidos y bases|neutraliz/,2,{fi:"qui:Soluciones, ácidos y equilibrio#ph"}],
+ ["Hidrocarburos","Alcanos, alquenos, alquinos, aromáticos",/hidrocarb|arom[aá]tic/,3],
+ ["Funciones oxigenadas y nitrogenadas","Alcoholes, aldehídos, cetonas, ácidos, ésteres, aminas, isomería, biomoléculas",/oxigenad|nitrogenad|isomer|org[aá]nica$|prote[ií]na|compuestos org|enlace y compuestos org/,3],
+ ["Química aplicada y ambiente","Recursos naturales, metalurgia, contaminación, potabilización",/metalurgia|ambient|contamin/,1]]},
+bio:{seq:false,f:[["Puro DECO · Biología",DRV+"1YgBv8Aos8vzmlKs54hQHtyWFobWU_hKJ/view"],["Apuntes digitales · Biología",DRF+"1LyATsLLVJDXZqilgnwr73lPp-ghpBsX6"]],u:[
+ ["Seres vivos y bioquímica","Características de los seres vivos, agua, biomoléculas, enzimas, virus",/caracter[ií]sticas|agua|enzima|bioqu/,2],
+ ["Célula y ciclo celular","Procariota y eucariota, organelos, mitosis y meiosis",/c[eé]lula|ciclo celular|mitosis/,2],
+ ["Tejidos (histología)","Tejidos animales y vegetales",/histolog|tejido/,3],
+ ["Fotosíntesis y respiración celular","Fase luminosa y oscura, glucólisis, Krebs",/fotos[ií]ntesis|respiraci[oó]n celular/,2,{pre:["bio.u02"]}],
+ ["Digestión y nutrición","Aparato digestivo humano y animal",/digest/,3],
+ ["Respiración y circulación","Sistema respiratorio, cardiovascular, sangre",/respirat|circulat|cardiovascular|gl[oó]bulos/,2],
+ ["Excreción e inmunidad","Sistema excretor, defensas y vacunas",/excre|inmun/,2],
+ ["Sistema endocrino","Glándulas y hormonas",/endocrin|coordinaci/,2],
+ ["Sistema nervioso y sentidos","Neurona, SNC y SNP, pares craneales, órganos de los sentidos",/nervios|sensorial/,3],
+ ["Reproducción","Reproducción humana, animal y vegetal",/reproducci/,2,{pre:["bio.u02"]}],
+ ["Genética","Mendel, herencia, grupos sanguíneos, citogenética",/gen[eé]tica|citogen|herencia/,3,{pre:["bio.u02"]}],
+ ["Evolución y taxonomía","Teorías evolutivas, clasificación de los seres vivos",/evoluci|taxonom/,2],
+ ["Diversidad de seres vivos","Reino Animal y Reino Plantae",/zoolog|reino plantae$/,1],
+ ["Salud y enfermedades","Enfermedades infecciosas, higiene",/salud|enfermedad/,3],
+ ["Ecología y recursos","Ecosistema, relaciones, cadenas tróficas, ciclos, recursos, huella ecológica",/ecolog|nitr[oó]geno|recursos|biorremed/,3,{fi:"bio:Ecología y recursos"}]]},
+len:{seq:false,f:[["Puro DECO · Lenguaje",DRV+"1qOwrFM_RJbA4YH0eB809CHZ2RWj_aXy3/view"],["Apuntes digitales · Lenguaje",DRF+"1D5XjTpVRsrXGqYoS5g1qKytFfKNcmzR_"]],u:[
+ ["Comunicación y lenguaje","Elementos y funciones, lengua y habla, planos del lenguaje",/comunicaci|planos del lenguaje|contexto|disciplinas/,2],
+ ["Realidad lingüística del Perú","Multilingüismo, lenguas amerindias, dialectos, historia del castellano",/realidad|amerindias|historia del castellano|dialect/,1],
+ ["Fonética y fonología","Fonemas, alófonos, grafemas",/fonolog|fonemas/,1],
+ ["Sílaba y secuencias vocálicas","Silabeo, diptongo, triptongo, hiato",/s[ií]laba|silabeo|concurrencia/,3,{fi:"len:Acentuación y fonología#silaba"}],
+ ["Uso de mayúsculas","Normas de la RAE (2010)",/may[uú]scula/,2],
+ ["Acentuación y tildación","Tildación general, diacrítica y enfática; compuestos",/tild|acentuaci/,3,{fi:"len:Acentuación y fonología#tilde"}],
+ ["Morfología y formación de palabras","Morfemas, derivación, composición",/morfolog|formaci[oó]n de palabras/,2],
+ ["Semántica","Relaciones semánticas, sentidos de la palabra",/sem[aá]ntica|relaciones sem/,2],
+ ["Frase nominal","Sustantivo, adjetivo, artículo, concordancia",/frase nominal|adjetivo|art[ií]culo|concordancia nominal/,2],
+ ["Verbo y frase verbal","Accidentes, modos, predicado, complementos",/verbo|predicado|predicativo|modo verbal/,2],
+ ["Adverbio, preposición y conjunción","Clases y funciones",/adverbio|preposici|conjunci/,2],
+ ["Oración simple","Clases según la actitud del hablante y la estructura",/clasificaci[oó]n de oraciones|tipos de oraci|funciones sint/,2],
+ ["Oración compuesta","Coordinada y subordinada (sustantiva, adjetiva, adverbial)",/oraci[oó]n compuesta/,3],
+ ["Puntuación","Coma, punto y coma, dos puntos",/puntuaci|coma/,3],
+ ["El texto: cohesión y coherencia","Anáfora, catáfora, conectores",/cohesi|an[aá]fora/,1]]},
+lit:{seq:false,f:[["Puro DECO · Literatura",DRV+"1R0oRSKXFd6s9NvikyPR5GYhfxw9jXoQf/view"],["Apuntes digitales · Literatura",DRF+"109LiR6i9dWRgCK7aphyVcl-RO01zuT7n"]],u:[
+ ["Teoría literaria, géneros y figuras","Géneros, figuras literarias, métrica",/figuras|g[eé]neros|teor[ií]a|comparada/,3],
+ ["Literatura griega","Ilíada, Odisea, Edipo Rey",/griega|tragedia/,2],
+ ["Medievalismo y Siglo de Oro","Mio Cid, Calderón, Quijote, teatro barroco",/mio cid|edad de oro|barroc|siglo de oro/,2],
+ ["Renacimiento y Romanticismo","Shakespeare, Goethe, Bécquer",/renacimiento|shakespeare|romanticismo|goethe/,2],
+ ["Realismo y vanguardia europea","Dostoievski, Kafka, simbolismo",/realismo ruso|vanguardismo europeo|simbolismo|kafka/,2],
+ ["Modernismo y poesía hispanoamericana","Darío, Neruda",/modernismo|poes[ií]a hispano|nueva poes/,1],
+ ["Nueva narrativa hispanoamericana","Borges, García Márquez, Carpentier, realismo maravilloso",/borges|nueva narrativa|realismo maravilloso|carpentier/,2],
+ ["Literatura colonial: Inca Garcilaso","Comentarios reales",/garcilaso|colonia/,1],
+ ["Costumbrismo y romanticismo peruano","Segura, Palma: la tradición",/palma|tradici|costumbr/,1],
+ ["Realismo peruano","Matto de Turner, González Prada",/aves sin nido|matto|gonz[aá]lez prada/,2],
+ ["Posmodernismo y vanguardia peruana","Eguren, Valdelomar, Vallejo",/vallejo|eguren|valdelomar/,2],
+ ["Indigenismo","Ciro Alegría, José María Arguedas",/indigenis|arguedas|alegr/,3],
+ ["Generación del 50","Ribeyro, Blanca Varela, narrativa urbana",/generaci[oó]n del 50|ribeyro|varela/,3],
+ ["Vargas Llosa y Bryce","La ciudad y los perros, Conversación en La Catedral",/vargas llosa|catedral|ciudad y los perros|generaci[oó]n del 60/,2]]},
+psi:{seq:false,f:[["Puro DECO · Psicología",DRV+"1LJDL8KLwhLaCclek9SXODB5oi6--vE4l/view"],["Apuntes digitales · Psicología",DRF+"1r0sSFf6To02N1V3RfH_X8vkGqjHMWrm9"]],u:[
+ ["La psicología como ciencia","Orígenes, método, enfoques: psicoanálisis, conductismo, humanismo, cognitivismo",/escuelas|m[eé]todo|psicoan|personalidad/,2],
+ ["Bases biológicas de la conducta","Sistema nervioso y endocrino en el comportamiento",/bases biol/,2],
+ ["Socialización, familia y actitudes","Agentes y tipos de socialización, estilos de crianza, actitudes y valores",/sociocult|socializaci|crianza|actitudes/,3],
+ ["Sensación, percepción, atención y memoria","Procesos cognitivos básicos",/memoria|percepci|atenci/,2],
+ ["Pensamiento, lenguaje e inteligencia","Desarrollo de la inteligencia, Piaget",/inteligencia$|piaget|desarrollo cognitivo|pensamiento/,2],
+ ["Aprendizaje","Condicionamiento, significativo, por descubrimiento, observacional, autorregulado",/aprendizaje/,3],
+ ["Desarrollo humano e identidad","Etapas del ciclo vital, identidad, autoestima",/desarrollo humano|autoestima|identidad/,3],
+ ["Vida saludable y proyecto de vida","Conductas de riesgo, orientación vocacional, uso del tiempo",/saludable|tiempo|vocacional/,1],
+ ["Afectividad y motivación","Emociones, sentimientos, inteligencia emocional, necesidades",/afectiv|motivaci|emocional/,2]]},
+civ:{seq:false,f:[["Puro DECO · Cívica",DRV+"1HuKn44juqka8u7KNDgv8W7gIaiRv3STk/view"],["Apuntes digitales · Cívica",DRF+"1vD4ndEwEBacNFAfvPv3jlaM4GdOF6fBa"]],u:[
+ ["Derechos humanos y sistema interamericano","Declaración Universal, Convención del Niño, CIDH y Corte IDH",/derechos humanos|interamericano/,2],
+ ["Constitución y garantías constitucionales","Derechos fundamentales, hábeas corpus, amparo, hábeas data, regímenes de excepción",/garant|constituci|derechos fundamentales|excepci/,3],
+ ["Ciudadanía y participación","Referéndum, revocatoria, rendición de cuentas, consulta previa",/ciudadan|participaci|derechos y deberes pol/,3],
+ ["Convivencia y solución de conflictos","Cultura de paz, negociación, mediación, conciliación, violencia terrorista",/convivencia|conflict|violencia/,3],
+ ["Diversidad cultural e interculturalidad","Identidad, patrimonio, peruanidad",/diversidad/,2],
+ ["Estado peruano y poderes del Estado","Legislativo, Ejecutivo, Judicial",/estado|poder|legislativ/,2],
+ ["Organismos autónomos y sistema electoral","JNE, ONPE, RENIEC, Defensoría, BCRP",/aut[oó]nomo|electoral|onpe|jurado/,2],
+ ["Seguridad y defensa nacional","FF. AA. y PNP",/defensa|seguridad/,1]]},
+hpe:{seq:false,f:[["Puro DECO · Historia del Perú",DRV+"1tFcJZANH0FhRHh_lEo6-boYhnc_kFr4M/view"],["Apuntes digitales · Historia",DRF+"1CPNjyGl4kCjNrirNOASabUXc-_dsInsF"]],u:[
+ ["Poblamiento y Formativo","Teorías del poblamiento, Arcaico, Chavín",/poblamiento|arcaico|formativo/,2],
+ ["Culturas preincas y Tahuantinsuyo","Mochica, Recuay, Wari, Chimú, Incas",/recuay|mochica|preinca|tahuantinsuyo/,3],
+ ["Conquista y Virreinato","Instituciones, economía, sociedad colonial",/virreinato/,3],
+ ["Reformas borbónicas y rebeliones","Túpac Amaru II, Juan Santos Atahualpa",/borb[oó]n|t[uú]pac amaru|juan santos|rebelion/,2],
+ ["Independencia","Corrientes libertadoras",/independencia/,1],
+ ["República del siglo XIX","Prosperidad falaz, guerra con Chile, Reconstrucción",/reconstrucci|prosperidad|civilismo/,2],
+ ["República Aristocrática y Oncenio","Leguía",/aristocr|oncenio|legu/,2],
+ ["Siglo XX: militarismos a nuestros días","Velasco, Belaunde, década del 80",/velasco|fuerzas armadas|bela[uú]nd|prado/,2],
+ ["Historiografía","Historiadores del Perú",/historiador/,0]]},
+hun:{seq:false,f:[["Puro DECO · Historia Universal",DRV+"1oXI0rQRxflmvCgNlaeFSONHyIblFjn6-/view"],["Apuntes digitales · Historia (con líneas de tiempo)",DRF+"1XbTsczI8ICvXiAh5sGZjaY5XZYacvTAl"]],u:[
+ ["Historia como ciencia y prehistoria","Fuentes, periodización, paleolítico y neolítico",/teor[ií]a de la historia|paleol|neol/,2],
+ ["Antigüedad: Oriente, Grecia y Roma","Mesopotamia, Egipto, polis griegas, Roma",/roma|grecia|mesopot|egipto/,2],
+ ["Edad Media","Feudalismo, cruzadas",/medieval|feudal/,1],
+ ["Edad Moderna","Reforma protestante, monarquías absolutas, Ilustración",/reforma protestante|ilustraci|monarqu/,2],
+ ["Revoluciones liberales","Revolución francesa, liberalismo",/revoluci[oó]n francesa|revoluciones liberales|liberalismo/,2],
+ ["Revolución Industrial e imperialismo","Primera y segunda revolución industrial",/industrial|imperialismo/,2],
+ ["Revolución rusa y guerras mundiales","Primera y Segunda Guerra Mundial",/rusa|guerra mundial/,2],
+ ["Guerra fría y mundo contemporáneo","Descolonización, nuevo orden mundial",/guerra fr[ií]a|descoloniz/,2]]},
+gfa:{seq:false,f:[["Puro DECO · Geografía",DRV+"1XBy7dsLMAXI05opaBpdV81ZClTlanqOQ/view"],["Apuntes digitales · Geografía",DRF+"1B8uqtmjQSlv1YuFhwPIa1-66VrBsEoEw"]],u:[
+ ["Espacio geográfico y la Tierra","Movimientos de la Tierra, líneas imaginarias, husos horarios",/traslaci[oó]n|l[ií]neas imaginarias/,1],
+ ["Cartografía y fronteras","Escalas, proyecciones, coordenadas, límites del Perú",/cartograf|fronter/,3],
+ ["Geodinámica interna y externa","Tectónica de placas, sismos, meteorización",/geodin|deriva|tect[oó]n/,2],
+ ["Relieve peruano","Costa, sierra y selva, geomorfología",/relieve|geomorfolog/,3],
+ ["Hidrografía y mar peruano","Vertientes, cuencas, corrientes, El Niño",/hidrograf|mar peruano|cuencas/,2],
+ ["Clima y atmósfera","Factores del clima, presión, climas del Perú",/clima|atmosf|presi[oó]n atm|ni[ñn]o/,3],
+ ["Cambio climático","Calentamiento global, Protocolo de Kioto, problemas atmosféricos",/kioto|calentamiento|problemas atmosf/,2],
+ ["Gestión de riesgos y desastres","Fenómenos naturales, prevención",/riesgo|desastre/,3],
+ ["Recursos naturales y biodiversidad","Suelo, agua, biodiversidad amazónica",/recursos naturales|biodivers|suelo/,2],
+ ["Ecorregiones y áreas protegidas","Once ecorregiones, reservas de biósfera, ANP",/ecorregion|bi[oó]sfera|reservas|protegid/,2],
+ ["Actividades económicas","Minería, pesca, agricultura, servicios",/miner|sector|actividades/,2],
+ ["Población","Demografía del Perú y del mundo",/poblaci[oó]n|demograf/,1]]},
+eco:{seq:false,f:[["Puro DECO · Economía",DRV+"1uahCb4DNuIv8PwQwYlaatULC3Y5TD-WN/view"],["Apuntes digitales · Economía",DRF+"1IDxva6QkFmeLH4ILDfuWl7a4-w1nIT5r"]],u:[
+ ["La economía como ciencia","Método, división de la economía",/ciencia|divisi[oó]n de la econom|conceptos b[aá]sicos/,2],
+ ["Necesidades, bienes y escasez","Costo de oportunidad, frontera de posibilidades de producción",/necesidad|bienes|costo de oportunidad/,2],
+ ["Proceso económico y flujo circular","Producción, circulación, consumo, ingresos",/proceso|flujo circular|consumo|ingresos/,2],
+ ["Demanda, oferta y elasticidad","Equilibrio de mercado",/demanda|oferta/,3,{pre:["ari.u08"]}],
+ ["Mercados y fallas de mercado","Competencia perfecta, monopolio, oligopolio, externalidades",/mercado$|modelos de mercado|monopolio|fallas/,3],
+ ["Producción, empresa y trabajo","Factores productivos, costos, mercado laboral",/mercado laboral|producci|ciclo de vida|trabajo/,2],
+ ["Dinero, inflación y sistema financiero","BCRP, SBS, política monetaria, fintech",/dinero|inflaci|financ|banc/,2],
+ ["Sector público, tributos y deuda","Presupuesto, SUNAT, política fiscal",/deuda|tribut|presupuesto|pol[ií]tica econ/,2],
+ ["Comercio internacional y balanza de pagos","Exportaciones, aranceles, tipo de cambio, integración",/comercio|balanza|divisas/,3],
+ ["PBI, cuentas nacionales y ciclo económico","Agregados macroeconómicos",/agregados|cuentas nacionales|ciclos/,2],
+ ["Desarrollo y sostenibilidad","IDH, economía circular",/desarrollo/,2],
+ ["Informalidad y emprendimiento","Sector informal, proyectos de inversión",/informal|emprend/,2]]},
+fil:{seq:false,f:[["Puro DECO · Filosofía",DRV+"1IREV2eaty25BHTsH3YaK1JpNPjEV6CzP/view"],["Apuntes digitales · Filosofía",DRF+"1Zg5l5I3tXRxj2w4MHXxRTTwkSpcFVAo1"]],u:[
+ ["Origen y sentido de la filosofía","Del mito al logos, características y disciplinas",/mito|origen|caracter[ií]sticas|introducci/,2],
+ ["Filosofía antigua","Presocráticos, Sócrates, Platón, Aristóteles",/antigua/,2],
+ ["Filosofía moderna","Racionalismo, empirismo, Kant",/moderna/,3],
+ ["Filosofía contemporánea","Siglo XIX y XX, positivismo, existencialismo",/contempor|siglo xix|positivis/,2],
+ ["Filosofía latinoamericana y peruana","Salazar Bondy, Mariátegui, filosofía en el Perú",/latinoameric|per[uú]/,2],
+ ["Lógica y argumentación","Razonamientos, lógica proposicional, falacias",/l[oó]gica|razonamiento|argumentos|falacia/,2],
+ ["Epistemología","Conocimiento científico, Popper, Kuhn",/epistemolog|cient[ií]fic|ciencia y poder/,3],
+ ["Ética","Teorías éticas, valores morales",/(^|\s)[eé]tica|teor[ií]as [eé]ticas/,3],
+ ["Estética y axiología","Valores, lo bello, el arte",/est[eé]tica|axiolog/,2],
+ ["Filosofía política","Estado, poder, democracia",/pol[ií]tica/,2]]}
 };
 </script>
 <script>
@@ -2375,6 +2828,7 @@ const TEMAS={
 };
 
 
+
 // =====================================================================
 // Ruta 1250 · motor de aprendizaje v2 (16 nov 2026)
 // Mide con primeros intentos y aciertos espaciados (no con repeticiones),
@@ -2437,7 +2891,7 @@ const I={
 const VISTAS=[["inicio","Inicio"],["tarjetas","Tarjetas"],["cursos","Cursos"],["progreso","Progreso"],["banco","Banco"]];
 
 // ---- estado (misma clave de siempre: no se pierde el progreso). v2 agrega log, cfg y FSRS sin borrar nada.
-const BASE=()=>({xp:0,racha:0,dia:"",r:{},hechas:{},hist:[],dias:{},metaDia:20,log:[],cfg:{fecha:"",min:45,t:0},diags:[],diag:null,diagT:0,res:[],plan:null,borrado:0,fi:{},v:2});
+const BASE=()=>({xp:0,racha:0,dia:"",r:{},hechas:{},hist:[],dias:{},metaDia:20,log:[],cfg:{fecha:"",min:45,t:0},diags:[],diag:null,diagT:0,res:[],plan:null,borrado:0,fi:{},un:{},v:2});
 let DEV=""; try{DEV=localStorage.getItem(DKEY)||""; if(!DEV){DEV=Math.random().toString(36).slice(2,8); localStorage.setItem(DKEY,DEV)}}catch(e){DEV="x"}
 let S=BASE();
 // un estado guardado sin "v" es de la versión 1 (antes del 16 nov): hay que migrarlo
@@ -2762,7 +3216,8 @@ function vCurso(cid){const c=C[cid], ids=idsCurso(cid), x=nivel(ids), e=extremos
       <div class="row"><button class="btn" data-act="cursoq" data-id="${cid}">Preguntas de todo el curso</button>${calc?"":`<button class="btn ghost" data-act="flash" data-deck="c:${cid}">Tarjetas de todo el curso</button>`}</div>
     </div>
   </section>
-  <section class="card"><div class="row"><h2 class="grow">Temas</h2>${legend}</div>
+  ${rutaCurso(cid)}
+  <section class="card"><div class="row"><h2 class="grow">Temas del banco</h2>${legend}</div>
     <p class="muted small">Los puntos dorados muestran en cuántos de los ${NEX} exámenes cargados vino el tema. <b>Preguntas</b> te da alternativas como en el examen${calc?"":"; <b>Tarjetas</b> te hace recordar la respuesta sin verlas"}.</p>
     <div>${TC[cid].map(t=>filaTema(t,false)).join("")}</div>
   </section>
@@ -2863,6 +3318,7 @@ function startFlash(deck){let ids=[], t="";
   if(deck==="hoy"){ids=mazoHoy(); t="Repaso del día"}
   else if(deck==="mezcla"){ids=mazoMezcla(); t="Mezcla del día"} else if(deck.startsWith("c:")){const c=deck.slice(2); ids=ordenar(idsCurso(c),15); t="Tarjetas de "+C[c].n}
   else if(deck.startsWith("t:")){const tm=TM[deck.slice(2)]; if(tm){ids=ordenar(tm.ids,15); t=C[tm.c].n+" · "+tm.n}}
+  else if(deck.startsWith("u:")){const u=UN[deck.slice(2)]; if(u){ids=ordenar(u.ids,15); t=C[u.c].n+" · "+u.n}}
   else if(deck.startsWith("fx:")){const b=bloquePorKey(deck.slice(3)); if(b){ids=shuffle(b.fx); t="Recuerda: "+b.t}}
   if(!ids.length) return;
   ses=null; fl={titulo:t,cola:ids,total:ids.length,hechas:0,flip:false,pista:false,cnt:[0,0,0],first:{},rep:{},xp:0,anim:true,busy:false,t0:Date.now()}; draw(); window.scrollTo(0,0)}
@@ -3036,6 +3492,7 @@ function fusionar(a,b){a=cargar(a); b=cargar(b);
   o.xp=Math.max(a.xp||0,b.xp||0); o.hechas=Object.assign({},a.hechas,b.hechas);
   Object.keys(a.hechas).forEach(k=>{o.hechas[k]=Math.max(a.hechas[k]||0,b.hechas[k]||0)});
   o.fi=Object.assign({},a.fi); Object.entries(b.fi||{}).forEach(([k,v])=>{if(!o.fi[k]||(v.t||0)>(o.fi[k].t||0)) o.fi[k]=v});
+  o.un=Object.assign({},a.un); Object.entries(b.un||{}).forEach(([k,v])=>{if(!o.un[k]||(v.t||0)>(o.un[k].t||0)) o.un[k]=v});
   o.res=[...new Set([...(a.res||[]),...(b.res||[])])].filter(id=>!o.r[id]);
   // racha recalculada con los días combinados
   let r=0; const d=new Date(); if(!o.dias[ymd(d)]) d.setDate(d.getDate()-1); while(o.dias[ymd(d)]){r++; d.setDate(d.getDate()-1)}
@@ -3130,12 +3587,63 @@ let fz=null;               // estado de la ficha abierta (no se guarda; el avanc
     b.guiada=b.guiada.filter(g=>Q[g.id]); b.guiada.forEach(g=>FIDS.add(g.id));
     // tarjetas de fórmulas y conceptos: preguntas "fx" con una sola respuesta
     b.fx=b.claves.map((x,i)=>{const id="fx-"+b.key+"-"+(i+1); Q[id]={id,fx:1,c,t:b.t,tm:tm.id,ex:"Ficha",n:b.t,q:x[0],o:[x[1]],a:0,e:""}; return id});
-    b.ids=tm.ids.filter(id=>b.ts.some(e=>e.endsWith("*")?Q[id].t.startsWith(e.slice(0,-1)):e===Q[id].t))})})})();
+    b.ids=tm.ids.filter(id=>!(b.excl||[]).includes(id)&&b.ts.some(e=>e.endsWith("*")?Q[id].t.startsWith(e.slice(0,-1)):e===Q[id].t))})})})();
 armarReserva();
 const estB=b=>(S.fi||{})[b.key]||{p:0,ok:false};
 function marcarB(b,o){S.fi=S.fi||{}; S.fi[b.key]=Object.assign({},estB(b),o,{t:Date.now()}); save()}
 const bloqueAbierto=(f,i)=>i===0||estB(f.bloques[i-1]).ok;
 function avanceFicha(f){const ok=f.bloques.filter(b=>estB(b).ok).length; return {ok,n:f.bloques.length,sig:f.bloques.findIndex(b=>!estB(b).ok)}}
+// ---- biblioteca: curso → unidad → subtemas → lección → práctica (datos en BIBLIO, biblioteca.js)
+// Una unidad agrupa preguntas reales del banco por etiqueta y, si existe, enlaza al bloque de su ficha.
+// Prerrequisitos y orden: solo recomiendan; nunca bloquean (modo Explorar = todo abierto, por prioridad).
+const BB=(typeof BIBLIO!=="undefined")?BIBLIO:{};
+const UN={}, UC={};
+const PRIO=["Cae poco en admisión","★ Cae a veces en admisión","★★ Cae con frecuencia en admisión","★★★ De lo que más cae en admisión"];
+(function(){Object.entries(BB).forEach(([c,cb])=>{if(!C[c]) return;
+  UC[c]=cb.u.map((u,i)=>{const id=c+".u"+String(i+1).padStart(2,"0"), x=u[4]||{};
+    const o={id,c,i,n:u[0],sub:u[1],re:u[2],pr:u[3]||0,pre:[...(x.pre||[])],fi:x.fi||null,fic:null,ids:[]}; UN[id]=o; return o});
+  if(cb.seq) UC[c].forEach((u,i)=>{if(i) u.pre.unshift(UC[c][i-1].id)})});
+  DATA.preguntas.forEach(p=>{const t=(p.t||"").toLowerCase(); (UC[p.c]||[]).forEach(u=>{if(u.re.test(t)) u.ids.push(p.id)})});
+  Object.values(UN).forEach(u=>{u.pre=u.pre.filter(p=>UN[p]&&p!==u.id);
+    if(u.fi){const [k,bid]=u.fi.split("#"), [c,n]=k.split(":"), tm=(TC[c]||[]).find(t=>t.n===n), f=tm&&FT[tm.id];
+      if(f) u.fic={tid:tm.id,b:bid?f.bloques.findIndex(x=>x.id===bid):-1}}})})();
+const unHecha=id=>!!(S.un&&S.un[id]&&S.un[id].v);
+function lecU(u){if(!u.fic) return null; const f=FT[u.fic.tid];
+  if(u.fic.b>=0){const b=f.bloques[u.fic.b]; return {ok:estB(b).ok,p:estB(b).p||0,t:b.t,f}}
+  const a=avanceFicha(f); return {ok:a.sig<0,p:a.ok,t:f.n,f}}
+function estU(u){const x=nivel(u.ids), l=lecU(u), lec=!!(l&&l.ok), h=unHecha(u.id);
+  return {x,lec,h,ok:x.l===2||x.l===3||((lec||h)&&x.l!==4),vacia:!u.ids.length&&!u.fic}}
+function etiquetaU(e,u){return e.x.nF?NIVELES[e.x.l]:e.lec?"Lección aprobada":e.h?"Estudiada":u.ids.length?"Sin practicar":"Sin preguntas aún"}
+function rutaCurso(cid){const lista=UC[cid]; if(!lista||!lista.length) return "";
+  const modo=S.cfg.modo==="explorar"?"explorar":"ruta", es=lista.map(u=>({u,e:estU(u)}));
+  const orden=modo==="ruta"?es:[...es].sort((a,b)=>b.u.pr-a.u.pr||b.u.ids.length-a.u.ids.length);
+  const sig=modo==="ruta"?es.find(o=>!o.e.ok&&!o.e.vacia):null, hechas=es.filter(o=>o.e.ok).length;
+  const fila=o=>{const u=o.u, e=o.e, s=sig&&sig.u===u;
+    const falta=e.ok||!(e.x.v||(lecU(u)||{}).p)?[]:u.pre.map(p=>UN[p]).filter(p=>{const q=estU(p); return !q.ok&&!q.vacia});
+    return `<a class="un ${e.ok?"ok":""} ${s?"sig":""}" href="#u-${u.id}"><span class="nu">${e.ok?"✓":u.i+1}</span><div><b>${esc(u.n)}</b>${u.pr?`<span class="stars" title="${PRIO[u.pr]}">${"★".repeat(u.pr)}</span>`:""}${s?`<span class="sigue">Sigue aquí</span>`:""}<small>${esc(u.sub)}</small>${falta.length?`<span class="aviso">Antes conviene: ${esc(falta[0].n)}${falta[0].c!==cid?` (${esc(C[falta[0].c].n)})`:""}${falta.length>1?` y ${falta.length-1} más`:""}</span>`:""}${u.fic?`<span class="lecd">Lección interactiva</span>`:""}</div><span class="lvl l${e.x.l}">${etiquetaU(e,u)}</span>${I.chev}</a>`};
+  return `<section class="card"><div class="row"><h2 class="grow">Ruta de aprendizaje</h2><div class="seg" role="group" aria-label="Orden de las unidades"><button data-act="modo" data-v="ruta" class="${modo==="ruta"?"on":""}">Ruta</button><button data-act="modo" data-v="explorar" class="${modo==="explorar"?"on":""}">Explorar</button></div></div>
+    <p class="muted small">${modo==="ruta"?`${lista.length} unidades en el orden en que conviene aprenderlas · ${hechas} de ${lista.length} listas. Si saltas una, te avisamos qué conviene repasar antes, pero nada se bloquea.`:`Las ${lista.length} unidades, de la que más cae en el examen (★★★) a la que menos. Abre la que quieras.`}</p>
+    <div class="ulist">${orden.map(fila).join("")}</div></section>`}
+function vUnidad(id){const u=UN[id], c=C[u.c], lista=UC[u.c], e=estU(u), x=e.x, calc=CALC.has(u.c), fu=(BB[u.c]||{}).f||[];
+  const ant=lista[u.i-1], sig=lista[u.i+1], pre=u.pre.map(p=>UN[p]), l=lecU(u);
+  const fuentes=fu.length?`<p class="small fuentes">Teoría de apoyo en tu Drive: ${fu.map(([t,h])=>`<a href="${esc(h)}" target="_blank" rel="noopener">${esc(t)}</a>`).join(" · ")}</p>`:"";
+  const aprende=l?`<p class="muted small">Lección interactiva en 7 pasos: concepto, explicación, ejemplo resuelto con una pregunta real, práctica guiada con pistas, ejercicios sin ayuda, evaluación y tarjetas de repaso.</p>
+      <p class="small"><b>${esc(l.t)}</b> · ${l.ok?`<span style="color:var(--ok-t)">✓ Aprobada</span>`:u.fic.b>=0?(l.p?`vas en el paso ${Math.min(l.p+1,7)} de 7`:"sin empezar"):`${l.p} de ${l.f.bloques.length} bloques aprobados`}</p>
+      <div class="row"><button class="btn gold" data-act="ficha" data-id="${u.fic.tid}" ${u.fic.b>=0?`data-b="${u.fic.b}"`:""}>${l.ok?"Repasar la lección":l.p?"Continuar la lección":"Empezar la lección"}</button></div>${fuentes}`
+    :`<p class="muted small">La lección interactiva de esta unidad todavía está en preparación. Mientras tanto, estúdiala así:</p>
+      <ol class="pasos"><li>Lee la teoría de los subtemas en el libro (enlaces abajo) y anota fórmulas o ideas clave.</li><li>Cierra el libro y explícala en voz alta o por escrito con tus palabras, como si se la enseñaras a alguien (técnica Feynman). Donde te trabes, vuelve a leer.</li><li>Resuelve las preguntas reales de abajo sin mirar la teoría.</li></ol>${fuentes}`;
+  return topbar()+`<a class="back" href="#c-${u.c}">${I.back}${esc(c.n)}</a>
+  <div class="pagehead"><div class="grow"><div class="kicker">${esc(c.n)} · Unidad ${u.i+1} de ${lista.length}</div><h1>${esc(u.n)}</h1><p class="muted" style="margin-top:6px">${PRIO[u.pr]} (exámenes 2015–2025)</p></div>${chips()}</div>
+  <section class="card wine"><h3>Qué vas a aprender</h3><div class="subs">${u.sub.split(/,\s*|;\s*|:\s*/).filter(Boolean).map(s=>`<span>${esc(s)}</span>`).join("")}</div>
+    ${barNivel(x)}<p class="small" style="color:var(--ink-2)">${x.nF?`${x.okF} de ${x.nF} preguntas nuevas bien${x.sp+x.sf?` · recordadas días después: ${x.sp} de ${x.sp+x.sf}`:""}`:u.ids.length?"Aún no practicas esta unidad.":"Todavía no hay preguntas de esta unidad en el banco."}${e.h?" · marcaste que ya la estudiaste":""}</p></section>
+  ${pre.length?`<section class="card"><h3>Antes de esta unidad</h3><p class="muted small">Es una recomendación: puedes seguir igual, pero si algo de aquí no lo sabes, esta unidad se te hará más difícil.</p><div class="tlist">${pre.map(p=>{const q=estU(p); return `<a href="#u-${p.id}"><span><b>${esc(p.n)}</b><small>${esc(C[p.c].n)}${q.ok||q.vacia?"":" · conviene reforzarla"}</small></span><span class="lvl l${q.x.l}">${q.ok?"✓ ":""}${etiquetaU(q,p)}</span></a>`}).join("")}</div></section>`:""}
+  <section class="card"><h2>1 · Aprende</h2>${aprende}</section>
+  <section class="card"><h2>2 · Practica</h2><p class="muted small">${u.ids.length?`${u.ids.length} ${plural(u.ids.length,"pregunta")} real${u.ids.length===1?"":"es"} de exámenes de admisión UNMSM. Primero intenta sin ayuda; si fallas, lee la explicación y anota por qué.`:"Aún no hay preguntas de esta unidad en el banco: usa la teoría de apoyo y las preguntas del libro."}</p>
+    <div class="row"><button class="btn" data-act="unq" data-id="${id}" ${u.ids.length?"":"disabled"}>${u.ids.length?`Resolver ${Math.min(8,u.ids.length)} preguntas`:"Sin preguntas aún"}</button>${calc||!u.ids.length?"":`<button class="btn ghost" data-act="flash" data-deck="u:${id}">Tarjetas</button>`}</div></section>
+  <section class="card"><h2>3 · Cierra la unidad</h2><p class="muted small">La unidad queda lista cuando la consolidas en las preguntas (aciertos en preguntas nuevas) o apruebas su lección. Si la estudiaste con tu libro y aquí no hay suficientes preguntas, márcala tú: no cuenta como «dominado», solo avanza tu ruta.</p>
+    <div class="row"><button class="btn sm ${e.h?"ghost":""}" data-act="u-hecha" data-id="${id}">${e.h?"Quitar la marca":"Ya la estudié"}</button></div></section>
+  <div class="row">${ant?`<a class="btn ghost sm" href="#u-${ant.id}">← ${esc(ant.n)}</a>`:""}${sig?`<a class="btn sm" href="#u-${sig.id}">Siguiente: ${esc(sig.n)} →</a>`:`<a class="btn ghost sm" href="#c-${u.c}">Volver al curso</a>`}</div>
+  <p class="muted small">Unidades, orden y prerrequisitos: propuesta de Ruta 1250 a partir del temario CEPRE y del temario oficial (Reglamento 2027-I). Prioridad según las preguntas de admisión 2015–2025. Las preguntas son reales; las lecciones las redactó Claude y no son material oficial.</p>`}
 function abrirFicha(tid,b){const f=FT[tid]; if(!f) return; const a=avanceFicha(f); b=b===undefined?(a.sig<0?0:a.sig):b;
   const e=estB(f.bloques[b]); fz={tid,b,paso:e.ok?6:Math.min(e.p||0,6),rev:0,gi:0,g:null,ev:null};
   if(location.hash!=="#f-"+tid) location.hash="#f-"+tid; else draw(); window.scrollTo(0,0)}
@@ -3219,7 +3727,7 @@ function vFicha(tid){const f=FT[tid]; if(!f) return vCurso(tid.split("-")[0]);
 function bloquePorKey(k){for(const f of Object.values(FT)) for(const b of f.bloques) if(b.key===k) return b; return null}
 function fichaEjHecho(k){const b=bloquePorKey(k); if(b) marcarB(b,{ej:Date.now(),p:Math.max(estB(b).p||0,4)}); if(fz) fz.paso=4}
 function accionFicha(a,el){
-  if(a==="ficha"){abrirFicha(el.dataset.id); return}
+  if(a==="ficha"){abrirFicha(el.dataset.id,el.dataset.b!==undefined?+el.dataset.b:undefined); return}
   if(!fz) return; const f=FT[fz.tid], b=f.bloques[fz.b];
   if(a==="fi-bloque"){const i=+el.dataset.b; const e=estB(f.bloques[i]); fz={tid:fz.tid,b:i,paso:e.ok?6:Math.min(e.p||0,6),rev:0,gi:0,g:null,ev:null}; draw(); window.scrollTo(0,0); return}
   if(a==="fi-saber"){fz.b=fz.b-1; irPaso(5); return}
@@ -3243,7 +3751,7 @@ function accionFicha(a,el){
 // ---- render y eventos
 let lastKey="";
 function view(){const h=(location.hash||"#inicio").slice(1); if(h==="repaso") return "tarjetas"; if(h==="ruta") return "cursos";
-  if(h.startsWith("c-")&&C[h.slice(2)]) return h; if(h.startsWith("f-")&&FT[h.slice(2)]) return h; return VISTAS.some(v=>v[0]===h)?h:"inicio"}
+  if(h.startsWith("c-")&&C[h.slice(2)]) return h; if(h.startsWith("f-")&&FT[h.slice(2)]) return h; if(h.startsWith("u-")&&UN[h.slice(2)]) return h; return VISTAS.some(v=>v[0]===h)?h:"inicio"}
 function navs(v){const pend=pendientes().length, e=estimado();
   $("#side").innerHTML=`<a class="brand" href="#inicio"><img src="${ESCUDO}" alt="Ruta 1250"><div><b>Ruta 1250</b><span>Área C · Computación</span></div></a>
   <nav>${VISTAS.map(([k,t])=>`<a href="#${k}" class="${k===v?"on":""}">${I[k]}${k==="tarjetas"?"Repasos":t}${k==="tarjetas"&&pend?`<span class="badge">${pend}</span>`:""}</a>`).join("")}</nav>
@@ -3257,8 +3765,8 @@ function draw(){const app=$("#app"), nav=$("#nav"), side=$("#side"); const enSes
     if(dg){key=dg.res?"dgfin":dg.fin?"dgentre":"dg"; app.innerHTML=dg.res?vDiagFin():dg.fin?vDiagEntre():vDiag()}
     else if(ses){key=ses.fin?"fin":"ses"; app.innerHTML=ses.fin?vFin():vSesion()}
     else {key=fl.fin?"ffin":"fl"; app.innerHTML=fl.fin?vFlashFin():vFlash(); fl.anim=false}}
-  else {nav.style.display=""; side.style.display=""; const v=view(); key=v+(v.startsWith("f-")&&fz?"|"+fz.b+"|"+fz.paso:""); navs(v.startsWith("c-")||v.startsWith("f-")?"cursos":v);
-    app.innerHTML=v.startsWith("f-")?vFicha(v.slice(2)):v.startsWith("c-")?vCurso(v.slice(2)):{inicio:vInicio,tarjetas:vTarjetas,cursos:vCursos,progreso:vProgreso,banco:vBanco}[v]()}
+  else {nav.style.display=""; side.style.display=""; const v=view(); key=v+(v.startsWith("f-")&&fz?"|"+fz.b+"|"+fz.paso:""); navs(v.startsWith("c-")||v.startsWith("f-")||v.startsWith("u-")?"cursos":v);
+    app.innerHTML=v.startsWith("f-")?vFicha(v.slice(2)):v.startsWith("u-")?vUnidad(v.slice(2)):v.startsWith("c-")?vCurso(v.slice(2)):{inicio:vInicio,tarjetas:vTarjetas,cursos:vCursos,progreso:vProgreso,banco:vBanco}[v]()}
   document.body.classList.toggle("enficha",!enSes&&String(key).startsWith("f-"));
   const nueva=key!==lastKey; app.classList.toggle("enter",nueva&&key!=="ses"&&key!=="fl"); if(nueva) contar(); lastKey=key}
 function salir(){if(dg){guardarTiempo(); clearInterval(reloj); dg=null; cpMsg=""}
@@ -3295,6 +3803,9 @@ document.addEventListener("click",ev=>{const b=ev.target.closest("[data-act]");
   if(a.startsWith("fi-")||a==="ficha"){accionFicha(a,b); return}
   if(a==="cf"){ses.cf=b.dataset.v; draw(); return}
   if(a==="er"){ses.er=ses.er===b.dataset.v?"":b.dataset.v; draw(); return}
+  if(a==="modo"){S.cfg.modo=b.dataset.v==="explorar"?"explorar":"ruta"; S.cfg.t=Date.now(); save(); draw(); return}
+  if(a==="u-hecha"){const id=b.dataset.id; S.un=S.un||{}; S.un[id]={v:unHecha(id)?0:1,t:Date.now()}; save(); draw(); return}
+  if(a==="unq"){const u=UN[b.dataset.id]; if(u&&u.ids.length) start("leccion",ordenar(u.ids,8),C[u.c].n+" · "+u.n); return}
   if(a==="temaq"){iniciarTema(b.dataset.id)}
   else if(a==="cursoq"){const c=b.dataset.id; start("leccion",ordenar(idsCurso(c),10),C[c].n)}
   else if(a==="esp"){iniciarEsp()}
