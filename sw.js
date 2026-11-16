@@ -1,5 +1,5 @@
-/* Ruta 1250 · service worker. Versión: 41eb0ff7a7 */
-const VERSION = "41eb0ff7a7";
+/* Ruta 1250 · service worker. Versión: b23ce4b66a */
+const VERSION = "b23ce4b66a";
 const APP = "ruta-app-" + VERSION;   // página, manifest e iconos (se renueva en cada versión)
 const IMG = "ruta-img";              // figuras: se guardan una vez y solo se bajan las nuevas
 const FUENTES = "ruta-fuentes";
