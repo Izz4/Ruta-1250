@@ -492,6 +492,9 @@ input.cfg{background:rgba(248,244,238,.06);border:1px solid var(--line-2);color:
 .pasos{margin:4px 0 0;padding-left:22px;display:flex;flex-direction:column;gap:8px}
 .pasos li{padding-left:4px;animation:pop .3s var(--ease)}
 .pasos li::marker{color:var(--gold-l);font-weight:700}
+.obj,.errs{margin:6px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px}.errs li::marker{content:"✗  ";color:var(--bad-t)}
+.fey textarea{width:100%;box-sizing:border-box;font:400 .95rem var(--sans);padding:10px 12px;border:1px solid var(--line-2);border-radius:12px;background:rgba(248,244,238,.06);color:var(--ink);color-scheme:dark;margin:8px 0;resize:vertical}.chk input{accent-color:var(--gold)}
+.chk{display:flex;gap:8px;align-items:flex-start;padding:4px 0}.origen{border-top:1px dashed var(--line);padding-top:8px}
 .pistas{display:flex;flex-direction:column;gap:6px;border-left:3px solid var(--gold);padding:6px 0 6px 14px;max-width:760px}
 .pistas p{font-size:.97rem;color:var(--ink-2)} .pistas b{color:var(--gold-l)}
 @media (max-width:899px){body.enficha .dock{bottom:calc(78px + env(safe-area-inset-bottom))}}
@@ -949,6 +952,255 @@ const FICHAS={
     {q:"¿Qué palabra está mal tildada?",o:["canción","árbol","música","examén","café"],a:3,e:"«Examen» es grave terminada en n: no lleva tilde."},
     {q:"¿Qué oración tiene bien la tilde diacrítica?",o:["Tu sabes que el te está frío.","Tú sabes que el té está frío.","Tú sábes que el té esta frío.","Tu sabes que él té está frío.","Tú sabes que el te está frio."],a:1,e:"Tú (pronombre), té (bebida), está (verbo, aguda en vocal), frío (hiato acentual)."},
     {q:"¿Qué oración usa bien la tilde enfática?",o:["No sé cuando empieza el examen.","No se cuándo empieza el examen.","No sé cuándo empieza el examen.","No sé cuándo empieza el exámen.","No se cuando empieza el examen."],a:2,e:"«Sé» del verbo saber y «cuándo» en pregunta indirecta; «examen» no lleva tilde."}]}]}
+,
+"ari:Porcentajes y proporcionalidad":{
+  fuente:"Preguntas reales del banco (2023-II a 2026-II) y sus resoluciones. Teoría redactada para Ruta 1250 y verificada con cálculo.",
+  lee:[["Puro DECO · Aritmética","https://drive.google.com/file/d/1PtxqKIEoAVH21ksfPg9QJmgbtNZqfxSU/view"],["Separata ADUNI · Magnitudes proporcionales II","https://drive.google.com/file/d/1_sHnMW9wmhy2p4UEGTwYh6smw_6SvklJ/view"]],
+  bloques:[
+  {id:"razon",t:"Razones, proporciones y reparto",ts:["Razones y proporciones","Reparto proporcional"],
+   obj:["Escribir cualquier razón «a es a b como 3 es a 5» con una constante k.","Unir dos razones que comparten un término.","Repartir una cantidad en partes directa o inversamente proporcionales."],
+   concepto:"Una razón compara dos cantidades dividiendo: a/b = 3/5 dice que por cada 3 de a hay 5 de b. El truco de casi todos los problemas es escribir a = 3k y b = 5k, y buscar k con el dato que falta.",
+   explica:[
+    "Razón aritmética es una resta (a − b) y razón geométrica es una división (a/b). En admisión, «razón» sin más casi siempre es la geométrica.",
+    "Si a/b = 3/5, entonces a = 3k y b = 5k para algún k. Con un dato más (la suma, la diferencia, un producto) hallas k y luego todo lo demás.",
+    "Proporción es una igualdad de dos razones: a/b = c/d. Propiedad clave: a·d = b·c (producto de extremos = producto de medios).",
+    "Si dos razones comparten un término, iguala ese término con el mínimo común múltiplo. Ej.: a/b = 11/2 y c/b = 7/3 → b debe ser múltiplo de 2 y de 3: b = 6k, a = 33k, c = 14k.",
+    "Reparto directo (DP): cada parte es proporcional a su número. Si repartes N DP a 2, 3 y 5, las partes son 2k, 3k y 5k, y 10k = N.",
+    "Reparto inverso (IP): cada parte es proporcional al inverso. Si repartes IP a 3, 4 y 6, toma el MCM (12) y divide: 12/3, 12/4, 12/6 = 4, 3, 2. Las partes son 4k, 3k y 2k: el que tiene el número más grande recibe menos."],
+   claves:[["Razón geométrica","a/b = m/n → a = m·k y b = n·k. Con un dato más se halla k."],
+     ["Proporción","a/b = c/d ⇔ a·d = b·c."],
+     ["Unir razones con un término común","Iguala el término común usando su MCM: a/b = 11/2 y c/b = 7/3 → b = 6k, a = 33k, c = 14k."],
+     ["Reparto directamente proporcional","Partes = (números)·k; la suma de las partes es el total."],
+     ["Reparto inversamente proporcional","Pasa a DP con MCM ÷ cada número. IP a 3, 4, 6 ≡ DP a 4, 3, 2."]],
+   errores:["Sumar las razones como fracciones (3/5 + 2/7) cuando lo que se suma son las cantidades 3k + 5k.","En razones con un término común, olvidar igualar ese término y usar dos k distintos como si fueran iguales.","En reparto inverso, dar más al número más grande. Es al revés: a más faltas, menos dinero."],
+   ejemplo:{id:"23II-32",pasos:[
+     "Llama a = cartera, b = correa, c = billetera. Datos: a/b = 11/2 y c/b = 7/3.",
+     "La correa (b) aparece en las dos razones con 2 y con 3. MCM(2; 3) = 6: multiplica la primera por 3 y la segunda por 2.",
+     "a = 33k, b = 6k, c = 14k.",
+     "Dato: la cartera cuesta 243 más que la correa → 33k − 6k = 27k = 243 → k = 9.",
+     "Piden billetera − correa = 14k − 6k = 8k = 8 × 9 = 72 soles."],
+     idea:"Cuando dos razones comparten un término, iguálalo con el MCM y trabaja con una sola k."},
+   guiada:[
+    {id:"24II-32",pistas:["Reparto DP a 5, 7 y 10: las partes son 5k, 7k y 10k, y el total es 22k. Pero ojo: si fuera equitativo, cada uno recibiría 22k/3, que no es entero. ¿Por qué número conviene multiplicar 5, 7 y 10?","Multiplica todo por 3: partes 15k, 21k y 30k; total 66k; reparto equitativo 22k cada uno. El de 7 años habría recibido 22k − 21k = k más."],
+     pasos:["Partes DP a 5, 7 y 10 → multiplico por 3 para que el total se divida entre 3: 15k, 21k, 30k. Total = 66k.","Si el reparto fuera equitativo, cada sobrino recibiría 66k ÷ 3 = 22k.","El de 7 años habría recibido 22k − 21k = k canicas más. Dato: k = 7.","Total = 66 × 7 = 462 canicas."],
+     mal:{0:"453 no es múltiplo de 66: el total debe ser 66k. Revisa el reparto equitativo.",2:"484 = 22 × 22: parece que usaste 22k como total. El total es 66k (15k + 21k + 30k).",3:"475 no es múltiplo de 66. Escribe las partes 15k, 21k y 30k y compara con 22k.",4:"436 no es múltiplo de 66. El total debe ser 66k."}}],
+   chequeo:[
+    {q:"Dos números están en la razón 4 a 7 y su suma es 132. ¿Cuál es el mayor?",o:["48","84","77","56","66"],a:1,e:"4k + 7k = 11k = 132 → k = 12. Mayor = 7 × 12 = 84."},
+    {q:"Si a/b = 2/3 y b/c = 6/5, ¿cuál es a/c?",o:["4/5","12/15","5/4","2/5","3/5"],a:0,e:"a/c = (a/b)·(b/c) = (2/3)·(6/5) = 12/15 = 4/5."},
+    {q:"Se reparten 540 soles en forma inversamente proporcional a 2, 3 y 6. ¿Cuánto recibe el que tiene 6?",o:["270","180","90","60","120"],a:2,e:"IP a 2, 3, 6 ≡ DP a 6/2, 6/3, 6/6 = 3, 2, 1. 6k = 540 → k = 90. El de 6 recibe 1k = 90."}]},
+  {id:"magn",t:"Magnitudes y regla de tres",ts:["Regla de tres compuesta","Aplicación de magnitudes"],
+   obj:["Decidir si dos magnitudes son directa o inversamente proporcionales.","Resolver obras con la fórmula (obreros · días · horas · eficiencia) ÷ (obra · dificultad) = constante.","Plantear problemas donde cambian los trabajadores a mitad de la obra."],
+   concepto:"Dos magnitudes son directamente proporcionales (DP) si al duplicar una se duplica la otra: su cociente es constante. Son inversamente proporcionales (IP) si al duplicar una la otra se reduce a la mitad: su producto es constante. La regla de tres compuesta junta varias de estas relaciones en una sola fórmula.",
+   explica:[
+    "Pregunta de control: «si aumento A, ¿B aumenta o disminuye?». Si aumenta en la misma proporción, son DP (A/B = cte). Si disminuye, son IP (A·B = cte).",
+    "Ejemplos: más obreros → menos días (IP). Más horas diarias → menos días (IP). Más obra → más días (DP). Más dificultad → más días (DP). Más eficiencia → menos días (IP).",
+    "Fórmula de obras: (obreros × días × horas/día × eficiencia) ÷ (obra × dificultad) = constante. Arriba va lo que «aporta trabajo» y abajo lo que «exige trabajo».",
+    "Escribe la fórmula para la situación 1 y la situación 2, iguálalas y despeja. Pon solo las magnitudes que cambian; las que no cambian se cancelan.",
+    "Cuando cambian los obreros a mitad de la obra, piensa en «jornadas-obrero»: lo que faltaba hacer se completa sumando lo que aporta cada grupo en su tiempo.",
+    "Lee con cuidado: a veces hay datos de más (como el número total de paltas en una pregunta de cajas). Solo usa lo que cambia la obra."],
+   claves:[["Magnitudes DP","A/B = constante: si una se multiplica por n, la otra también."],
+     ["Magnitudes IP","A·B = constante: si una se multiplica por n, la otra se divide entre n."],
+     ["Fórmula de obras","(obreros · días · h/d · eficiencia) ÷ (obra · dificultad) = constante."],
+     ["Cambio de personal","Lo que falta de la obra = suma de (obreros × días × eficiencia) de cada tramo."]],
+   errores:["Poner la dificultad o la obra arriba en la fórmula: van abajo, porque exigen trabajo.","Contar como «días que faltan» los días ya trabajados.","Olvidar la eficiencia: un obrero el doble de eficiente cuenta como 2."],
+   ejemplo:{id:"26II-34",pasos:[
+     "Las 7392 paltas son un dato de más: lo que importa es la obra en cajas.",
+     "Situación 1: 8 obreros, 1 día, 6 h/d, obra 120 cajas. Situación 2: 12 obreros, x días, 5 h/d, obra 450 cajas.",
+     "Fórmula: (obreros · días · h/d) ÷ obra = constante → (8 · 1 · 6)/120 = (12 · x · 5)/450.",
+     "48/120 = 60x/450 → 0,4 = 60x/450 → x = 0,4 × 450 ÷ 60 = 3.",
+     "Les tomará 3 días."],
+     idea:"Arma la fórmula con lo que aporta trabajo arriba y la obra abajo, iguala las dos situaciones y despeja."},
+   guiada:[
+    {id:"25II-33",pistas:["Sea T el número inicial de trabajadores. Faltando 16 días, lo que quedaba de obra equivale a T × 16 jornadas.","Ese resto se hizo así: (T − 5) trabajadores los 16 días, más n nuevos que valen el doble durante los últimos 10 días: (T − 5)·16 + 2n·10."],
+     pasos:["Lo que faltaba: 16T jornadas (T obreros × 16 días).","Lo que realmente se hizo: los T − 5 que quedaron trabajan 16 días → 16(T − 5). Los n nuevos (doble eficiencia) trabajan 16 − 6 = 10 días → 2n × 10 = 20n.","16T = 16T − 80 + 20n → 20n = 80 → n = 4.","Cada uno recibe 4800 ÷ 4 = 1200 soles."],
+     mal:{0:"800 sería si fueran 6 trabajadores nuevos. Revisa: los nuevos trabajan 10 días (16 − 6), no 16.",1:"960 sería si fueran 5. Los que renunciaron son 5, pero los nuevos valen el doble: n = 4.",3:"600 sería con 8 trabajadores: parece que no usaste la doble eficiencia.",4:"480 sería con 10 trabajadores. Plantea 16T = 16(T − 5) + 2n·10."}},
+    {id:"24I-34",pistas:["El plazo se mantiene: si ya pasó 1/3 de la obra, pasó 1/3 del tiempo (12 días) y quedan 24 días. Como los días son iguales, puedes dejarlos fuera.","Antes: 60 obreros, 8 h, dificultad 1. Después: (60 + 2x) obreros equivalentes (los nuevos valen doble), 10 h, dificultad 3. Fórmula: obreros·h/d ÷ dificultad = cte."],
+     pasos:["Lo que falta (2/3 de la obra) se hará en los mismos días que se tenían previstos: los días se cancelan.","Obreros DP dificultad; obreros IP horas/día. Entonces: (obreros × h/d) ÷ dificultad = constante.","(60 × 8)/1 = ((60 + 2x) × 10)/3 → 480 × 3 = 10(60 + 2x) → 144 = 60 + 2x.","x = 42 obreros contratados."],
+     mal:{1:"48 = 144 ÷ 3. Recuerda que en 144 ya están los 60 originales: 144 = 60 + 2x.",2:"50 no cumple 60 + 2x = 144. Revisa que los nuevos valen el doble.",3:"46 no cumple 60 + 2x = 144. Plantea (60 × 8)/1 = ((60 + 2x) × 10)/3.",4:"36 no cumple. La dificultad 3 va abajo, junto a la obra."}}],
+   chequeo:[
+    {q:"6 obreros hacen una obra en 10 días. ¿Cuántos días tardarán 15 obreros iguales?",o:["25","4","6","5","3"],a:1,e:"Obreros IP días: 6 × 10 = 15 × d → d = 4."},
+    {q:"Si 4 máquinas producen 300 piezas en 5 horas, ¿cuántas piezas producen 6 máquinas en 4 horas?",o:["360","300","450","240","400"],a:0,e:"Piezas DP máquinas y DP horas: 300 × (6/4) × (4/5) = 360."},
+    {q:"En la fórmula de obras, ¿dónde va la dificultad?",o:["Arriba, junto a los obreros","Abajo, junto a la obra","No se usa","Arriba, junto a las horas","Se suma a los días"],a:1,e:"La dificultad exige más trabajo, como la obra: va abajo (es DP a los días y a los obreros)."}]}]},
+"alg:Polinomios y ecuaciones":{
+  fuente:"Preguntas reales del banco (2023-I a 2024-II) y sus resoluciones. Teoría redactada para Ruta 1250 y verificada con cálculo.",
+  lee:[["Puro DECO · Álgebra","https://drive.google.com/file/d/1YfpoeCQQs-9xhX6RJgBGRW5heW2P14Gn/view"],["Apuntes digitales · Álgebra","https://drive.google.com/drive/folders/1pSoJ6GLS9RIOm3oetbU3emL2N6oHiNnU"]],
+  bloques:[
+  {id:"ecu",t:"Ecuaciones de primer y segundo grado",ts:["Ecuación lineal","Ecuaciones cuadráticas","Ecuación bicuadrada"],
+   obj:["Plantear y resolver una ecuación lineal a partir de un enunciado.","Resolver una cuadrática por factorización o por fórmula general.","Usar la suma y el producto de raíces sin hallar las raíces."],
+   concepto:"Una ecuación es una igualdad con una incógnita. Las de primer grado (ax + b = 0) tienen una solución. Las de segundo grado (ax² + bx + c = 0) tienen dos raíces, y muchas preguntas se resuelven solo con su suma (−b/a) y su producto (c/a), sin hallarlas.",
+   explica:[
+    "Primer grado: despeja dejando x sola. Si el enunciado es largo, primero nombra con una letra lo que piden y traduce cada frase a una igualdad.",
+    "Segundo grado ax² + bx + c = 0: intenta factorizar con aspa simple (dos números que multiplicados den a·c y sumados den b). Si no sale, usa la fórmula x = (−b ± √Δ)/(2a), con Δ = b² − 4ac.",
+    "El discriminante Δ dice cómo son las raíces: Δ > 0, dos reales distintas; Δ = 0, una doble (iguales); Δ < 0, complejas conjugadas.",
+    "Propiedades de Cardano-Vieta: x₁ + x₂ = −b/a y x₁·x₂ = c/a. Con ellas: x₁² + x₂² = (x₁ + x₂)² − 2x₁x₂.",
+    "Para armar una cuadrática con raíces conocidas r y s: x² − (r + s)x + r·s = 0.",
+    "Bicuadrada (ax⁴ + bx² + c = 0): haz z = x² y resuelve la cuadrática en z. Cada valor de z da dos valores de x: ±√z."],
+   claves:[["Fórmula general","x = (−b ± √(b² − 4ac)) / (2a)."],
+     ["Discriminante","Δ = b² − 4ac. Δ > 0: 2 raíces reales; Δ = 0: raíz doble; Δ < 0: complejas."],
+     ["Suma y producto de raíces","x₁ + x₂ = −b/a; x₁·x₂ = c/a."],
+     ["Cuadrática con raíces dadas","x² − Sx + P = 0, donde S es la suma y P el producto."],
+     ["Suma de cuadrados de raíces","x₁² + x₂² = (x₁ + x₂)² − 2x₁x₂."]],
+   errores:["Escribir la suma de raíces como +b/a: es −b/a.","Elevar al cuadrado (x₁ + x₂)² y olvidar el −2x₁x₂ al pedir x₁² + x₂².","En la bicuadrada, quedarse con z y no sacar las dos raíces ±√z."],
+   ejemplo:{id:"24I-40",pasos:[
+     "En x² + 5x − 3 = 0: suma x₁ + x₂ = −5 y producto x₁·x₂ = −3. No hace falta hallar las raíces.",
+     "La nueva ecuación tiene raíces x₁² y x₂². Su suma: S = x₁² + x₂² = (x₁ + x₂)² − 2x₁x₂ = 25 − 2(−3) = 31.",
+     "Su producto: P = x₁²·x₂² = (x₁x₂)² = (−3)² = 9.",
+     "La ecuación es x² − Sx + P = 0 → x² − 31x + 9 = 0."],
+     idea:"Para construir una ecuación nueva solo necesitas la suma y el producto de sus raíces."},
+   guiada:[
+    {id:"24II-40",pistas:["Llama x e y a los lados del jardín. Con la vereda de 2 m alrededor, el rectángulo grande mide (x + 4) por (y + 4).","Área de la vereda = área grande − área del jardín = (x + 4)(y + 4) − xy. Desarrolla: los xy se cancelan."],
+     pasos:["Rectángulo total: (x + 4)(y + 4) = xy + 4x + 4y + 16.","Vereda = total − jardín = 4x + 4y + 16 = 88.","4(x + y) = 72 → x + y = 18.","Perímetro del jardín = 2(x + y) = 36 m."],
+     mal:{0:"10 no sale de 4(x + y) = 72. Revisa: el lado grande es x + 4 (2 m de cada lado).",1:"18 es x + y, el semiperímetro. Piden el perímetro: 2(x + y).",2:"16 viene de un término suelto. Plantea (x + 4)(y + 4) − xy = 88.",4:"72 es 4(x + y). El perímetro es 2(x + y) = 36."}},
+    {id:"24II-42",pistas:["Haz z = x²: queda z² + 45z + 324 = 0. Busca dos números que multiplicados den 324 y sumados 45.","z = −9 o z = −36. Entonces x² = −9 → x = ±3i, y x² = −36 → x = ±6i. ¿Cuál es el módulo de 3i?"],
+     pasos:["Con z = x²: z² + 45z + 324 = 0 → (z + 9)(z + 36) = 0.","x² = −9 → x = ±3i; x² = −36 → x = ±6i.","Módulos: |3i| = 3, |−3i| = 3, |6i| = 6, |−6i| = 6.","Suma = 3 + 3 + 6 + 6 = 18."],
+     mal:{0:"15 sería 9 + 6: no sumes los z, suma los módulos de las cuatro raíces.",1:"Revisa: hay cuatro raíces (±3i y ±6i), cada una con su módulo.",2:"17 no sale. Las raíces son ±3i y ±6i: sus módulos son 3, 3, 6 y 6.",3:"13 no sale. Haz z = x² y factoriza z² + 45z + 324."}}],
+   chequeo:[
+    {q:"Si x₁ y x₂ son las raíces de 2x² − 8x + 3 = 0, ¿cuánto vale x₁ + x₂?",o:["−4","4","3/2","8","−8"],a:1,e:"x₁ + x₂ = −b/a = −(−8)/2 = 4."},
+    {q:"¿Para qué valor de k la ecuación x² − 6x + k = 0 tiene una raíz doble?",o:["6","−9","36","9","3"],a:3,e:"Raíz doble ⇔ Δ = 0: 36 − 4k = 0 → k = 9."},
+    {q:"¿Qué ecuación tiene raíces 2 y −5?",o:["x² + 3x − 10 = 0","x² − 3x − 10 = 0","x² + 3x + 10 = 0","x² − 7x + 10 = 0","x² + 7x − 10 = 0"],a:0,e:"S = −3 y P = −10: x² − (−3)x + (−10) = x² + 3x − 10 = 0."}]},
+  {id:"sis",t:"Sistemas de ecuaciones",ts:["Sistema de ecuaciones","Sistema de ecuaciones lineales"],excl:["24I-41"],
+   obj:["Traducir un enunciado con varias incógnitas a un sistema.","Resolver sistemas 2×2 y 3×3 por sustitución o reducción.","Saber cuándo un sistema tiene solución única."],
+   concepto:"Un sistema de ecuaciones son varias igualdades que deben cumplirse a la vez. Si hay tantas ecuaciones independientes como incógnitas, normalmente hay una sola solución. La idea es eliminar incógnitas hasta quedarte con una.",
+   explica:[
+    "Primero nombra cada incógnita con una letra que te recuerde qué es (A, F, E…). Luego escribe una ecuación por cada dato.",
+    "Sustitución: despeja una incógnita en la ecuación más simple y reemplázala en las demás.",
+    "Reducción (eliminación): multiplica ecuaciones por números convenientes y súmalas o réstalas para que desaparezca una incógnita.",
+    "Si una ecuación tiene todos sus coeficientes divisibles por un mismo número, simplifícala antes: 20A + 80F + 120E = 8800 es lo mismo que A + 4F + 6E = 440.",
+    "En un sistema 2×2 {ax + by = c; dx + ey = f}: hay solución única si a/d ≠ b/e. Si a/d = b/e = c/f hay infinitas; si a/d = b/e ≠ c/f no hay solución.",
+    "Al terminar, comprueba reemplazando en todas las ecuaciones. En admisión es la forma más rápida de detectar un error."],
+   claves:[["Sustitución","Despeja una incógnita y reemplázala en las otras ecuaciones."],
+     ["Reducción","Combina ecuaciones (multiplicando y sumando) para eliminar una incógnita."],
+     ["Solución única (2×2)","a/d ≠ b/e. Infinitas: a/d = b/e = c/f. Ninguna: a/d = b/e ≠ c/f."],
+     ["Simplificar primero","Divide una ecuación entre el factor común de todos sus términos."]],
+   errores:["Plantear menos ecuaciones que incógnitas porque se olvidó un dato del enunciado.","Restar ecuaciones y equivocarse con los signos del término que no se elimina.","Responder una incógnita cuando piden otra cosa (por ejemplo, el gasto en vez de la cantidad)."],
+   ejemplo:{id:"23II-39",pasos:[
+     "Sean A, B y C las máquinas de cada marca. Cada fila de la tabla da una ecuación.",
+     "Vestidos: 20A + 15B + 8C = 700. Blusas: 40A + 50B + 60C = 2300. Pantalones: 30A + 10B + 20C = 1020.",
+     "Resolviendo (por reducción): A = 20, B = 12, C = 15.",
+     "Comprueba: 400 + 180 + 120 = 700 ✓; 800 + 600 + 900 = 2300 ✓; 600 + 120 + 300 = 1020 ✓.",
+     "A + B + C = 47 máquinas."],
+     idea:"Cada fila de la tabla (o cada dato) es una ecuación; al final comprueba en todas."},
+   guiada:[
+    {id:"23I-42",pistas:["Sean A almohadas, F frazadas y E edredones. Hay tres datos: total de unidades, gasto total y A = F + E.","Reemplaza A = F + E en A + F + E = 160: sale A = 80, así que F + E = 80. Simplifica el gasto dividiendo entre 20."],
+     pasos:["A + F + E = 160 y A = F + E → 2A = 160 → A = 80, y F + E = 80.","Gasto: 20A + 80F + 120E = 8800 → (÷20) A + 4F + 6E = 440 → 4F + 6E = 360 → 2F + 3E = 180.","Con F + E = 80: 2F + 3E − 2(F + E) = 180 − 160 → E = 20, y F = 60.","Gasto en frazadas: 60 × 80 = 4800 soles."],
+     mal:{1:"3600 = 45 × 80. Revisa: F + E = 80 y 2F + 3E = 180 dan F = 60.",2:"4400 no sale. Primero halla A con A = F + E y el total 160.",3:"5200 = 65 × 80. Resuelve F + E = 80 y 2F + 3E = 180.",4:"5000 no es múltiplo de 80 con F entero menor que 80. Revisa el sistema."}}],
+   chequeo:[
+    {q:"Resuelve: x + y = 10; x − y = 4. ¿Cuánto vale x·y?",o:["24","21","40","6","16"],a:1,e:"Sumando: 2x = 14 → x = 7, y = 3. x·y = 21."},
+    {q:"En un corral hay gallinas y conejos: 20 cabezas y 56 patas. ¿Cuántos conejos hay?",o:["12","8","10","14","6"],a:1,e:"g + c = 20 y 2g + 4c = 56 → 2c = 56 − 40 = 16 → c = 8."},
+    {q:"El sistema 2x + 3y = 5; 4x + 6y = 7…",o:["tiene solución única","tiene infinitas soluciones","no tiene solución","tiene x = 1","tiene y = 1"],a:2,e:"2/4 = 3/6 pero 5/7 es distinto: las rectas son paralelas, no hay solución."}]}]},
+"alg:Funciones":{
+  fuente:"Preguntas reales del banco (2025-I a 2026-II) y sus resoluciones. Teoría redactada para Ruta 1250.",
+  lee:[["Puro DECO · Álgebra","https://drive.google.com/file/d/1YfpoeCQQs-9xhX6RJgBGRW5heW2P14Gn/view"]],
+  bloques:[
+  {id:"fun",t:"Funciones: dominio, rango y gráficas",ts:["Funciones","Funciones reales","Función inversa","Función cuadrática"],excl:["24II-41","23II-41"],
+   obj:["Hallar el dominio y el rango de una función.","Saber si una función es creciente, inyectiva o biyectiva.","Hallar el máximo o mínimo de una cuadrática completando cuadrados."],
+   concepto:"Una función asigna a cada valor de entrada x (del dominio) un único valor de salida f(x). El rango es el conjunto de salidas. En admisión se pide sobre todo: dominio y rango, máximo o mínimo de una cuadrática, y si la función tiene inversa (es inyectiva).",
+   explica:[
+    "Dominio: los x permitidos. Restricciones típicas: denominador ≠ 0, lo que está dentro de una raíz par ≥ 0, lo que está dentro de un logaritmo > 0. Si el enunciado da un intervalo (0 ≤ t ≤ 12), ese es el dominio.",
+    "Rango: los valores que realmente toma f(x). En una recta en un intervalo, evalúa los extremos. En una cuadrática, mira el vértice.",
+    "Cuadrática f(x) = ax² + bx + c: completa cuadrados para llevarla a a(x − h)² + k. El vértice es (h; k). Si a > 0 el mínimo es k; si a < 0 el máximo es k. También h = −b/(2a).",
+    "Creciente: si x aumenta, f(x) aumenta (recta con pendiente positiva). Decreciente: al revés.",
+    "Inyectiva: valores distintos de x dan valores distintos de f(x). Prueba rápida: si encuentras dos x distintos con el mismo f(x), no es inyectiva. Solo las inyectivas tienen inversa.",
+    "Biyectiva = inyectiva y sobreyectiva (el rango es todo el conjunto de llegada). Una función constante en un tramo nunca es inyectiva.",
+    "Valor absoluto |f(x)| refleja hacia arriba la parte de la gráfica que está debajo del eje x; por eso suele dejar de ser inyectiva."],
+   claves:[["Dominio","Valores de x permitidos: denominador ≠ 0, raíz par ≥ 0, logaritmo > 0."],
+     ["Vértice de la cuadrática","f(x) = a(x − h)² + k → vértice (h; k), h = −b/(2a). a > 0: mínimo k; a < 0: máximo k."],
+     ["Inyectiva","x₁ ≠ x₂ ⇒ f(x₁) ≠ f(x₂). Solo las inyectivas tienen inversa."],
+     ["Dominio y rango de la inversa","Dom f⁻¹ = Ran f y Ran f⁻¹ = Dom f."],
+     ["Igualar funciones","«¿Cuándo f y g valen lo mismo?» → resuelve f(t) = g(t)."]],
+   errores:["Olvidar las restricciones que pone el enunciado (0 ≤ t ≤ 12) y dar una respuesta fuera de ellas.","Confundir el valor de x en el vértice (h) con el valor máximo o mínimo (k).","Decir que una función es inyectiva sin probar: busca dos x con el mismo valor."],
+   ejemplo:{id:"26II-40",pasos:[
+     "I. f(x) = 3x − 6 tiene pendiente 3 > 0: es creciente, no decreciente. I es falsa.",
+     "II. |f(1)| = |−3| = 3 y |f(3)| = |3| = 3: dos x distintos con el mismo valor, así que |f| no es inyectiva y no es biyectiva. II es verdadera.",
+     "III. g(x) = |−f(x)| + f(x) = |f(x)| + f(x). En [0; 2), f(x) < 0 y g(x) = −f(x) + f(x) = 0: g es constante en ese tramo.",
+     "Una función constante en un tramo no es inyectiva, así que no tiene inversa. III es falsa.",
+     "Respuesta: FVF."],
+     idea:"Para negar la inyectividad basta un contraejemplo: dos x distintos con el mismo valor."},
+   guiada:[
+    {id:"26II-41",pistas:["Piden el momento en que el número de enfermos y el de vacunados son iguales.","Iguala f(t) = g(t): 12 − t = 3t."],
+     pasos:["Enfermos = vacunados → f(t) = g(t).","12 − t = 3t → 12 = 4t → t = 3.","Está dentro del dominio 0 ≤ t ≤ 12: después de 3 meses."],
+     mal:{1:"Con t = 2: f = 10 y g = 6, todavía no son iguales.",2:"Con t = 1: f = 11 y g = 3. Resuelve 12 − t = 3t.",3:"Con t = 4: f = 8 y g = 12, ya se pasaron. Resuelve 12 − t = 3t.",4:"Con t = 5: f = 7 y g = 15. Resuelve 12 − t = 3t."}},
+    {id:"25I-40",pistas:["Completa cuadrados: f(x) = x² + 2x + 5 = (x + 1)² + 4. Entonces f(x + 2) = (x + 3)² + 4.","En A: (x + 3)² + 4 = 20 → (x + 3)² = 16. En B: f(x − 2) = (x − 1)² + 4 = 13."],
+     pasos:["f(x) = (x + 1)² + 4.","A: f(x + 2) = (x + 3)² + 4 = 20 → x + 3 = ±4 → x = 1 o x = −7.","B: f(x − 2) = (x − 1)² + 4 = 13 → x − 1 = ±3 → x = 4 o x = −2.","Producto: 1 · (−7) · 4 · (−2) = 56 soles."],
+     mal:{0:"28 es la mitad: revisa los signos. (−7)·(−2) es positivo.",1:"36 no sale. Completa cuadrados: f(x) = (x + 1)² + 4.",2:"42 no sale. En A las soluciones son 1 y −7; en B, 4 y −2.",4:"48 no sale. Revisa B: (x − 1)² = 9 → x = 4 o x = −2."}}],
+   chequeo:[
+    {q:"¿Cuál es el valor mínimo de f(x) = x² − 6x + 11?",o:["3","11","2","−3","6"],a:2,e:"f(x) = (x − 3)² + 2: mínimo 2, en x = 3."},
+    {q:"¿Cuál es el dominio de f(x) = √(x − 4)?",o:["x > 4","x ≥ 4","x ≤ 4","Todos los reales","x ≠ 4"],a:1,e:"Lo que está dentro de la raíz debe ser ≥ 0: x − 4 ≥ 0 → x ≥ 4."},
+    {q:"¿Cuál de estas funciones NO tiene inversa en todos los reales?",o:["f(x) = 2x + 1","f(x) = x³","f(x) = x²","f(x) = −3x","f(x) = x − 7"],a:2,e:"x² no es inyectiva: f(2) = f(−2) = 4."}]}]},
+"alg:Logaritmos y exponenciales":{
+  fuente:"Preguntas reales del banco (2023-I a 2027-I) y sus resoluciones. Teoría redactada para Ruta 1250.",
+  lee:[["Puro DECO · Álgebra","https://drive.google.com/file/d/1YfpoeCQQs-9xhX6RJgBGRW5heW2P14Gn/view"]],
+  bloques:[
+  {id:"log",t:"Exponenciales y logaritmos",ts:["Función logarítmica","Logaritmos","Función exponencial"],excl:["23I-42"],
+   obj:["Pasar de forma exponencial a logarítmica y al revés.","Usar las propiedades de los logaritmos.","Hallar el dominio de una función logarítmica y resolver inecuaciones con logaritmos."],
+   concepto:"El logaritmo es la operación inversa de la potencia: log_b(N) = x significa que bˣ = N. Responde a «¿a qué exponente elevo b para obtener N?». Por ejemplo, log₂(8) = 3 porque 2³ = 8.",
+   explica:[
+    "Condiciones: la base b > 0 y b ≠ 1; el número N > 0. Por eso el dominio de log(algo) exige algo > 0.",
+    "Propiedades: log(A·B) = log A + log B; log(A/B) = log A − log B; log(Aⁿ) = n·log A; log_b(b) = 1; log_b(1) = 0. «log» sin base es base 10.",
+    "Si la base es mayor que 1, el logaritmo es creciente: log A > log B ⇔ A > B (con A y B positivos). Si la base está entre 0 y 1, la desigualdad se invierte.",
+    "Ecuación exponencial: intenta escribir todo con la misma base (4ᵗ = (2ᵗ)²) y haz un cambio de variable q = 2ᵗ. Queda una cuadrática en q.",
+    "Crecimiento: si algo se duplica cada año, después de t años vale a·2ᵗ; si se cuadruplica, b·4ᵗ.",
+    "Para el dominio de una función logarítmica, junta todas las condiciones (cada argumento > 0, cada base > 0 y ≠ 1) y luego intersecta."],
+   claves:[["Definición","log_b(N) = x ⇔ bˣ = N, con b > 0, b ≠ 1, N > 0."],
+     ["Propiedades","log(AB) = log A + log B; log(A/B) = log A − log B; log Aⁿ = n·log A."],
+     ["Monotonía","Base > 1: log A > log B ⇔ A > B. Base entre 0 y 1: se invierte."],
+     ["Misma base","4ᵗ = (2ᵗ)² y 8ᵗ = (2ᵗ)³: cambia q = 2ᵗ y resuelve en q."]],
+   errores:["Escribir log(A + B) = log A + log B: es falso; la propiedad es para el producto.","Olvidar que el argumento debe ser positivo y dar un dominio con valores que lo anulan.","Invertir la desigualdad cuando la base es mayor que 1."],
+   ejemplo:{id:"27I-40",pasos:[
+     "Dominio: x − 1 > 0 y 5 − x > 0 → 1 < x < 5 (ya lo dice el enunciado).",
+     "T(x) > 0 → log(x − 1) − log(5 − x) > 0 → log(x − 1) > log(5 − x).",
+     "La base es 10 (> 1), así que la desigualdad se mantiene: x − 1 > 5 − x → 2x > 6 → x > 3.",
+     "Intersecta con el dominio: 3 < x < 5. Intervalo ⟨3; 5⟩."],
+     idea:"Con base mayor que 1, compara los argumentos directamente; al final intersecta con el dominio."},
+   guiada:[
+    {id:"23I-41",pistas:["En A hay 10 aves y se duplican cada año: después de t años hay 10·2ᵗ. En B hay 4 y se cuadruplican: 4·4ᵗ.","Escribe 4ᵗ = (2ᵗ)² y haz q = 2ᵗ: te queda una cuadrática en q."],
+     pasos:["Al inicio hay 10 aves en A y 4 en B. Después de t años el total es 10·2ᵗ + 4·4ᵗ = 1184.","Como 4·4ᵗ = 4(2ᵗ)², con q = 2ᵗ queda 4q² + 10q − 1184 = 0; dividiendo entre 2: 2q² + 5q − 592 = 0.","Factoriza: (q − 16)(2q + 37) = 0 → q = 16 (q no puede ser negativo).","2ᵗ = 16 → t = 4 años."],
+     mal:{0:"Con t = 5: 10·32 + 4·1024 = 4416, demasiado.",1:"Con t = 3: 10·8 + 4·64 = 336, muy poco.",2:"Con t = 7 el total sería enorme. Haz q = 2ᵗ.",3:"Con t = 6: 10·64 + 4·4096, demasiado. Prueba con q = 2ᵗ = 16."}},
+    {id:"26I-42",pistas:["Para que exista log[algo − 1], hace falta algo − 1 > 0, es decir, logₓ((3x + 32)/(3x − 1)) > 1.","Con x > 1 (base mayor que 1), logₓ(A) > 1 = logₓ(x) ⇔ A > x."],
+     pasos:["Se necesita logₓ((3x + 32)/(3x − 1)) > 1 = logₓ(x).","Como x > 1, la desigualdad se mantiene: (3x + 32)/(3x − 1) > x. Para x > 1, 3x − 1 > 0, así que puedes multiplicar.","3x + 32 > 3x² − x → 3x² − 4x − 32 < 0 → (3x + 8)(x − 4) < 0 → −8/3 < x < 4.","Con x > 1: dominio ⟨1; 4⟩. Altura = |4 − 1| = 3 m."],
+     mal:{0:"1 m no sale. Plantea (3x + 32)/(3x − 1) > x y factoriza.",1:"2 m no sale. La cuadrática 3x² − 4x − 32 se anula en x = 4.",3:"2,5 m no sale. El dominio es ⟨1; 4⟩.",4:"3,5 m no sale. Recuerda que también debe cumplirse x > 1."}}],
+   chequeo:[
+    {q:"¿Cuánto vale log₃(81)?",o:["3","27","4","9","1/4"],a:2,e:"3⁴ = 81, así que log₃(81) = 4."},
+    {q:"Si log 2 ≈ 0,30, ¿cuánto vale aproximadamente log 8?",o:["0,90","2,40","0,60","0,09","8,30"],a:0,e:"log 8 = log 2³ = 3·log 2 ≈ 0,90."},
+    {q:"¿Cuál es el dominio de f(x) = log(x − 2)?",o:["x ≥ 2","x > 2","x < 2","x ≠ 2","Todos los reales"],a:1,e:"El argumento debe ser positivo: x − 2 > 0 → x > 2."}]}]},
+"geo:Cuadriláteros y áreas":{
+  fuente:"Preguntas reales del banco (2024-I a 2026-II) y sus resoluciones. Teoría redactada para Ruta 1250.",
+  lee:[["Puro DECO · Geometría","https://drive.google.com/file/d/1Ub7H2rbVv7DyT55NsBqNN_xvWOg8pXVt/view"],["Apuntes digitales · Geometría","https://drive.google.com/drive/folders/1Xrc-57LkbDPVzA0HV7LpnJUlKgBfB1rI"]],
+  bloques:[
+  {id:"areas",t:"Áreas de regiones planas",ts:["Áreas en el trapecio","Áreas de regiones planas","Área de regiones triangulares","Área de regiones sombreadas","Áreas de regiones cuadrangulares"],excl:["24II-37"],
+   obj:["Usar las fórmulas de área del triángulo, cuadriláteros y círculo.","Aprovechar que la mediana divide un triángulo en dos de igual área.","Calcular áreas sombreadas sumando y restando regiones."],
+   concepto:"El área mide cuánta superficie ocupa una figura. En admisión casi nunca basta una fórmula: hay que partir la figura en piezas conocidas (triángulos, rectángulos, sectores) o comparar áreas usando relaciones como «la mediana divide en dos partes iguales».",
+   explica:[
+    "Fórmulas base: triángulo = base × altura ÷ 2; rectángulo = b × h; trapecio = (B + b)/2 × h; rombo = D × d ÷ 2; círculo = πr²; sector circular = πr²·θ/360°.",
+    "Triángulos con la misma altura: sus áreas están en la misma razón que sus bases. Por eso la mediana divide un triángulo en dos de igual área.",
+    "Triángulos semejantes: si la razón de lados es k, la razón de áreas es k². Por ejemplo, si un lado es el doble, el área es el cuádruple.",
+    "Trapecio con sus dos diagonales: los triángulos de las bases son semejantes; si las bases están en razón 1:2, sus áreas son S y 4S, y cada triángulo lateral mide 2S (siempre son iguales entre sí).",
+    "Áreas sombreadas: área sombreada = área total − lo que no está sombreado. A veces es más fácil trasladar piezas para formar una figura simple.",
+    "Dibuja siempre la figura con los datos y marca las regiones con letras (S, 2S…). Así ves las relaciones."],
+   claves:[["Trapecio","Área = (B + b)/2 × h."],
+     ["Mediana","Divide el triángulo en dos regiones de igual área."],
+     ["Misma altura","Las áreas de triángulos con igual altura son proporcionales a sus bases."],
+     ["Semejanza","Si la razón de lados es k, la razón de áreas es k²."],
+     ["Trapecio con diagonales","Bases en razón 1:k → triángulos de las bases S y k²S; cada lateral k·S."]],
+   errores:["Usar como altura un lado inclinado: la altura siempre es perpendicular a la base.","En semejanza, poner la razón de áreas igual a la de lados (es al cuadrado).","Restar la misma región dos veces en un área sombreada."],
+   ejemplo:{id:"26II-38",pasos:[
+     "En el trapecio ABCD (bases BC = 80 y AD = 160, altura AB = 120), las diagonales AC y BD se cortan en M.",
+     "Los triángulos BMC y DMA son semejantes con razón BC/AD = 80/160 = 1/2. Sus áreas: S y 4S.",
+     "Los dos triángulos laterales (AMB y CMD) valen 2S cada uno (razón 1·2).",
+     "Área del trapecio: (80 + 160)/2 × 120 = 14 400 = S + 4S + 2S + 2S = 9S.",
+     "S = 1600 cm²: es el área de BMC."],
+     idea:"Con las diagonales de un trapecio, ubica S, k²S y kS, y compara con el área total."},
+   guiada:[
+    {id:"25I-37",pistas:["M es punto medio de BC. Traza la diagonal AC: AM es mediana del triángulo ABC.","La mediana divide el triángulo en dos de igual área: S(ABM) = S(AMC). Haz lo mismo con N en el triángulo ACD."],
+     pasos:["Traza la diagonal AC.","En el triángulo ABC, AM es mediana (BM = MC): S(AMC) = S(ABM) = 600.","En el triángulo ACD, CN es mediana (AN = ND): S(ACN) = S(NCD) = 900.","Total: 600 + 600 + 900 + 900 = 3000 m²."],
+     mal:{0:"3200 no sale. Cada mediana duplica su área: 2 × 600 + 2 × 900.",1:"2800 no sale. Traza AC y usa la mediana en cada triángulo.",2:"3600 sería 4 × 900. El triángulo ABC suma 1200, no 1800.",4:"2600 no sale. La mediana divide en dos áreas iguales."}},
+    {id:"24I-37",pistas:["El cuadrado mide 4 de lado: área 16. La circunferencia inscrita tiene radio 2.","Los cuatro semicírculos de diámetro 2 (radio 1) equivalen a dos círculos de radio 1. Mira la figura para ver qué se resta y qué se suma."],
+     pasos:["Área del cuadrado: 4² = 16.","Se quita el círculo inscrito de radio 2: π · 2² = 4π.","Los cuatro semicírculos (radio 1) equivalen a 2 círculos: 2 · π · 1² = 2π, y según la figura esa parte sí está sombreada.","Sombreada = 16 − 4π + 2π = 16 − 2π = 2(8 − π) cm²."],
+     mal:{0:"4(4 − π) = 16 − 4π: te faltó sumar los semicírculos (2π).",1:"2(6 − π) = 12 − 2π. El cuadrado mide 16, no 12.",2:"16 − π no sale. Los cuatro semicírculos de radio 1 equivalen a 2π.",4:"2(5 − π) = 10 − 2π. Revisa el área del cuadrado: 4² = 16."}}],
+   chequeo:[
+    {q:"Un trapecio tiene bases 6 y 10 y altura 5. ¿Cuál es su área?",o:["80","40","30","60","16"],a:1,e:"(6 + 10)/2 × 5 = 8 × 5 = 40."},
+    {q:"Dos triángulos semejantes tienen lados en razón 1 a 3. Si el menor tiene área 5, ¿cuál es el área del mayor?",o:["15","45","25","9","30"],a:1,e:"Razón de áreas = 3² = 9: 5 × 9 = 45."},
+    {q:"En un triángulo de área 50, se traza una mediana. ¿Qué área tiene cada parte?",o:["20 y 30","25 y 25","10 y 40","50 y 50","Depende del triángulo"],a:1,e:"La mediana divide al triángulo en dos regiones de igual área: 25 y 25."}]}]}
 };
 </script>
 <script>
@@ -998,8 +1250,8 @@ ari:{seq:true,f:[["Puro DECO · Aritmética",DRV+"1PtxqKIEoAVH21ksfPg9QJmgbtNZqf
  ["Números primos y divisores","Descomposición canónica, cantidad de divisores",/divisores|primos/,1],
  ["MCD y MCM","Algoritmo de Euclides, problemas de reparto y coincidencia",/m[aá]ximo com[uú]n|mcd|m[ií]nimo com/,2],
  ["Racionales y fracciones","Clases de fracciones, operaciones, decimales",/racional|fracci|decimal/,2],
- ["Razones y proporciones","Razón aritmética y geométrica, series de razones iguales",/razones y proporciones/,3],
- ["Magnitudes, regla de tres y reparto","Directa e inversamente proporcionales, regla de tres compuesta, reparto proporcional",/magnitud|regla de tres|reparto/,3],
+ ["Razones y proporciones","Razón aritmética y geométrica, series de razones iguales",/razones y proporciones/,3,{fi:"ari:Porcentajes y proporcionalidad#razon"}],
+ ["Magnitudes, regla de tres y reparto","Directa e inversamente proporcionales, regla de tres compuesta, reparto proporcional",/magnitud|regla de tres|reparto/,3,{fi:"ari:Porcentajes y proporcionalidad#magn"}],
  ["Porcentajes, descuentos e interés","Tanto por ciento, aumentos y descuentos sucesivos, interés simple y compuesto",/tanto por ciento|porcentaj|descuento|inter[eé]s/,2],
  ["Mezclas y aleaciones","Precio medio, ley de aleación",/mezcla|aleaci/,1],
  ["Sucesiones y progresiones","Aritméticas y geométricas, sumatorias",/sucesi|progresi/,1],
@@ -1008,16 +1260,16 @@ ari:{seq:true,f:[["Puro DECO · Aritmética",DRV+"1PtxqKIEoAVH21ksfPg9QJmgbtNZqf
  ["Probabilidades","Espacio muestral, regla de Laplace, probabilidad condicional",/probabilid/,2]]},
 alg:{seq:true,f:[["Puro DECO · Álgebra",DRV+"1YfpoeCQQs-9xhX6RJgBGRW5heW2P14Gn/view"],["Apuntes digitales · Álgebra",DRF+"1pSoJ6GLS9RIOm3oetbU3emL2N6oHiNnU"]],u:[
  ["Exponentes, radicales y productos notables","Leyes de exponentes, radicales, productos notables",/producto|expresiones algebraicas|exponentes/,2],
- ["Ecuaciones de primer y segundo grado","Ecuación lineal, cuadrática, discriminante, bicuadrada",/ecuaci[oó]n(es)? (lineal|cuadr|bicuadr)/,3],
+ ["Ecuaciones de primer y segundo grado","Ecuación lineal, cuadrática, discriminante, bicuadrada",/ecuaci[oó]n(es)? (lineal|cuadr|bicuadr)/,3,{fi:"alg:Polinomios y ecuaciones#ecu"}],
  ["Valor absoluto y números complejos","Ecuaciones con valor absoluto, operaciones con complejos",/valor absoluto|complejos/,2],
  ["Polinomios","Grado, valor numérico, raíces y coeficientes",/^polinomios|ra[ií]ces de polinomios/,2],
  ["División, cocientes notables y binomio","Ruffini, teorema del resto, cocientes notables, binomio de Newton",/cociente|binomio|divisi[oó]n algebr/,1],
  ["Factorización","Factor común, aspa simple y doble",/factoriz/,1],
  ["Ecuaciones de grado superior","Ecuaciones polinomiales, Cardano-Vieta",/polinomiales|grado superior/,2],
  ["Inecuaciones","Lineales, cuadráticas, fraccionarias, de grado superior",/inecuaci|desigualdad/,2],
- ["Sistemas de ecuaciones","Lineales 2×2 y 3×3, matrices y determinantes",/sistema de ecuaciones/,3],
- ["Funciones","Dominio, rango, gráficas, función cuadrática e inversa",/^funci[oó]n(es)?( reales| inversa| cuadr[aá]tica)?$/,3],
- ["Exponencial y logaritmos","Función exponencial y logarítmica, ecuaciones exponenciales",/exponencial|logar/,3],
+ ["Sistemas de ecuaciones","Lineales 2×2 y 3×3, matrices y determinantes",/sistema de ecuaciones/,3,{fi:"alg:Polinomios y ecuaciones#sis"}],
+ ["Funciones","Dominio, rango, gráficas, función cuadrática e inversa",/^funci[oó]n(es)?( reales| inversa| cuadr[aá]tica)?$/,3,{fi:"alg:Funciones#fun"}],
+ ["Exponencial y logaritmos","Función exponencial y logarítmica, ecuaciones exponenciales",/exponencial|logar/,3,{fi:"alg:Logaritmos y exponenciales#log"}],
  ["Programación lineal","Región factible, máximo y mínimo de una función objetivo",/programaci[oó]n lineal/,2]]},
 geo:{seq:true,f:[["Puro DECO · Geometría",DRV+"1Ub7H2rbVv7DyT55NsBqNN_xvWOg8pXVt/view"],["Apuntes digitales · Geometría",DRF+"1Xrc-57LkbDPVzA0HV7LpnJUlKgBfB1rI"]],u:[
  ["Segmentos y ángulos","Puntos medios, ángulos entre paralelas",/segment|[aá]ngulo entre/,1],
@@ -1026,7 +1278,7 @@ geo:{seq:true,f:[["Puro DECO · Geometría",DRV+"1Ub7H2rbVv7DyT55NsBqNN_xvWOg8pX
  ["Cuadriláteros y polígonos","Paralelogramos, trapecios, ángulos en polígonos",/cuadril|pol[ií]gono/,1],
  ["Circunferencia","Ángulos en la circunferencia, inscritas y circunscritas",/^circunferencia$|relaciones m[eé]tricas en la circ/,2],
  ["Semejanza y relaciones métricas","Thales, semejanza, Pitágoras, bisectriz, mediana",/semejanza|relaciones m[eé]tricas$|tales/,2],
- ["Áreas de regiones planas","Triangulares, cuadrangulares, circulares y sombreadas",/[aá]rea/,3],
+ ["Áreas de regiones planas","Triangulares, cuadrangulares, circulares y sombreadas",/[aá]rea/,3,{fi:"geo:Cuadriláteros y áreas#areas"}],
  ["Poliedros, prisma y pirámide","Áreas lateral y total, volúmenes, troncos",/prism|pir[aá]mide|poliedro/,2],
  ["Cilindro, cono y esfera","Áreas y volúmenes, troncos de cono y cilindro",/cilindro|cono|esfera/,3],
  ["Geometría analítica: recta","Plano cartesiano, distancia, pendiente, ecuación de la recta",/recta|plano cartesiano/,2,{pre:["alg.u02"]}],
@@ -3652,13 +3904,27 @@ function irPaso(p){const f=FT[fz.tid], b=f.bloques[fz.b]; fz.paso=Math.max(0,Mat
   if(fz.paso>estB(b).p) marcarB(b,{p:fz.paso}); draw(); window.scrollTo(0,0)}
 function ctxTexto(p){const tx=p.x?DATA.textos[p.x]:null; return tx?`<details class="ctx"><summary>${esc(tx.titulo)}: ábrelo para leer</summary>${figura(tx.f)}<p>${esc(tx.cuerpo)}</p></details>`:""}
 function opcionesFijas(p,cls,attr,dis){return `<div class="opts">${p.o.map((o,i)=>`<button class="opt ${cls(i)}" ${attr?`data-act="${attr}" data-i="${i}"`:""} ${dis?"disabled":""}><span class="l">${L[i]}</span><span class="t">${esc(o)}</span></button>`).join("")}</div>`}
+// trazabilidad: qué es texto propio y dónde contrastarlo
+function origen(f){const lee=f.lee||[];
+  return `<p class="small muted origen"><b>Origen:</b> explicación complementaria redactada por Ruta 1250, no es texto oficial del CEPRE ni de la UNMSM. Las preguntas son reales de admisión.${lee.length?` Contrasta con: ${lee.map(([t,h])=>h?`<a href="${esc(h)}" target="_blank" rel="noopener">${esc(t)}</a>`:esc(t)).join(" · ")}.`:""}</p>`}
+// técnica Feynman: el alumno escribe su explicación y la compara con las ideas clave
+const FKEY="r1250-fe"; let FE={}; try{FE=JSON.parse(localStorage.getItem(FKEY)||"{}")}catch(e){}
+function vFeynman(b){const t=FE[b.key]||"", rev=fz&&fz.fey;
+  return `<section class="card fey"><h3>Explícalo con tus palabras</h3>
+  <p class="small muted">Escribe en 2 o 3 líneas qué es y para qué sirve, como si se lo explicaras a un amigo. No copies: si te trabas, ahí está lo que falta entender.</p>
+  <textarea id="fey" rows="4" placeholder="Para mí, esto significa que…">${esc(t)}</textarea>
+  <div class="row"><button class="btn ghost sm" data-act="fi-fey">Revisar mi explicación</button></div>
+  ${rev?`<div class="pistas"><p><b>¿Tu explicación menciona estas ideas?</b> Marca las que sí.</p>${b.claves.map((x,i)=>`<label class="chk"><input type="checkbox"> ${esc(x[0])}</label>`).join("")}<p class="small">Las que no marcaste son las que debes mirar con más cuidado en la explicación (paso 2). Si dijiste algo que contradice una de ellas, ahí hay una confusión.</p></div>`:""}</section>`}
 function pasoFicha(f,b){const st=estB(b);
   const sig=(txt="Siguiente")=>`<div class="dock"><button class="btn" data-act="fi-next">${txt}</button></div>`;
   switch(fz.paso){
   case 0: return `<section class="card wine fstep"><div class="kicker">1 · Concepto fundamental</div><p class="big-c">${esc(b.concepto)}</p></section>
-    <p class="muted small">Antes de seguir, intenta decirlo con tus palabras, en voz alta o en tu cuaderno. Explicarlo es la forma más rápida de saber si lo entendiste.</p>${sig("Ya lo entendí · ver la explicación")}`;
+    ${b.obj?`<section class="card"><h3>Al terminar este bloque podrás…</h3><ul class="obj">${b.obj.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>`:""}
+    ${vFeynman(b)}${sig("Ya lo entendí · ver la explicación")}`;
   case 1: return `<section class="card fstep"><div class="kicker">2 · Explicación sencilla</div>${b.explica.map(x=>`<p>${esc(x)}</p>`).join("")}</section>
-    <section class="card"><h3>Lo que debes recordar</h3><div class="tlist">${b.claves.map(x=>`<div class="kv"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join("")}</div><p class="muted small">Al final del bloque estas ideas pasan a tus tarjetas de repaso.</p></section>${sig()}`;
+    <section class="card"><h3>Lo que debes recordar</h3><div class="tlist">${b.claves.map(x=>`<div class="kv"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join("")}</div><p class="muted small">Al final del bloque estas ideas pasan a tus tarjetas de repaso.</p></section>
+    ${b.errores?`<section class="card"><h3>Errores frecuentes</h3><ul class="errs">${b.errores.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>`:""}
+    ${origen(f)}${sig()}`;
   case 2: {const p=Q[b.ejemplo.id], n=b.ejemplo.pasos.length, r=fz.rev;
     return `<section class="card fstep"><div class="kicker">3 · Ejemplo resuelto · pregunta real del ${esc(p.ex)}</div>${ctxTexto(p)}${enun(p)}${opcionesFijas(p,i=>r>=n&&i===p.a?"ok":"",null,true)}
     <ol class="pasos">${b.ejemplo.pasos.slice(0,r).map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
@@ -3734,6 +4000,7 @@ function accionFicha(a,el){
   if(a==="fi-paso"){irPaso(+el.dataset.p); return}
   if(a==="fi-next"){irPaso(fz.paso+1); return}
   if(a==="fi-rev"){fz.rev++; draw(); return}
+  if(a==="fi-fey"){const t=(document.getElementById("fey")||{}).value||""; FE[b.key]=t.slice(0,2000); try{localStorage.setItem(FKEY,JSON.stringify(FE))}catch(e){} fz.fey=!!t.trim(); draw(); return}
   if(a==="fi-gpick"){fz.g.sel=+el.dataset.i; draw(); return}
   if(a==="fi-gpista"){fz.g.pistas++; draw(); return}
   if(a==="fi-gcheck"){guiadaCheck(); return}
