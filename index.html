@@ -1201,6 +1201,81 @@ const FICHAS={
     {q:"Un trapecio tiene bases 6 y 10 y altura 5. ¿Cuál es su área?",o:["80","40","30","60","16"],a:1,e:"(6 + 10)/2 × 5 = 8 × 5 = 40."},
     {q:"Dos triángulos semejantes tienen lados en razón 1 a 3. Si el menor tiene área 5, ¿cuál es el área del mayor?",o:["15","45","25","9","30"],a:1,e:"Razón de áreas = 3² = 9: 5 × 9 = 45."},
     {q:"En un triángulo de área 50, se traza una mediana. ¿Qué área tiene cada parte?",o:["20 y 30","25 y 25","10 y 40","50 y 50","Depende del triángulo"],a:1,e:"La mediana divide al triángulo en dos regiones de igual área: 25 y 25."}]}]}
+,
+"fis:Trabajo y energía":{
+  fuente:"Preguntas reales del banco (2024-I a 2027-I) y sus resoluciones. Teoría redactada para Ruta 1250 y verificada con cálculo.",
+  lee:[["Puro DECO · Física","https://drive.google.com/file/d/1Kxx77MgrklnADw10HIe5tUeYeFxJOsvY/view"]],
+  bloques:[
+  {id:"ener",t:"Energía mecánica y su conservación",ts:["Conservación de la energía","Energía mecánica","Conservación de la energía mecánica"],
+   obj:["Calcular la energía cinética, la potencial gravitatoria y la elástica.","Usar la conservación de la energía cuando no hay rozamiento.","Elegir bien el nivel de referencia para la altura."],
+   concepto:"La energía mecánica es la suma de la energía de movimiento (cinética) y la de posición (potencial). Si sobre el cuerpo solo trabajan el peso y los resortes (no hay rozamiento), esa suma no cambia: lo que pierde en altura lo gana en rapidez, y al revés.",
+   explica:[
+    "Energía cinética: Ec = ½mv². Depende de la rapidez al cuadrado: si la rapidez se duplica, la Ec se cuadruplica.",
+    "Energía potencial gravitatoria: Epg = mgh, donde h es la altura sobre un nivel de referencia que tú eliges (normalmente el suelo o el punto más bajo).",
+    "Energía potencial elástica de un resorte: Epe = ½kx², donde x es lo que se estira o comprime.",
+    "Conservación: si no hay rozamiento ni otras fuerzas externas que trabajen, Em(inicial) = Em(final): Ec₁ + Ep₁ = Ec₂ + Ep₂.",
+    "Si hay rozamiento, la energía no se conserva: Em(final) = Em(inicial) − |trabajo del rozamiento|.",
+    "Trabajo de una fuerza constante: W = F·d·cos θ. Teorema trabajo-energía: el trabajo neto es igual al cambio de energía cinética.",
+    "Caso típico: algo que cae desde h partiendo del reposo llega con v = √(2gh), sin importar el camino (rampa o caída libre) si no hay rozamiento."],
+   claves:[["Energía cinética","Ec = ½mv²."],
+     ["Energía potencial gravitatoria","Epg = mgh (h medida desde el nivel de referencia)."],
+     ["Energía potencial elástica","Epe = ½kx²."],
+     ["Conservación de la energía","Sin rozamiento: Ec₁ + Ep₁ = Ec₂ + Ep₂."],
+     ["Caída desde el reposo","v = √(2gh), sin importar la forma del camino liso."]],
+   errores:["Usar la longitud de la rampa como altura: la altura es la vertical (h = L·sen θ).","Olvidar la energía cinética inicial cuando el cuerpo ya se mueve en el punto A.","Aplicar conservación cuando el enunciado dice que hay rozamiento."],
+   ejemplo:{id:"26II-88",pasos:[
+     "Toma el suelo como nivel de referencia.",
+     "Energía inicial: Ec = ½(0,2)(30²) = 90 J y Epg = 0,2 × 10 × 55 = 110 J. Total: 200 J.",
+     "Sin fricción, la energía se conserva. Cuando Ec = 40 J: 200 = 40 + 0,2 × 10 × H.",
+     "160 = 2H → H = 80 m sobre el suelo."],
+     idea:"Calcula la energía total una vez; en cualquier otro punto, Ec + Ep vale lo mismo."},
+   guiada:[
+    {id:"24I-88",pistas:["El tramo es liso: la energía se conserva entre A y C. Toma C (el punto más bajo) como nivel de referencia.","La altura de A no es 5 m: la rampa de 5 m está inclinada 37°, así que la altura es 5·sen 37° = 3 m."],
+     pasos:["Altura de A respecto de C: h = 5 × sen 37° = 5 × 3/5 = 3 m.","Em(A) = Em(C): g·h + ½vA² = ½vC² (la masa se cancela).","10 × 3 + ½(2²) = ½vC² → 30 + 2 = ½vC² → vC² = 64.","vC = 8 m/s."],
+     mal:{0:"10 m/s saldría con h = 5 m. La altura es la vertical: 5·sen 37° = 3 m.",1:"6 m/s no incluye la energía cinética de A ni la altura correcta. Plantea 10·3 + ½·2² = ½vC².",2:"4 m/s es muy poco: el bloque baja 3 m y gana rapidez.",4:"2 m/s es la rapidez en A. Al bajar, gana energía cinética."}},
+    {id:"25II-84",pistas:["Al soltarlo, el bloque baja x metros: pierde energía potencial gravitatoria mgx.","En el punto más bajo se detiene un instante (v = 0): toda esa energía quedó en el resorte como ½kx²."],
+     pasos:["Nivel de referencia: el punto más bajo. Arriba: Epg = mgx, Ec = 0, resorte sin deformar.","Abajo: Ec = 0 (estiramiento máximo), Epe = ½kx².","mgx = ½kx² → x = 2mg/k = 2 × 1 × 10/100.","x = 0,20 m."],
+     mal:{1:"0,30 m no sale. Iguala mgx = ½kx².",2:"0,40 m sería 4mg/k. Revisa: x = 2mg/k.",3:"0,10 m = mg/k es el punto de equilibrio, no el estiramiento máximo: el bloque se pasa por inercia.",4:"0,15 m no sale. Usa mgx = ½kx²."}}],
+   chequeo:[
+    {q:"Una piedra de 2 kg se mueve a 3 m/s. ¿Cuál es su energía cinética?",o:["6 J","9 J","18 J","3 J","12 J"],a:1,e:"Ec = ½ × 2 × 3² = 9 J."},
+    {q:"Se suelta un objeto desde 5 m de altura (g = 10 m/s²), sin aire. ¿Con qué rapidez llega al suelo?",o:["5 m/s","50 m/s","100 m/s","10 m/s","25 m/s"],a:3,e:"v = √(2gh) = √(2 × 10 × 5) = √100 = 10 m/s."},
+    {q:"Si la rapidez de un auto se duplica, su energía cinética…",o:["se duplica","no cambia","se cuadruplica","se reduce a la mitad","se triplica"],a:2,e:"Ec depende de v²: (2v)² = 4v², se cuadruplica."}]}]},
+"fis:Fluidos":{
+  fuente:"Preguntas reales del banco (2023-II a 2027-I) y sus resoluciones. Teoría redactada para Ruta 1250 y verificada con cálculo.",
+  lee:[["Puro DECO · Física","https://drive.google.com/file/d/1Kxx77MgrklnADw10HIe5tUeYeFxJOsvY/view"]],
+  bloques:[
+  {id:"flu",t:"Presión, empuje y fluidos en movimiento",ts:["Hidrostática","Dinámica de fluidos"],
+   obj:["Calcular la presión dentro de un líquido.","Usar el principio de Arquímedes para cuerpos que flotan.","Aplicar la ecuación de continuidad y la de Bernoulli en tuberías."],
+   concepto:"Un líquido empuja en todas direcciones, y empuja más cuanto más profundo estás. Todo cuerpo sumergido recibe un empuje hacia arriba igual al peso del líquido que desaloja (Arquímedes). Si el cuerpo flota, ese empuje es igual a su peso.",
+   explica:[
+    "Presión hidrostática: P = ρgh (ρ es la densidad del líquido y h la profundidad). Presión absoluta = presión atmosférica + ρgh.",
+    "Pascal: una presión aplicada a un líquido encerrado se transmite igual a todos sus puntos. Por eso en una prensa hidráulica F₁/A₁ = F₂/A₂.",
+    "Empuje (Arquímedes): E = ρ(líquido) · g · V(sumergido). Solo cuenta el volumen que está bajo el líquido.",
+    "Si flota en equilibrio: empuje = peso. De ahí sale que la fracción sumergida = ρ(cuerpo)/ρ(líquido). Una madera de densidad 0,7 g/cm³ en agua tiene el 70 % sumergido.",
+    "Continuidad (fluido en movimiento): el caudal se mantiene, A₁v₁ = A₂v₂. Donde el tubo es más angosto, el agua va más rápido. Con tubos circulares, v₁/v₂ = (d₂/d₁)².",
+    "Bernoulli (misma altura): P₁ + ½ρv₁² = P₂ + ½ρv₂². Donde el agua va más rápido, la presión es menor."],
+   claves:[["Presión hidrostática","P = ρgh; absoluta = P(atm) + ρgh."],
+     ["Empuje de Arquímedes","E = ρ(líquido)·g·V(sumergido)."],
+     ["Flotación","Peso = empuje → fracción sumergida = ρ(cuerpo)/ρ(líquido)."],
+     ["Continuidad","A₁v₁ = A₂v₂. En tubos circulares, v₁/v₂ = (d₂/d₁)²."],
+     ["Bernoulli (misma altura)","P₁ + ½ρv₁² = P₂ + ½ρv₂²."]],
+   errores:["Usar el volumen total del cuerpo en el empuje cuando solo una parte está sumergida.","En continuidad con diámetros, olvidar elevar al cuadrado (el área depende de d²).","Mezclar unidades: pasa cm a m y kPa a Pa antes de reemplazar."],
+   ejemplo:{id:"27I-86",pasos:[
+     "El cubo flota: peso = empuje. Entonces la fracción sumergida es ρ(madera)/ρ(agua) = 700/1000 = 0,7.",
+     "Altura sumergida: 0,7 × 30 cm = 21 cm.",
+     "Sobresale: 30 − 21 = 9 cm."],
+     idea:"Cuando algo flota, la fracción sumergida es la razón de densidades."},
+   guiada:[
+    {id:"26II-84",pistas:["La tabla queda totalmente sumergida y en equilibrio: el empuje sostiene el peso de la tabla más el del nadador.","Volumen de la tabla = A × 0,15. Escribe empuje = peso de la tabla + 72·g, y la g se cancela."],
+     pasos:["Empuje = peso de la tabla + peso del nadador.","1000 · g · (A · 0,15) = 400 · g · (A · 0,15) + 72 · g.","150A = 60A + 72 → 90A = 72.","A = 0,80 m²."],
+     mal:{0:"0,90 m² no sale. Plantea 1000·A·0,15 = 400·A·0,15 + 72.",1:"1,09 m² no sale. La tabla también pesa: réstala del empuje.",2:"1,80 m² sería si la tabla no pesara y usaras mal el espesor. Revisa 90A = 72.",4:"1,0 m² no sale. Resta el peso de la tabla: (1000 − 400)·0,15·A = 72."}},
+    {id:"25II-82",pistas:["Por continuidad, A(ancha)·v(ancha) = A(angosta)·v(angosta).","El área de un círculo depende del diámetro al cuadrado: v(ancha) = v(angosta)·(d angosta/d ancha)²."],
+     pasos:["Continuidad: A₁v₁ = A₂v₂. Con tubos circulares, A ∝ d².","v(ancha) = 4 × (4/10)² = 4 × 0,16.","v(ancha) = 0,64 m/s."],
+     mal:{0:"0,60 m/s no sale. Calcula 4 × (0,4)².",1:"0,80 m/s no sale. Recuerda elevar la razón de diámetros al cuadrado.",3:"0,90 m/s no sale. En la parte ancha el agua va más lenta: 4 × 0,16.",4:"0,50 m/s no sale. Usa v₁ = v₂·(d₂/d₁)²."}}],
+   chequeo:[
+    {q:"¿Qué presión ejerce el agua a 5 m de profundidad? (ρ = 1000 kg/m³, g = 10 m/s²)",o:["5000 Pa","50 000 Pa","500 Pa","0,5 Pa","5 Pa"],a:1,e:"P = ρgh = 1000 × 10 × 5 = 50 000 Pa."},
+    {q:"Un bloque flota en agua con el 60 % de su volumen sumergido. ¿Cuál es su densidad?",o:["400 kg/m³","1000 kg/m³","600 kg/m³","1600 kg/m³","60 kg/m³"],a:2,e:"Fracción sumergida = ρ(cuerpo)/ρ(agua) → ρ = 0,6 × 1000 = 600 kg/m³."},
+    {q:"En una tubería horizontal, el agua pasa de una zona ancha a una angosta. En la zona angosta…",o:["la rapidez y la presión aumentan","la rapidez aumenta y la presión disminuye","la rapidez disminuye y la presión aumenta","ambas disminuyen","no cambia nada"],a:1,e:"Continuidad: más angosto, más rápido. Bernoulli: más rápido, menos presión."}]}]}
 };
 </script>
 <script>
@@ -1301,9 +1376,9 @@ fis:{seq:true,f:[["Puro DECO · Física",DRV+"1Kxx77MgrklnADw10HIe5tUeYeFxJOsvY/
  ["MRU, MRUV y caída libre","Ecuaciones del movimiento, gráficas",/\bmru\b|\bmruv\b|ca[ií]da|cinem/,3,{pre:["alg.u02"]}],
  ["Movimiento parabólico y circular","Proyectiles, MCU y MCUV",/parab[oó]lico|mcu/,2,{pre:["tri.u03"]}],
  ["Dinámica y estática","Leyes de Newton, rozamiento, equilibrio, torque",/^din[aá]mica|est[aá]tica/,3,{pre:["tri.u03"]}],
- ["Trabajo, potencia y energía","Trabajo neto, energía mecánica y su conservación",/energ|trabajo|potencia$/,3],
+ ["Trabajo, potencia y energía","Trabajo neto, energía mecánica y su conservación",/energ|trabajo|potencia$/,3,{fi:"fis:Trabajo y energía#ener"}],
  ["Cantidad de movimiento y gravitación","Impulso, choques, leyes de Kepler, gravitación universal",/cantidad de movimiento|choques|impulso|kepler|gravitaci[oó]n universal/,2],
- ["Fluidos","Presión, principio de Pascal y de Arquímedes, hidrodinámica",/hidrost|fluidos|arqu/,3],
+ ["Fluidos","Presión, principio de Pascal y de Arquímedes, hidrodinámica",/hidrost|fluidos|arqu/,3,{fi:"fis:Fluidos#flu"}],
  ["Calor y temperatura","Calorimetría, cambios de fase, dilatación, termodinámica",/calor|temperatura|dilataci|termodin/,2],
  ["Electrostática y condensadores","Ley de Coulomb, campo y potencial, condensadores",/electrost|condensador|potencial el/,3,{fi:"fis:Electricidad y magnetismo#cond"}],
  ["Corriente y circuitos","Ley de Ohm, resistencias, Kirchhoff, efecto Joule",/electrodin|circuito/,2,{fi:"fis:Electricidad y magnetismo#elec"}],
