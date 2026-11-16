@@ -2819,10 +2819,10 @@ function syncChip(){if(!SYNC.tok) return ""; const c=SYNC.est==="error"?"err":SY
   return `<a class="chip" href="#progreso" title="Sincronización" id="sync-chip"><span class="sync-dot ${c}"></span>${SYNC.est==="sync"?"…":SYNC.est==="offline"?"sin red":SYNC.est==="error"?"revisar":"al día"}</a>`}
 function pintarSync(){document.querySelectorAll("#sync-chip").forEach(el=>{el.outerHTML=syncChip()}); const c=$("#sync-card"); if(c) c.outerHTML=syncCard()}
 const EN_ARTEFACTO=!!window.R1250_ARTEFACTO;   // la copia dentro de Claude no puede llamar a GitHub (política del artefacto)
-const URL_APP="https://izz4.github.io/ruta-1250/";
+const URL_APP="https://izz4.github.io/Ruta-1250/";
 function syncCard(){
   if(EN_ARTEFACTO) return `<section class="card" id="sync-card"><div class="row">${I.sync}<h2 class="grow">Sincronización</h2></div>
-    <p class="small">Esta copia dentro de Claude no puede conectarse a GitHub, así que aquí no se sincroniza. Para tener <b>un solo progreso</b> en PC y celular usa la app instalable: <a href="${URL_APP}" target="_blank" rel="noopener">izz4.github.io/ruta-1250</a> (en la PC ábrela en Chrome y toca «Instalar»). Para llevar lo que hiciste aquí, usa «Copiar mi progreso» y combínalo allá.</p></section>`;
+    <p class="small">Esta copia dentro de Claude no puede conectarse a GitHub, así que aquí no se sincroniza. Para tener <b>un solo progreso</b> en PC y celular usa la app instalable: <a href="${URL_APP}" target="_blank" rel="noopener">izz4.github.io/Ruta-1250</a> (en la PC ábrela en Chrome y toca «Instalar»). Para llevar lo que hiciste aquí, usa «Copiar mi progreso» y combínalo allá.</p></section>`;
   if(SYNC.tok) return `<section class="card" id="sync-card"><div class="row">${I.sync}<h2 class="grow">Sincronización</h2><span class="sync-dot ${SYNC.est==="error"?"err":SYNC.est==="ok"?"ok":""}"></span></div>
     <p class="small">${SYNC.est==="sync"?"Sincronizando…":SYNC.last?`Al día ${haceTxt(SYNC.last)}.`:"Conectado."} Tu progreso se combina solo entre este dispositivo y los demás donde pegaste la misma llave.</p>${SYNC.msg?`<p class="small" style="color:var(--bad-t)">${esc(SYNC.msg)}</p>`:""}
     <div class="row"><button class="btn sm" data-act="sy-now">Sincronizar ahora</button><button class="btn ghost sm" data-act="sy-copy">${SYNC.cp||"Copiar llave para otro dispositivo"}</button><button class="btn dash sm" data-act="sy-off">Desconectar este dispositivo</button></div></section>`;
