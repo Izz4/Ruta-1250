@@ -651,8 +651,9 @@ details.minsel .seg{margin:4px 0 6px}
 details.resumen{border-top:1px solid var(--line);padding-top:10px}
 details.resumen>summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
 .qa.pre{margin-top:0;border-top:0;padding-top:0}
-.erow .btn.sm{justify-self:end}
-.erow{grid-template-columns:minmax(0,1fr) auto auto}
+.er2{display:grid;grid-template-columns:minmax(0,1fr) auto auto;gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line)}
+.er2:first-of-type{border-top:0}
+.er2 b{display:block}
 /* modo foco: en lecciones se oculta la barra inferior; en PC se pliega la lateral */
 body.enficha .tabs{display:none}
 body.enficha .dock{bottom:0}
@@ -5344,8 +5345,8 @@ function vErrores(){const g=gruposErrores(), n=g.ids.length;
   return head("Mis errores","Lo que fallaste y aún no corriges")+`
   <section class="card wine"><div class="row"><div class="grow"><b style="font-size:var(--fs-xl);font-family:var(--serif)">${n}</b> <span>${plural(n,"pregunta fallada","preguntas falladas")} que aún no aciertas</span><p class="small" style="color:var(--ink-2)">Corregir un error pronto evita que se vuelva costumbre. Al acertarla en un repaso, sale de esta lista.</p></div></div>
     <button class="btn" data-act="errq">Practicar ${Math.min(10,n)} ahora</button></section>
-  <section class="card"><h2>Por tipo de error</h2>${tipos.map(([k,t])=>`<div class="erow"><b class="small">${esc(t)} · ${g.tipo[k].length}</b><span class="small muted">${k==="sin"?"Al fallar, marca qué pasó: el plan lo usa.":esc(CONSEJO[k])}</span><button class="btn sm" data-act="errk" data-k="${k}">Practicar</button></div>`).join("")}</section>
-  <section class="card"><h2>Por tema</h2><div class="tlist">${temas.map(([t,ids])=>`<div class="erow"><span class="small"><b>${esc(TM[t].n)}</b><br><span class="muted">${esc(C[TM[t].c].n)}</span></span><span class="pct">${ids.length}</span><button class="btn sm" data-act="errt" data-t="${t}">Practicar</button></div>`).join("")}</div></section>`}
+  <section class="card"><h2>Por tipo de error</h2>${tipos.map(([k,t])=>`<div class="er2"><div><b>${esc(t)}</b><span class="small muted">${k==="sin"?"Al fallar, marca qué pasó: el plan lo usa.":esc(CONSEJO[k])}</span></div><span class="pct">${g.tipo[k].length}</span><button class="btn sm" data-act="errk" data-k="${k}">Practicar</button></div>`).join("")}</section>
+  <section class="card"><h2>Por tema</h2><div>${temas.map(([t,ids])=>`<div class="er2"><div><b>${esc(TM[t].n)}</b><span class="small muted">${esc(C[TM[t].c].n)}</span></div><span class="pct">${ids.length}</span><button class="btn sm" data-act="errt" data-t="${t}">Practicar</button></div>`).join("")}</div></section>`}
 function vBanco(){const ex=BANCO.examenes, car=ex.filter(x=>x.estado==="cargado");
   const fig=car.reduce((a,x)=>a+(x.fig||0),0);
   const pill={cargado:'<span class="pill on">En la app</span>',pendiente:'<span class="pill wait">Por convertir</span>',falta:'<span class="pill off">Falta</span>'};
