@@ -601,7 +601,7 @@ input.bibq{width:100%;margin-top:6px} .bibr{margin-top:8px}
 .chip .dss{margin-left:-6px}
 /* verificación: áreas táctiles, desbordes y verde en modo claro */
 .seg button{min-width:44px}
-.fst{min-height:44px;justify-content:center}
+.fst{min-height:44px;justify-content:flex-start}
 @media (max-width:700px){.crs .pc{min-width:0;font-size:var(--fs-md)}}
 :root[data-tema="claro"]{--ok-t:#0f6448}
 /* ---------- Fase 2 · Inicio, Ajustes ---------- */
@@ -638,6 +638,36 @@ details.minsel .seg{margin:4px 0 6px}
 .cr-n{font-size:var(--fs-xs);line-height:1.2;text-align:center;color:var(--ink-2);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:2.4em}
 .lvl.l1{color:var(--accent)} .lvl.l2{color:var(--gold)} 
 @media (min-width:1100px){.cursos-row{flex-wrap:wrap;overflow:visible}}
+
+/* ---------- Fase 3 · lecciones y práctica ---------- */
+.big-c{font-family:var(--sans);font-size:var(--fs-lg);line-height:1.45;font-weight:500}
+.fstep p,.fstep li{font-size:var(--fs-read);line-height:1.6}
+.fstep .small,.fstep .muted.small{font-size:var(--fs-sm)}
+.fpaso{font-size:var(--fs-sm);color:var(--muted);margin-top:-6px}
+.fpaso b{color:var(--ink)}
+.recall{border-left:3px solid var(--gold)}
+.recall .q{font-weight:600}
+.rec-a{font-size:var(--fs-read);padding:10px 12px;border-radius:var(--r-s);background:rgba(var(--acc),.1);animation:rise2 var(--t-med) var(--ease) both}
+details.resumen{border-top:1px solid var(--line);padding-top:10px}
+details.resumen>summary{cursor:pointer;font-weight:600;min-height:44px;display:flex;align-items:center}
+.qa.pre{margin-top:0;border-top:0;padding-top:0}
+.erow .btn.sm{justify-self:end}
+.erow{grid-template-columns:minmax(0,1fr) auto auto}
+/* modo foco: en lecciones se oculta la barra inferior; en PC se pliega la lateral */
+body.enficha .tabs{display:none}
+body.enficha .dock{bottom:0}
+.dock{padding:12px 0 calc(12px + env(safe-area-inset-bottom));background:var(--bg);border-top:1px solid var(--line);margin-top:4px}
+@media (max-width:899px){.dock{margin-left:-16px;margin-right:-16px;padding-left:16px;padding-right:16px;max-width:none}
+  body.enficha .shell,body.insession .shell{padding-bottom:24px}}
+@media (min-width:900px){body.enficha .side{display:none!important}body.enficha .main{margin-left:0}body.enficha .shell{max-width:860px}body.enficha .dock,body.insession .dock{max-width:none}body.enficha .pagehead .chips{display:flex}}
+@media (max-width:899px){
+  body.enficha .topbar{display:none}
+  body.enficha .shell{padding-top:12px;gap:14px}
+  body.enficha .fmeta{display:none}
+  body.enficha .pagehead h1{font-size:var(--fs-xl)}
+  body.enficha .fbqs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
+  body.enficha .fbq{flex:none;max-width:78vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;justify-content:flex-start}
+}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -3651,7 +3681,7 @@ function vProgreso(){let g="";const e=estimado(), sem=semanas(), errs={}; S.log.
   DATA.cursos.forEach(c=>{const x=nivel(idsCurso(c.id)); if(c.g!==g){g=c.g;h+=`<div class="group-label">${esc(g)}</div>`}
     h+=`<div class="crow"><span class="n"><a href="#c-${c.id}" style="color:inherit">${esc(c.n)}</a> <small>· ${c.peso} preg.</small></span>${barNivel(x,false)}<span class="pct">${x.nF?Math.round(x.hab*100)+"%":"—"}</span></div>`});
   h+=`<p class="muted small">El porcentaje son tus aciertos en preguntas nuevas. Toca un curso para ver sus temas.</p></section>
-  <section class="card"><h2>Tus errores</h2>${totErr?Object.entries(errs).sort((a,b)=>b[1]-a[1]).map(([k,n])=>`<div class="erow"><b class="small">${esc(ERRORES.find(x=>x[0]===k)[1])} · ${n}</b><span class="small muted">${esc(CONSEJO[k])}</span></div>`).join(""):`<p class="muted small">Cuando falles en una lección, marca qué pasó (concepto, procedimiento, cálculo…). Aquí verás tu patrón y el plan lo usará.</p>`}</section>
+  <section class="card"><div class="row"><h2 class="grow">Tus errores</h2><a class="btn ghost sm" href="#errores">Mis errores</a></div>${totErr?Object.entries(errs).sort((a,b)=>b[1]-a[1]).map(([k,n])=>`<div class="erow"><b class="small">${esc(ERRORES.find(x=>x[0]===k)[1])} · ${n}</b><span class="small muted">${esc(CONSEJO[k])}</span></div>`).join(""):`<p class="muted small">Cuando falles en una lección, marca qué pasó (concepto, procedimiento, cálculo…). Aquí verás tu patrón y el plan lo usará.</p>`}</section>
   ${(()=>{const st=statsDif(Object.keys(Q).filter(i=>!Q[i].fx)); return `<section class="card"><h2>Tus aciertos por nivel</h2>${[1,2,3,4].map(n=>{const o=st[n], p=o.n?o.ok/o.n:0; return `<div class="crow"><span class="n">${difTag(n,true)} ${NIVD[n]} <small>· ${o.n} de ${o.tot}</small></span><div class="bar"><i class="${p<.5?"low":p<.75?"mid":"hi"}" style="width:${o.n?Math.max(2,Math.round(p*100)):0}%"></i></div><span class="pct">${o.n?Math.round(p*100)+"%":"—"}</span></div>`}).join("")}<p class="muted small">Primeros intentos en preguntas de cada nivel. Si vas bien en un nivel, la app te sube al siguiente en las preguntas nuevas. El nivel de cada pregunta es una estimación de la app (por tipo de pregunta, cuánto hay que leer y pasos de la resolución), no un dato oficial.</p></section>`})()}
   <section class="card"><h2>Tu ritmo</h2><p class="small">${vq?`Tardas <b>${Math.round(vq/1e3)} s</b> por pregunta (mediana). En el examen tienes ≈${Math.round(RITMO/1e3)} s por pregunta.${vq>RITMO*1.2?" Vas lento: practica con reloj.":""}`:"Aún no hay tiempos suficientes. Se miden solos mientras respondes."}</p></section>
   <section class="card"><h2>Últimas sesiones</h2>${S.hist.length?S.hist.slice(-8).reverse().map(x=>`<div class="crow"><span class="n">${esc(x.t)} <small>· ${x.d}</small></span><div class="bar"><i class="hi" style="width:${Math.round(x.ok/Math.max(1,x.n)*100)}%"></i></div><span class="pct">${x.ok}/${x.n}</span></div>`).join(""):`<p class="muted">Todavía no hay sesiones. Empieza por tu plan de hoy en Inicio.</p>`}</section>
@@ -3673,6 +3703,18 @@ function vAjustes(){const tp=temaPref();
   ${respaldoCard()}
   <section class="card"><h3>Borrar mi progreso</h3><p class="muted small">Borra el progreso en este navegador${SYNC.tok?" y en tus otros dispositivos sincronizados":""}. No se puede recuperar.</p><button class="btn ghost" data-act="reset">${resetArmed?"Toca otra vez para confirmar":"Borrar progreso"}</button></section>`;}
 
+// ---- mis errores: preguntas falladas que aún no aciertas, por tipo de error y por tema
+function gruposErrores(){const ids=errores(), ult={}, tipo={}, tema={}; S.log.forEach(e=>{if(e.er) ult[e.id]=e.er});
+  ids.forEach(id=>{const k=ult[id]||"sin"; (tipo[k]=tipo[k]||[]).push(id); const t=Q[id].tm; if(t) (tema[t]=tema[t]||[]).push(id)}); return {ids,tipo,tema}}
+function vErrores(){const g=gruposErrores(), n=g.ids.length;
+  if(!n) return head("Mis errores","Lo que fallaste y aún no corriges")+`<section class="card"><p>No tienes errores pendientes.</p><p class="muted small">Cuando falles una pregunta, aparece aquí hasta que la aciertes en un repaso. Al fallar, marca qué pasó (concepto, procedimiento, cálculo…): así se agrupan abajo.</p></section>`;
+  const tipos=[...ERRORES,["sin","Sin marcar"]].filter(([k])=>g.tipo[k]);
+  const temas=Object.entries(g.tema).sort((a,b)=>b[1].length-a[1].length).slice(0,12);
+  return head("Mis errores","Lo que fallaste y aún no corriges")+`
+  <section class="card wine"><div class="row"><div class="grow"><b style="font-size:var(--fs-xl);font-family:var(--serif)">${n}</b> <span>${plural(n,"pregunta fallada","preguntas falladas")} que aún no aciertas</span><p class="small" style="color:var(--ink-2)">Corregir un error pronto evita que se vuelva costumbre. Al acertarla en un repaso, sale de esta lista.</p></div></div>
+    <button class="btn" data-act="errq">Practicar ${Math.min(10,n)} ahora</button></section>
+  <section class="card"><h2>Por tipo de error</h2>${tipos.map(([k,t])=>`<div class="erow"><b class="small">${esc(t)} · ${g.tipo[k].length}</b><span class="small muted">${k==="sin"?"Al fallar, marca qué pasó: el plan lo usa.":esc(CONSEJO[k])}</span><button class="btn sm" data-act="errk" data-k="${k}">Practicar</button></div>`).join("")}</section>
+  <section class="card"><h2>Por tema</h2><div class="tlist">${temas.map(([t,ids])=>`<div class="erow"><span class="small"><b>${esc(TM[t].n)}</b><br><span class="muted">${esc(C[TM[t].c].n)}</span></span><span class="pct">${ids.length}</span><button class="btn sm" data-act="errt" data-t="${t}">Practicar</button></div>`).join("")}</div></section>`}
 function vBanco(){const ex=BANCO.examenes, car=ex.filter(x=>x.estado==="cargado");
   const fig=car.reduce((a,x)=>a+(x.fig||0),0);
   const pill={cargado:'<span class="pill on">En la app</span>',pendiente:'<span class="pill wait">Por convertir</span>',falta:'<span class="pill off">Falta</span>'};
@@ -3695,9 +3737,10 @@ function vBanco(){const ex=BANCO.examenes, car=ex.filter(x=>x.estado==="cargado"
 let ses=null, fl=null, resetArmed=false;
 const MODO={leccion:"l",repaso:"r",esp:"r",sim:"s"};
 function start(tipo,ids,titulo,lid,proxy){fl=null; if(!ids.length) return;
-  ses={tipo,cola:ids.slice(),total:ids.length,hechas:0,ok:0,bad:0,blank:0,sel:null,done:false,titulo,lid,first:{},xp:0,proxy:proxy||{},t0:Date.now(),pend:null,cf:"",er:""};
+  ses={ini:Date.now(),tipo,cola:ids.slice(),total:ids.length,hechas:0,ok:0,bad:0,blank:0,sel:null,done:false,titulo,lid,first:{},xp:0,proxy:proxy||{},t0:Date.now(),pend:null,cf:"",er:""};
   draw(); window.scrollTo(0,0)}
 function qaPanel(){if(!ses.pend||ses.tipo==="sim") return "";
+  if(ses.pend.ok&&ses.cfPre) return "";
   if(ses.pend.ok) return `<div class="qa"><span class="small muted">¿Cómo la respondiste?</span><div class="seg"><button data-act="cf" data-v="s" class="${ses.cf!=="d"?"on":""}">Segura</button><button data-act="cf" data-v="d" class="${ses.cf==="d"?"on":""}">Dudé o adiviné</button></div></div>`;
   if(ses.pend.ok===false) return `<div class="qa"><span class="small muted">¿Qué pasó? (ayuda a tu plan)</span><div class="seg">${ERRORES.map(([k,t])=>`<button data-act="er" data-v="${k}" class="${ses.er===k?"on":""}">${t}</button>`).join("")}</div></div>`;
   return ""}
@@ -3711,19 +3754,22 @@ function vSesion(){const id=ses.cola[0], p=Q[id], tx=p.x?DATA.textos[p.x]:null;
   if(ses.done){const ok=ses.sel===p.a, bl=ses.sel===null;
     h+=`<div class="fb ${ok?"ok":"bad"}"><h3>${ok?"¡Correcto!":bl?"En blanco":"Respuesta: "+L[ord.indexOf(p.a)]}${ses.tipo==="sim"?(ok?" · +20":bl?" · 0":" · −1,125"):""}</h3>${ok?"":`<p><b>${L[ord.indexOf(p.a)]}.</b> ${esc(p.o[p.a])}</p>`}${resol(p)}${p.nota?`<p class="muted small">${esc(p.nota)}</p>`:""}${bl&&ses.tipo==="sim"?`<p class="small muted">En blanco vale 0. Marcar al azar vale +${dec(EVAZAR)} en promedio: casi siempre conviene marcar.</p>`:""}${!ok&&ses.tipo!=="sim"&&!bl?`<p class="small muted">Esta pregunta vuelve al final de la lección.</p>`:""}${qaPanel()}</div>
     <div class="dock"><button class="btn" data-act="next">Continuar</button></div>`}
-  else h+=`<div class="dock">${ses.tipo==="sim"?`<button class="btn dash" data-act="blank">En blanco</button>`:""}<button class="btn" data-act="check" ${ses.sel===null?"disabled":""}>Comprobar</button></div>`;
+  else {if(ses.tipo!=="sim"&&ses.sel!==null) h+=`<div class="qa pre"><span class="small muted">Antes de comprobar: ¿qué tan seguro estás?</span><div class="seg"><button data-act="cf" data-v="s" class="${ses.cf==="s"?"on":""}" aria-pressed="${ses.cf==="s"}">Seguro</button><button data-act="cf" data-v="d" class="${ses.cf==="d"?"on":""}" aria-pressed="${ses.cf==="d"}">Dudo</button></div></div>`;
+    h+=`<p class="kb muted small">Teclado: A–E o 1–5 para elegir · Enter para comprobar</p><div class="dock">${ses.tipo==="sim"?`<button class="btn dash" data-act="blank">En blanco</button>`:""}<button class="btn" data-act="check" ${ses.sel===null?"disabled":""}>Comprobar</button></div>`}
   return h}
 function vFin(){const pts=ses.ok*20-ses.bad*1.125, n=ses.total;
-  return `<section class="card wine fin-card"><img src="${ESCUDO}" alt=""><h1>${ses.ok===n?"Bloque perfecto":ses.ok/n>=.6?"Buen tramo":"A repasar este tramo"}</h1>
+  return `<section class="card wine fin-card"><img src="${ESCUDO}" alt=""><h1>${ses.ok===n?"Todas al primer intento":ses.ok/n>=.6?"Buen tramo":"A repasar este tramo"}</h1>
   <div class="tiles" style="width:100%"><div class="tile"><b>${ses.ok}/${n}</b><span>al primer intento</span></div><div class="tile"><b>${dec(pts,3).replace(/,?0+$/,"")}</b><span>puntos de examen</span></div></div>
+  ${(()=>{const min=Math.max(1,Math.round((Date.now()-(ses.ini||Date.now()))/6e4)), mal=[...new Set(Object.keys(ses.first).filter(id=>!ses.first[id]).map(id=>Q[id].tm).filter(Boolean))].slice(0,3);
+    return `<p class="small" style="color:var(--ink-2)">Tiempo: <b>${min} min</b>${mal.length?` · Para repasar: ${mal.map(t=>`<a href="#c-${TM[t].c}">${esc(TM[t].n)}</a>`).join(", ")}`:""}</p>`})()}
   <p class="small" style="color:var(--ink-2)">Con la regla real, estas ${n} preguntas valían ${n*20} puntos${ses.tipo==="sim"&&ses.blank?` (${ses.blank} en blanco: marcando al azar habrías sumado ≈${fmt(ses.blank*EVAZAR)} en promedio)`:""}. Las que fallaste vuelven en tus repasos.</p>
   <button class="btn gold wide" data-act="home">Listo</button></section>`}
 // guarda el intento pendiente (se espera a "Continuar" para registrar confianza o tipo de error)
 function cerrarIntento(){const x=ses&&ses.pend; if(!x) return; ses.pend=null;
-  const e=intento(x.id,{m:MODO[ses.tipo]||"l",ok:x.ok,ms:x.ms,cf:x.ok?(ses.cf||"s"):"",er:x.ok===false?ses.er:"",px:ses.proxy[x.id]||""});
+  const e=intento(x.id,{m:MODO[ses.tipo]||"l",ok:x.ok,ms:x.ms,cf:x.ok?(ses.cf||"s"):(ses.cfPre?ses.cf:""),er:x.ok===false?ses.er:"",px:ses.proxy[x.id]||""});
   if(ses.proxy[x.id]) reprogramar(ses.proxy[x.id],e.ok?(e.cf==="d"?2:3):1);
-  tocarRacha(); save(); ses.cf=""; ses.er=""}
-function responder(sel){const id=ses.cola[0], p=Q[id]; ses.sel=sel; ses.done=true; const ok=sel===p.a;
+  tocarRacha(); save(); ses.cf=""; ses.er=""; ses.cfPre=false}
+function responder(sel){const id=ses.cola[0], p=Q[id]; ses.sel=sel; ses.done=true; const ok=sel===p.a; ses.cfPre=!!ses.cf;
   if(!(id in ses.first)){ses.first[id]=ok; if(ok){ses.ok++} else if(sel===null) ses.blank++; else ses.bad++;
     ses.pend={id,ok:sel===null?null:ok,ms:Date.now()-ses.t0}; if(ses.tipo==="sim") cerrarIntento()}
   draw()}
@@ -4104,7 +4150,7 @@ function pasoFicha(f,b){const st=estB(b);
     ${b.errores?`<section class="card"><h3>Errores frecuentes</h3><ul class="errs">${b.errores.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></section>`:""}
     ${origen(f)}${sig()}`;
   case 2: {const p=Q[b.ejemplo.id], n=b.ejemplo.pasos.length, r=fz.rev;
-    return `<section class="card fstep"><div class="kicker">3 · Ejemplo resuelto · pregunta real del ${esc(p.ex)}</div>${ctxTexto(p)}${enun(p)}${opcionesFijas(p,i=>r>=n&&i===p.a?"ok":"",null,true)}
+    return `${recuerdo(b)}<section class="card fstep"><div class="kicker">3 · Ejemplo resuelto · pregunta real del ${esc(p.ex)}</div>${ctxTexto(p)}${enun(p)}${opcionesFijas(p,i=>r>=n&&i===p.a?"ok":"",null,true)}
     <ol class="pasos">${b.ejemplo.pasos.slice(0,r).map(x=>`<li>${esc(x)}</li>`).join("")}</ol>
     ${r<n?`<p class="muted small">Antes de ver cada paso, intenta adivinar cuál es.</p><button class="btn ghost" data-act="fi-rev">${r?"Ver el siguiente paso":"Ver el primer paso"} (${r+1} de ${n})</button>`:`<div class="fb ok"><h3>Respuesta: ${L[p.a]}. ${esc(p.o[p.a])}</h3><p>${esc(b.ejemplo.idea)}</p></div>`}</section>
     ${r>=n?sig("Ahora tú, con ayuda"):""}`}
@@ -4119,8 +4165,13 @@ function pasoFicha(f,b){const st=estB(b);
     return `<section class="card wine fstep"><div class="kicker">7 · Repaso posterior</div>
     <p>${st.ok?"Aprobaste este bloque.":"Todavía no apruebas la evaluación de este bloque."} Las ${b.fx.length} tarjetas con lo que debes recordar ${due?"ya están":"entran"} en tus repasos: el sistema te las devuelve justo antes de que las olvides.</p>
     <p class="small" style="color:var(--ink-2)">Las preguntas de este tema también vuelven en tu plan cuando toca repasarlas.</p>
+    <details class="resumen"><summary>Resumen del bloque · ${b.claves.length} ${plural(b.claves.length,"idea")}</summary><div class="tlist">${b.claves.map(x=>`<div class="kv"><b>${esc(x[0])}</b><span>${esc(x[1])}</span></div>`).join("")}</div></details>
     <div class="row"><button class="btn gold" data-act="fi-cards">${due?"Repasar las tarjetas":"Memorizar las tarjetas ahora"}</button>${f.bloques[fz.b+1]?`<button class="btn" data-act="fi-bloque" data-b="${fz.b+1}" ${st.ok?"":"disabled"}>Siguiente bloque: ${esc(f.bloques[fz.b+1].t)}</button>`:`<a class="btn ghost" href="#c-${f.c}">Volver al curso</a>`}</div>
     ${st.ok?"":`<p class="small muted">Para pasar al siguiente bloque, aprueba la evaluación (paso 6).</p>`}</section>`}}}
+// recuerdo: antes del ejemplo, una idea clave del bloque con la respuesta oculta (práctica de recuperación)
+function recuerdo(b){if(!b.claves||!b.claves.length) return ""; const k=b.claves[(fz.b+(estB(b).ev||0))%b.claves.length], ver=fz.rec===b.key;
+  return `<section class="card recall"><div class="kicker">Recuerda sin mirar</div><p class="q">${esc(k[0])}</p>
+    ${ver?`<p class="rec-a">${esc(k[1])}</p><p class="muted small">Si no lo recordabas, vuelve un momento a la explicación (paso 2).</p>`:`<p class="muted small">Piensa la respuesta antes de verla. Recordar cuesta un poco: ese esfuerzo es lo que la fija.</p><button class="btn ghost sm" data-act="fi-recver">Ver la respuesta</button>`}</section>`}
 // práctica guiada: pistas de a una, retroalimentación por alternativa y solución paso a paso
 function vGuiada(f,b){const gs=b.guiada; if(!gs.length) return `<section class="card fstep"><div class="kicker">4 · Práctica guiada</div><p>Este bloque no tiene otra pregunta real para practicar con pistas. En el paso 5 tienes práctica extra con corrección inmediata.</p></section><div class="dock"><button class="btn" data-act="fi-next">Siguiente</button></div>`;
   const it=gs[fz.gi], p=Q[it.id]; if(!fz.g) fz.g={sel:null,pistas:0,mal:[],ok:false,fin:false,pasos:0,t0:Date.now()};
@@ -4163,9 +4214,9 @@ function vFicha(tid){const f=FT[tid]; if(!f) return vCurso(tid.split("-")[0]);
   const step=PASOS.map((x,i)=>`<button class="fst ${i===fz.paso?"on":""} ${i<Math.max(estB(b).p||0,fz.paso)||estB(b).ok?"done":""}" data-act="fi-paso" data-p="${i}" ${abierto?"":"disabled"} aria-label="Paso ${i+1}: ${x}"><i>${i+1}</i><span>${x}</span></button>`).join("");
   return topbar()+`<a class="back" href="#c-${f.c}">${I.back}${esc(C[f.c].n)}</a>
   <div class="pagehead"><div class="grow"><div class="kicker">Aprende paso a paso · ${av.ok} de ${av.n} bloques aprobados</div><h1>${esc(tm.n)}</h1>
-  <p class="muted small" style="margin-top:6px">Viene ≈${dec(tm.porEx)} ${plural(Math.round(tm.porEx)===1?1:2,"pregunta")} por examen (vino en ${tm.veces} de ${NEX}). ${esc(f.fuente)}</p></div>${chips()}</div>
+  <p class="muted small fmeta" style="margin-top:6px">Viene ≈${dec(tm.porEx)} ${plural(Math.round(tm.porEx)===1?1:2,"pregunta")} por examen (vino en ${tm.veces} de ${NEX}). ${esc(f.fuente)}</p></div>${chips()}</div>
   <div class="fbqs" role="tablist">${tabs}</div>
-  ${abierto?`<nav class="fsteps" aria-label="Pasos del bloque">${step}</nav>${pasoFicha(f,b)}`
+  ${abierto?`<nav class="fsteps" aria-label="Pasos del bloque">${step}</nav><p class="fpaso">Paso ${fz.paso+1} de 7 · <b>${esc(PASOS[fz.paso])}</b></p>${pasoFicha(f,b)}`
    :`<section class="card"><h2>${esc(b.t)}</h2><p>Primero aprueba la evaluación de «${esc(f.bloques[fz.b-1].t)}»: los fundamentos van antes.</p>
      <div class="row"><button class="btn" data-act="fi-bloque" data-b="${fz.b-1}">Ir al bloque anterior</button><button class="btn ghost" data-act="fi-saber">Ya lo sé: hacer su evaluación</button></div></section>`}`}
 function bloquePorKey(k){for(const f of Object.values(FT)) for(const b of f.bloques) if(b.key===k) return b; return null}
@@ -4178,6 +4229,7 @@ function accionFicha(a,el){
   if(a==="fi-paso"){irPaso(+el.dataset.p); return}
   if(a==="fi-next"){irPaso(fz.paso+1); return}
   if(a==="fi-rev"){fz.rev++; draw(); return}
+  if(a==="fi-recver"){fz.rec=b.key; draw(); return}
   if(a==="fi-fey"){const t=(document.getElementById("fey")||{}).value||""; FE[b.key]=t.slice(0,2000); try{localStorage.setItem(FKEY,JSON.stringify(FE))}catch(e){} fz.fey=!!t.trim(); draw(); return}
   if(a==="fi-gpick"){fz.g.sel=+el.dataset.i; draw(); return}
   if(a==="fi-pr"){const i=+el.dataset.q; fz.pr=fz.pr||{resp:{}}; if(fz.pr.resp[i]===undefined){fz.pr.resp[i]=+el.dataset.i;
@@ -4360,7 +4412,7 @@ function cardNiveles(ids,titulo,cid){const st=statsDif(ids), t=nivelObjetivo(ids
 // ---- render y eventos
 let lastKey="";
 function view(){const h=(location.hash||"#inicio").slice(1); if(h==="repaso") return "tarjetas"; if(h==="ruta") return "cursos";
-  if(h.startsWith("c-")&&C[h.slice(2)]) return h; if(h.startsWith("f-")&&FT[h.slice(2)]) return h; if(h.startsWith("u-")&&UN[h.slice(2)]) return h; if((h.startsWith("m-")||h.startsWith("t-"))&&UC[h.slice(2)]) return h; if(h==="biblioteca"||h==="historial"||h==="ajustes") return h; return VISTAS.some(v=>v[0]===h)?h:"inicio"}
+  if(h.startsWith("c-")&&C[h.slice(2)]) return h; if(h.startsWith("f-")&&FT[h.slice(2)]) return h; if(h.startsWith("u-")&&UN[h.slice(2)]) return h; if((h.startsWith("m-")||h.startsWith("t-"))&&UC[h.slice(2)]) return h; if(h==="biblioteca"||h==="historial"||h==="ajustes"||h==="errores") return h; return VISTAS.some(v=>v[0]===h)?h:"inicio"}
 function navs(v){const pend=pendientes().length, e=estimado();
   $("#side").innerHTML=`<a class="brand" href="#inicio"><img src="${ESCUDO}" alt="Ruta 1250"><div><b>Ruta 1250</b><span>Área C · Computación</span></div></a>
   <nav>${VISTAS.map(([k,t])=>`<a href="#${k}" class="${k===v?"on":""}">${I[k]}${k==="tarjetas"?"Repasos":t}${k==="tarjetas"&&pend?`<span class="badge">${pend}</span>`:""}</a>`).join("")}<a href="#ajustes" class="${v==="ajustes"?"on":""}">${I.ajustes}Ajustes</a></nav>
@@ -4374,8 +4426,8 @@ function draw(){const app=$("#app"), nav=$("#nav"), side=$("#side"); const enSes
     if(dg){key=dg.res?"dgfin":dg.fin?"dgentre":"dg"; app.innerHTML=dg.res?vDiagFin():dg.fin?vDiagEntre():vDiag()}
     else if(ses){key=ses.fin?"fin":"ses"; app.innerHTML=ses.fin?vFin():vSesion()}
     else {key=fl.fin?"ffin":"fl"; app.innerHTML=fl.fin?vFlashFin():vFlash(); fl.anim=false}}
-  else {nav.style.display=""; side.style.display=""; const v=view(); key=v+(v.startsWith("f-")&&fz?"|"+fz.b+"|"+fz.paso:""); navs(v.startsWith("c-")||v.startsWith("f-")||v.startsWith("u-")||v.startsWith("m-")||v.startsWith("t-")||v==="biblioteca"?"cursos":v==="historial"?"progreso":v);
-    app.innerHTML=v.startsWith("f-")?vFicha(v.slice(2)):v.startsWith("u-")?vUnidad(v.slice(2)):v.startsWith("m-")?vMapa(v.slice(2)):v.startsWith("t-")?vTeoria(v.slice(2)):v==="biblioteca"?vBiblio():v==="historial"?vHistorial():v==="ajustes"?vAjustes():v.startsWith("c-")?vCurso(v.slice(2)):{inicio:vInicio,tarjetas:vTarjetas,cursos:vCursos,progreso:vProgreso,banco:vBanco}[v]()}
+  else {nav.style.display=""; side.style.display=""; const v=view(); key=v+(v.startsWith("f-")&&fz?"|"+fz.b+"|"+fz.paso:""); navs(v.startsWith("c-")||v.startsWith("f-")||v.startsWith("u-")||v.startsWith("m-")||v.startsWith("t-")||v==="biblioteca"?"cursos":v==="historial"?"progreso":v==="errores"?"tarjetas":v);
+    app.innerHTML=v.startsWith("f-")?vFicha(v.slice(2)):v.startsWith("u-")?vUnidad(v.slice(2)):v.startsWith("m-")?vMapa(v.slice(2)):v.startsWith("t-")?vTeoria(v.slice(2)):v==="biblioteca"?vBiblio():v==="historial"?vHistorial():v==="ajustes"?vAjustes():v==="errores"?vErrores():v.startsWith("c-")?vCurso(v.slice(2)):{inicio:vInicio,tarjetas:vTarjetas,cursos:vCursos,progreso:vProgreso,banco:vBanco}[v]()}
   document.body.classList.toggle("enficha",!enSes&&String(key).startsWith("f-"));
   const nueva=key!==lastKey; app.classList.toggle("enter",nueva&&key!=="ses"&&key!=="fl"); if(nueva) contar(); lastKey=key}
 function salir(){if(dg){guardarTiempo(); clearInterval(reloj); dg=null; cpMsg=""}
@@ -4423,6 +4475,8 @@ document.addEventListener("click",ev=>{const b=ev.target.closest("[data-act]");
   else if(a==="esp"){iniciarEsp()}
   else if(a==="olvq"){const p=olvidando().filter(o=>esCalc(o.id)).slice(0,10).map(o=>o.id); if(p.length) start("repaso",p,"Lo que estás olvidando")}
   else if(a==="errq"){const e=shuffle(errores()).slice(0,10); start("repaso",e,"Mis errores")}
+  else if(a==="errk"){const g=gruposErrores(), k=b.dataset.k, e=shuffle(g.tipo[k]||[]).slice(0,10); if(e.length) start("repaso",e,"Mis errores · "+(k==="sin"?"sin marcar":ERRORES.find(x=>x[0]===k)[1]))}
+  else if(a==="errt"){const g=gruposErrores(), t=b.dataset.t, e=shuffle(g.tema[t]||[]).slice(0,10); if(e.length) start("repaso",e,"Mis errores · "+TM[t].n)}
   else if(a==="review"){const p=pendientes(); if(p.length) start("repaso",p.slice(0,10),"Repaso")}
   else if(a==="sim"){start("sim",armarSim(20),"Simulacro rápido")}
   else if(a==="flash"){startFlash(b.dataset.deck)}
@@ -4446,11 +4500,11 @@ document.addEventListener("keydown",ev=>{if(fl&&ev.target.closest&&ev.target.clo
     else if(k==="Escape") salir();
     return}
   if(dg&&!dg.fin){const k=ev.key.toUpperCase(), id=S.diag.bl[dg.b][S.diag.pos[dg.b]];
-    if("ABCDE".includes(k)&&k.length===1){const o=S.diag.ord[id][ "ABCDE".indexOf(k)]; if(o!==undefined){dg.sel=o; draw()}}
+    if(k.length===1&&("ABCDE".includes(k)||"12345".includes(k))){const o=S.diag.ord[id]["ABCDE12345".indexOf(k)%5]; if(o!==undefined){dg.sel=o; draw()}}
     else if(ev.key==="Enter"&&dg.sel!==undefined&&dg.sel!==null){ev.preventDefault(); diagSiguiente(1)}
     return}
   if(!ses||ses.fin) return; const k=ev.key.toUpperCase();
-  if(!ses.done&&"ABCDE".includes(k)&&k.length===1){const o=orden(ses.cola[0])["ABCDE".indexOf(k)]; if(o!==undefined){ses.sel=o; draw()}}
+  if(!ses.done&&k.length===1&&("ABCDE".includes(k)||"12345".includes(k))){const o=orden(ses.cola[0])["ABCDE12345".indexOf(k)%5]; if(o!==undefined){ses.sel=o; draw()}}
   else if(ev.key==="Enter"){ev.preventDefault(); if(ses.done) avanzar(); else if(ses.sel!==null) responder(ses.sel)}});
 window.addEventListener("hashchange",()=>{if(!ses&&!fl&&!dg){draw(); window.scrollTo(0,0)}});
 document.addEventListener("visibilitychange",()=>{if(dg&&!dg.fin){if(document.hidden) guardarTiempo(); else {dg.t0=Date.now(); dg.q0=Date.now()}}
