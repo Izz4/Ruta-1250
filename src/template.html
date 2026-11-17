@@ -669,6 +669,40 @@ body.enficha .dock{bottom:0}
   body.enficha .fbqs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}
   body.enficha .fbq{flex:none;max-width:78vw;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;justify-content:flex-start}
 }
+
+.usub{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+@media (max-width:700px){.ulist .un{padding:10px 4px}.ulist .un b{line-height:1.2}}
+/* ---------- Fase 4 · cursos ---------- */
+.cic{flex:none;display:grid;place-items:center;width:40px;height:40px;border-radius:var(--r-s);background:rgba(var(--acc),.12);color:var(--accent)}
+.cic.a2{background:rgba(200,36,63,.14);color:var(--l3)}
+.cic svg{width:22px;height:22px}
+.cic.big{width:52px;height:52px;border-radius:var(--r-m)}.cic.big svg{width:28px;height:28px}
+.chead{display:flex;gap:14px;align-items:center}
+.crs{grid-template-columns:40px minmax(0,1.3fr) minmax(120px,1fr) auto 20px}
+.crs-t{min-width:0}
+.crs-sig{color:var(--accent)!important;font-weight:600}
+@media (max-width:700px){.crs{grid-template-columns:40px minmax(0,1fr) auto 18px;gap:6px 12px}.crs .lv{grid-column:2/-1;grid-row:2}}
+.cstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.cstats div{display:flex;flex-direction:column;gap:2px;padding:10px;border-radius:var(--r-s);background:rgba(var(--fg),.04)}
+.cstats b{font:800 var(--fs-xl)/1.1 var(--serif);font-variant-numeric:tabular-nums}
+.cstats span{font-size:var(--fs-xs);color:var(--muted)}
+@media (max-width:480px){.cstats{gap:6px}.cstats div{padding:8px 6px}.cstats b{font-size:var(--fs-lg)}}
+.vsel a{display:inline-flex;align-items:center;min-height:44px;padding:8px 14px;border-radius:var(--r-full);border:1px solid var(--line-2);color:var(--ink);text-decoration:none;font:600 var(--fs-sm) var(--sans)}
+.vsel a.on{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
+.filtros{display:flex;gap:8px;overflow-x:auto;padding-bottom:2px;-webkit-overflow-scrolling:touch}.filtros .seg{flex-wrap:nowrap}.filtros .seg button{white-space:nowrap}
+.vsel{margin-top:-4px}
+.un .umeta{display:flex;gap:8px;align-items:center;margin-top:4px;flex-wrap:wrap}
+.ulist .un{grid-template-columns:34px minmax(0,1fr) 18px}
+.ulist .un .lvl{text-align:left}
+@media (max-width:700px){.ulist .un{grid-template-columns:30px minmax(0,1fr) 16px}.ulist .un .nu{grid-row:auto}.ulist .un>svg{grid-row:auto;grid-column:3}}
+.un .lecd{margin-top:0}
+details.plegable{gap:0}
+details.plegable>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;min-height:44px}
+details.plegable>summary::-webkit-details-marker{display:none}
+details.plegable>summary::after{content:"";flex:none;width:9px;height:9px;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);transform:rotate(45deg);margin:-4px 6px 0 12px;transition:transform var(--t-fast)}
+details.plegable[open]>summary::after{transform:rotate(225deg);margin-top:4px}
+details.plegable[open]>summary{margin-bottom:12px}
+details.plegable>summary h2{font-size:var(--fs-lg)}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -3543,7 +3577,7 @@ const legend=`<div class="legend"><span><i style="background:rgba(227,203,107,.4
 const frecuencia=t=>`<div class="freq"><span class="dots" aria-hidden="true">${Array.from({length:NEX},(_,i)=>`<i class="${i<t.veces?"on":""}"></i>`).join("")}</span>Vino en ${t.veces} de ${NEX} ${plural(NEX,"examen","exámenes")} · ${t.ids.length} ${plural(t.ids.length,"pregunta")}${t.veces===NEX&&NEX>1?' <span class="siempre">Viene siempre</span>':""}</div>`;
 function filaTema(t,conCurso){const x=nivel(t.ids), calc=CALC.has(t.c);
   return `<div class="tema"><div>${conCurso?`<span class="tg">${esc(C[t.c].n)}</span>`:""}<b>${esc(t.n)}</b>${frecuencia(t)}${x.nF?`<div class="why">${x.okF} de ${x.nF} nuevas bien${x.sp+x.sf?` · al repasar: ${x.sp} de ${x.sp+x.sf}`:""}</div>`:""}</div>${barNivel(x)}
-  <div class="tema-a">${FT[t.id]?`<button class="btn sm gold" data-act="ficha" data-id="${t.id}" title="Concepto, ejemplo resuelto, práctica guiada y evaluación">Aprender${(a=>a.ok?` ${a.ok}/${a.n}`:"")(avanceFicha(FT[t.id]))}</button>`:""}<button class="btn sm" data-act="temaq" data-id="${t.id}">Preguntas</button>${calc?"":`<button class="btn sm ghost" data-act="flash" data-deck="t:${t.id}">Tarjetas</button>`}</div></div>`}
+  <div class="tema-a">${FT[t.id]?`<button class="btn sm" data-act="ficha" data-id="${t.id}" title="Concepto, ejemplo resuelto, práctica guiada y evaluación">Aprender${(a=>a.ok?` ${a.ok}/${a.n}`:"")(avanceFicha(FT[t.id]))}</button>`:""}<button class="btn sm" data-act="temaq" data-id="${t.id}">Preguntas</button>${calc?"":`<button class="btn sm ghost" data-act="flash" data-deck="t:${t.id}">Tarjetas</button>`}</div></div>`}
 function rowCurso(c,s){return `<div class="crow"><span class="n">${esc(c.n)} <small>· ${c.peso} preg.</small></span>${barAcierto(s)}<span class="pct">${s.p===null?"—":Math.round(s.p*100)+"%"}</span></div>`}
 function anillo(v,meta){const C2=339.3, k=Math.min(1,v/meta);
   return `<div class="ring"><svg viewBox="0 0 120 120"><circle class="rb" cx="60" cy="60" r="54"/><circle class="rf" cx="60" cy="60" r="54" stroke-dasharray="${C2}" stroke-dashoffset="${C2*(1-k)}"/></svg><div class="rt"><b>${N(v)}</b><span>de ${meta} min hoy</span></div></div>`}
@@ -3627,39 +3661,58 @@ function vTarjetas(){const p=pendConcepto(), pc=pendCalculo(), t=Date.now(), box
   <section class="card"><div class="row"><h2 class="grow">Por curso y tema</h2>${legend}</div><p class="muted small">Entra a un curso para elegir el tema que quieres repasar.</p><div class="decks">${decks}</div></section>
   <section class="card"><div class="row">${I.reloj}<div class="grow"><b style="font-size:1.08rem">Simulacro rápido</b><p class="small muted">20 preguntas en la proporción del examen, con la calificación real: +20, −1,125 o 0 en blanco.</p></div><button class="btn gold" data-act="sim">Empezar</button></div></section>`}
 
-function vCursos(){let h=head("Cursos","Elige un curso y luego un tema",`<p class="muted" style="margin-top:6px">Dentro de cada curso, los temas van ordenados por cuántas veces vinieron en los exámenes reales.</p>`), g="";
-  const pr=prioridades(5);
-  h+=`<section class="card wine"><h2>Lo que más vale estudiar ahora</h2><p class="small" style="color:var(--ink-2)">Preguntas que vienen por examen × lo que te falta dominar.</p><div>${pr.map(o=>filaTema(o.t,true)).join("")}</div></section>
-  <section class="card"><div class="row"><div class="grow"><h2>Biblioteca de teoría</h2><p class="muted small">${Object.values(FT).reduce((a,f)=>a+f.bloques.length,0)} lecciones con explicación, tablas e ideas clave, y un buscador para toda la teoría.</p></div><a class="btn gold" href="#biblioteca">Abrir la biblioteca</a></div></section>
-  <div class="row"><h2 class="grow">Todos los cursos</h2>${legend}</div><div class="crslist">`;
-  DATA.cursos.forEach(c=>{const ids=idsCurso(c.id), x=nivel(ids), e=extremos(c.id);
+
+// ---- identidad de cada curso (Fase 4): un ícono propio; el color es solo un acento dentro de la paleta
+const CI={hv:'<path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2z"/><path d="M22 5h-7a3 3 0 0 0-3 3v12a2 2 0 0 1 2-2h8z"/>',
+ hlm:'<circle cx="7" cy="7" r="4"/><rect x="13" y="13" width="8" height="8" rx="1"/><path d="M17 3l4 7h-8z"/><path d="M3 21l7-7"/>',
+ ari:'<path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/>', geo:'<path d="M12 3 21 19H3z"/><circle cx="12" cy="14" r="2.5"/>',
+ alg:'<path d="M4 7h6M7 4v6"/><path d="M14 14l6 6M20 14l-6 6"/><path d="M4 17h6"/><path d="M14 5h6"/>', tri:'<path d="M4 20h16M4 20 16 6"/><path d="M9.5 20a5.5 5.5 0 0 0-1.7-4"/>',
+ len:'<path d="M4 7V4h16v3M9 20h6M12 4v16"/>', lit:'<path d="M20 4c-6 0-12 4-13 13l-3 3"/><path d="M7 17c5 0 9-3 10-8"/>',
+ psi:'<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/>',
+ civ:'<path d="M12 3v18M6 21h12M4 7h16"/><path d="M6 7l-3 6a3 3 0 0 0 6 0zM18 7l-3 6a3 3 0 0 0 6 0z"/>',
+ hpe:'<path d="M3 21h18M5 21V10M10 21V10M14 21V10M19 21V10M2 10 12 3l10 7z"/>', hun:'<path d="M6 3h12M6 21h12M7 3c0 5 10 7 10 18M17 3c0 5-10 7-10 18"/>',
+ gfa:'<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/>', eco:'<path d="M3 20h18"/><path d="M5 16l5-5 4 3 6-7"/><path d="M15 7h5v5"/>',
+ fil:'<path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.6.3-1 .8-1 1.5M12 16h.01"/>',
+ fis:'<circle cx="12" cy="12" r="1.5"/><ellipse cx="12" cy="12" rx="9" ry="3.8"/><ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(60 12 12)"/><ellipse cx="12" cy="12" rx="9" ry="3.8" transform="rotate(120 12 12)"/>',
+ qui:'<path d="M9 3h6M10 3v6L4 19a1.5 1.5 0 0 0 1.3 2h13.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path d="M7 15h10"/>', bio:'<path d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15z"/><path d="M5 19 13 11"/>'};
+const GA={Habilidades:"a1",Matemática:"a2",Comunicación:"a1",Sociales:"a2",Ciencias:"a1"};
+const icoC=(cid,big)=>`<span class="cic ${GA[C[cid].g]||"a1"}${big?" big":""}" aria-hidden="true">${sv(CI[cid]||CI.hv,1.8)}</span>`;
+function sigUnidad(cid){const l=UC[cid]||[]; return l.find(u=>{const e=estU(u); return !e.ok&&!e.vacia})||null}
+const cvista=(cid,v)=>`<nav class="seg vsel" aria-label="Vista del curso"><a href="#c-${cid}" class="${v==="l"?"on":""}" ${v==="l"?'aria-current="page"':""}>Lista</a><a href="#m-${cid}" class="${v==="m"?"on":""}" ${v==="m"?'aria-current="page"':""}>Mapa</a><a href="#t-${cid}" class="${v==="t"?"on":""}" ${v==="t"?'aria-current="page"':""}>Teoría</a></nav>`;
+let cfil="todas";
+function vCursos(){let h=head("Cursos","Tus 18 cursos",`<p class="muted" style="margin-top:6px">Cada curso es una ruta de unidades en el orden en que conviene aprenderlas.</p>`), g="";
+  const pr=prioridades(3);
+  h+=`<section class="card wine"><h2>Lo que más vale estudiar ahora</h2><p class="small" style="color:var(--ink-2)">Preguntas que vienen por examen × lo que te falta dominar.</p><div class="tlist">${pr.map(o=>{const u=(UC[o.t.c]||[]).find(v=>o.t.ids.some(i=>v.ids.includes(i))), x=nivel(o.t.ids);
+      return `<a href="${u?"#u-"+u.id:"#c-"+o.t.c}"><span><small>${esc(C[o.t.c].n)}</small><b>${esc(o.t.n)}</b><small>Vino en ${o.t.veces} de ${NEX} exámenes · ${o.t.ids.length} preguntas</small></span><span class="lvl l${x.l}">${NIVELES[x.l]}</span>${I.chev}</a>`}).join("")}</div></section>
+  <div class="crslist">`;
+  DATA.cursos.forEach(c=>{const ids=idsCurso(c.id), x=nivel(ids), u=sigUnidad(c.id), lista=UC[c.id]||[], listas=lista.filter(v=>estU(v).ok).length;
     if(c.g!==g){g=c.g; h+=`<div class="group-label">${esc(g)}</div>`}
-    h+=`<a class="crs" href="#c-${c.id}"><div><b>${esc(c.n)}</b><small>${c.peso} ${plural(c.peso,"pregunta")} en el examen · ${TC[c.id].length} temas${e&&e.fuerte?` · más fuerte: ${esc(e.fuerte.t.n)}`:""}</small></div>${barNivel(x)}<span class="pc">${x.nF?Math.round(x.p*100)+"%":"—"}</span>${I.chev}</a>`});
-  return h+`</div>`}
+    h+=`<a class="crs" href="#c-${c.id}">${icoC(c.id)}<div class="crs-t"><b>${esc(c.n)}</b><small>${c.peso} ${plural(c.peso,"pregunta")} en el examen · ${listas} de ${lista.length} unidades listas</small>${u?`<small class="crs-sig">Sigue: ${esc(u.n)}</small>`:lista.length?`<small class="crs-sig">Ruta completa</small>`:""}</div>${barNivel(x)}<span class="pc">${x.nF?Math.round(x.hab*100)+"%":"—"}</span>${I.chev}</a>`});
+  return h+`</div>
+  <section class="card"><div class="row"><div class="grow"><h2>Biblioteca de teoría</h2><p class="muted small">${Object.values(FT).reduce((a,f)=>a+f.bloques.length,0)} lecciones con explicación, tablas e ideas clave, y un buscador para toda la teoría.</p></div><a class="btn ghost" href="#biblioteca">Abrir</a></div></section>`}
 
-function vCurso(cid){const c=C[cid], ids=idsCurso(cid), x=nivel(ids), e=extremos(cid), pend=ids.filter(id=>S.r[id]&&S.r[id].n&&S.r[id].due<=Date.now()).length, calc=CALC.has(cid);
+function vCurso(cid){if(vCurso.last!==cid){cfil="todas"; vCurso.last=cid} const c=C[cid], ids=idsCurso(cid), x=nivel(ids), pend=ids.filter(id=>S.r[id]&&S.r[id].n&&S.r[id].due<=Date.now()).length, calc=CALC.has(cid);
+  const lista=UC[cid]||[], u=sigUnidad(cid), listas=lista.filter(v=>estU(v).ok).length;
+  const enU=new Set(lista.flatMap(v=>v.ids)), otros=TC[cid].filter(t=>!t.ids.some(id=>enU.has(id)));
+  const sigCard=u?(()=>{const e=estU(u), l=lecU(u);
+      return `<section class="card wine"><div class="kicker">Siguiente recomendada · unidad ${u.i+1} de ${lista.length}</div><h2>${esc(u.n)}</h2>
+      <p class="small" style="color:var(--ink-2)">${esc(u.sub)}</p><p class="small">${difTag(DIFU[u.id],true)} ${u.pr?`<span class="stars">${"★".repeat(u.pr)}</span>`:""} · ${etiquetaU(e,u)}${l?` · lección ${l.ok?"aprobada":l.p?"empezada":"disponible"}`:""}</p>
+      <a class="btn wide" href="#u-${u.id}">${l&&!l.ok?(l.p?"Continuar la unidad":"Empezar la unidad"):"Practicar la unidad"}</a></section>`})()
+    :lista.length?`<section class="card wine"><div class="kicker">Ruta completa</div><h2>Terminaste las ${lista.length} unidades</h2><p class="small" style="color:var(--ink-2)">Mantén lo aprendido con preguntas de todo el curso y tus repasos.</p><button class="btn wide" data-act="cursoq" data-id="${cid}">Preguntas de todo el curso</button></section>`:"";
   return topbar()+`<a class="back" href="#cursos">${I.back}Cursos</a>
-  <div class="pagehead"><div class="grow"><div class="kicker">${esc(c.g)}</div><h1>${esc(c.n)}</h1><p class="muted" style="margin-top:6px">${c.peso} ${plural(c.peso,"pregunta")} en el examen · hasta ${c.peso*20} puntos</p></div>${chips()}</div>
-  <section class="card wine csum">
-    <div><div class="bignum">${x.nF?N(Math.round(x.p*100),"%"):"—"}</div><span class="lvl l${x.l}" style="font-size:.9rem">${NIVELES[x.l]}</span></div>
-    <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
-      <div class="duo">
-        <div class="hl up"><small>Tu tema más fuerte</small><b>${e&&e.fuerte?esc(e.fuerte.t.n)+" · "+Math.round(e.fuerte.x.hab*100)+"%":e?"Aún ninguno: acierta tu primera pregunta":"Aún no practicas este curso"}</b></div>
-        <div class="hl down"><small>Tu tema más flojo</small><b>${e&&e.flojo?esc(e.flojo.t.n)+" · "+Math.round(e.flojo.x.hab*100)+"%":"Practica 2 temas para verlo"}</b></div>
-      </div>
-      <p class="small" style="color:var(--ink-2)">${x.v} de ${ids.length} preguntas vistas${x.nF?` · ${x.okF} de ${x.nF} bien a la primera`:""}${x.sp+x.sf?` · recordadas días después: ${x.sp} de ${x.sp+x.sf}`:""}${pend?` · ${pend} para repasar hoy`:""}</p>
-      ${idsDeco(cid).length?`<p class="small" style="color:var(--ink-2)">+ ${idsDeco(cid).length} preguntas de práctica de Puro DECO, repartidas en las unidades de la ruta (no son de admisión).</p>`:""}
-      <div class="row"><button class="btn" data-act="cursoq" data-id="${cid}">Preguntas de todo el curso</button>${calc?"":`<button class="btn ghost" data-act="flash" data-deck="c:${cid}">Tarjetas de todo el curso</button>`}</div>
-    </div>
-  </section>
+  <div class="pagehead"><div class="grow chead">${icoC(cid,true)}<div><div class="kicker">${esc(c.g)}</div><h1>${esc(c.n)}</h1><p class="muted small">${c.peso} ${plural(c.peso,"pregunta")} en el examen · hasta ${c.peso*20} puntos</p></div></div>${chips()}</div>
+  ${sigCard}
+  <section class="card"><div class="cstats">
+      <div><b>${x.nF?Math.round(x.hab*100)+"%":"—"}</b><span class="lvl l${x.l}">${x.nF?NIVELES[x.l]:"acierto"}</span></div>
+      <div><b>${listas}/${lista.length}</b><span>unidades</span></div>
+      <div><b>${x.v}/${ids.length}</b><span>vistas</span></div>
+      <div><b>${pend}</b><span>a repasar</span></div></div>
+    <p class="muted small">Acierto en preguntas nuevas${x.nF?` (${x.okF} de ${x.nF})`:""}.${idsDeco(cid).length?` Incluye ${idsDeco(cid).length} de práctica Puro DECO.`:""}</p>
+    <div class="row"><button class="btn sm" data-act="cursoq" data-id="${cid}">Preguntas de todo el curso</button>${calc?"":`<button class="btn sm" data-act="flash" data-deck="c:${cid}">Tarjetas del curso</button>`}</div></section>
   ${rutaCurso(cid)}
-  ${cardNiveles(idsCursoT(cid),"Practica por nivel de dificultad",cid)}
-  <section class="card"><div class="row"><h2 class="grow">Temas del banco</h2>${legend}</div>
-    <p class="muted small">Los puntos dorados muestran en cuántos de los ${NEX} exámenes cargados vino el tema. <b>Preguntas</b> te da alternativas como en el examen${calc?"":"; <b>Tarjetas</b> te hace recordar la respuesta sin verlas"}.</p>
-    <div>${TC[cid].map(t=>filaTema(t,false)).join("")}</div>
-  </section>
-  <p class="muted small">El porcentaje son tus aciertos en preguntas que veías por primera vez. Un tema está <b>dominado</b> cuando aciertas preguntas nuevas (72 %+ en 4 o más) y además las recuerdas 2 o más días después. Repetir la misma pregunta no lo sube.</p>`}
-
+  <details class="card plegable"><summary><h2>Practicar por nivel de dificultad</h2></summary>${cardNiveles(idsCursoT(cid),"",cid).replace(/^<section class="card"><h2>[^<]*<\/h2>/,"").replace(/<\/section>$/,"")}</details>
+  ${otros.length?`<details class="card plegable"><summary><h2>Otros temas del banco · ${otros.length}</h2></summary><p class="muted small">Temas cuyas preguntas no entran en ninguna unidad de la ruta.</p><div>${otros.map(t=>filaTema(t,false)).join("")}</div></details>`:""}
+  <p class="muted small">Dominado = 72 %+ en 4 o más preguntas nuevas y recordadas 2+ días después. Repetir la misma pregunta no lo sube.</p>`}
 function semanas(){const out=[], d=new Date(); d.setHours(0,0,0,0); const fin=+d+DIA;
   for(let i=7;i>=0;i--){const b=fin-i*7*DIA, a=b-7*DIA; out.push({...nuevasEntre(a,b),a})} return out}
 function vProgreso(){let g="";const e=estimado(), sem=semanas(), errs={}; S.log.forEach(x=>{if(x.er) errs[x.er]=(errs[x.er]||0)+1});
@@ -4093,14 +4146,17 @@ function etiquetaU(e,u){return e.x.nF?NIVELES[e.x.l]:e.lec?"Lección aprobada":e
 function rutaCurso(cid){const lista=UC[cid]; if(!lista||!lista.length) return "";
   const modo=S.cfg.modo==="explorar"?"explorar":"ruta", es=lista.map(u=>({u,e:estU(u)}));
   const orden=modo==="ruta"?es:[...es].sort((a,b)=>b.u.pr-a.u.pr||b.u.ids.length-a.u.ids.length);
-  const sig=modo==="ruta"?es.find(o=>!o.e.ok&&!o.e.vacia):null, hechas=es.filter(o=>o.e.ok).length;
+  const sig=es.find(o=>!o.e.ok&&!o.e.vacia), hechas=es.filter(o=>o.e.ok).length;
+  const FIL={todas:["Todas",()=>true],pend:["Por hacer",o=>!o.e.ok],listas:["Listas",o=>o.e.ok],ref:["Refuerzo",o=>o.e.x.l===4]};
+  const f=FIL[cfil]?cfil:"todas", vis=orden.filter(FIL[f][1]);
   const fila=o=>{const u=o.u, e=o.e, s=sig&&sig.u===u;
     const falta=e.ok||!(e.x.v||(lecU(u)||{}).p)?[]:u.pre.map(p=>UN[p]).filter(p=>{const q=estU(p); return !q.ok&&!q.vacia});
-    return `<a class="un ${e.ok?"ok":""} ${s?"sig":""}" href="#u-${u.id}"><span class="nu">${e.ok?"✓":u.i+1}</span><div><b>${esc(u.n)}</b>${u.pr?`<span class="stars" title="${PRIO[u.pr]}">${"★".repeat(u.pr)}</span>`:""} ${difTag(DIFU[u.id],true)}${s?`<span class="sigue">Sigue aquí</span>`:""}<small>${esc(u.sub)}</small>${falta.length?`<span class="aviso">Antes conviene: ${esc(falta[0].n)}${falta[0].c!==cid?` (${esc(C[falta[0].c].n)})`:""}${falta.length>1?` y ${falta.length-1} más`:""}</span>`:""}${u.fic?`<span class="lecd">Lección interactiva</span>`:""}</div><span class="lvl l${e.x.l}">${etiquetaU(e,u)}</span>${I.chev}</a>`};
-  return `<section class="card"><div class="row"><h2 class="grow">Ruta de aprendizaje</h2><div class="seg" role="group" aria-label="Orden de las unidades"><button data-act="modo" data-v="ruta" class="${modo==="ruta"?"on":""}">Ruta</button><button data-act="modo" data-v="explorar" class="${modo==="explorar"?"on":""}">Explorar</button></div></div>
-    <p class="muted small">${modo==="ruta"?`${lista.length} unidades en el orden en que conviene aprenderlas · ${hechas} de ${lista.length} listas. Si saltas una, te avisamos qué conviene repasar antes, pero nada se bloquea.`:`Las ${lista.length} unidades, de la que más cae en el examen (★★★) a la que menos. Abre la que quieras.`}</p>
-    <div class="row" style="margin:4px 0 8px"><a class="btn sm ghost" href="#m-${cid}">Mapa de conocimientos</a><a class="btn sm ghost" href="#t-${cid}">Teoría del curso</a></div>
-    <div class="ulist">${orden.map(fila).join("")}</div></section>`}
+    return `<a class="un ${e.ok?"ok":""} ${s?"sig":""}" href="#u-${u.id}"><span class="nu">${e.ok?"✓":u.i+1}</span><div><b>${esc(u.n)}</b>${u.pr?`<span class="stars" title="${PRIO[u.pr]}">${"★".repeat(u.pr)}</span>`:""}${s?`<span class="sigue">Sigue aquí</span>`:""}<small class="usub">${esc(u.sub)}</small><span class="umeta"><span class="lvl l${e.x.l}">${etiquetaU(e,u)}</span>${difTag(DIFU[u.id],true)}${u.fic?`<span class="lecd">Lección</span>`:""}</span>${falta.length?`<span class="aviso">Antes conviene: ${esc(falta[0].n)}${falta[0].c!==cid?` (${esc(C[falta[0].c].n)})`:""}${falta.length>1?` y ${falta.length-1} más`:""}</span>`:""}</div>${I.chev}</a>`};
+  return `<section class="card"><div class="row"><h2 class="grow">Unidades</h2><span class="muted small">${hechas} de ${lista.length} listas</span></div>${cvista(cid,"l")}
+    <div class="filtros"><div class="seg" role="group" aria-label="Mostrar">${Object.entries(FIL).filter(([k,[n,fn]])=>k==="todas"||k===f||orden.filter(fn).length).map(([k,[n,fn]])=>`<button data-act="cfil" data-v="${k}" class="${f===k?"on":""}" aria-pressed="${f===k}">${n} · ${orden.filter(fn).length}</button>`).join("")}</div>
+      <div class="seg" role="group" aria-label="Orden"><button data-act="modo" data-v="ruta" class="${modo==="ruta"?"on":""}" aria-pressed="${modo==="ruta"}">Orden de la ruta</button><button data-act="modo" data-v="explorar" class="${modo==="explorar"?"on":""}" aria-pressed="${modo!=="ruta"}">Más frecuentes</button></div></div>
+    <p class="muted small">${modo==="ruta"?"En el orden en que conviene aprenderlas; nada se bloquea.":"De la que más cae en el examen (★★★) a la que menos."}</p>
+    <div class="ulist">${vis.length?vis.map(fila).join(""):`<p class="muted small">No hay unidades con este filtro.</p>`}</div></section>`}
 function vUnidad(id){const u=UN[id], c=C[u.c], lista=UC[u.c], e=estU(u), x=e.x, calc=CALC.has(u.c), fu=(BB[u.c]||{}).f||[];
   const ant=lista[u.i-1], sig=lista[u.i+1], pre=u.pre.map(p=>UN[p]), l=lecU(u), prim=l&&!l.ok?"a":"p"; // un solo botón principal: el siguiente paso
   const fuentes=fu.length?`<p class="small fuentes">Teoría de apoyo en tu Drive: ${fu.map(([t,h])=>`<a href="${esc(h)}" target="_blank" rel="noopener">${esc(t)}</a>`).join(" · ")}</p>`:"";
@@ -4117,6 +4173,8 @@ function vUnidad(id){const u=UN[id], c=C[u.c], lista=UC[u.c], e=estU(u), x=e.x, 
   <section class="card"><h2>1 · Aprende</h2>${aprende}</section>
   <section class="card"><h2>2 · Practica</h2><p class="muted small">${u.ids.length?`${u.ids.length} ${plural(u.ids.length,"pregunta")} real${u.ids.length===1?"":"es"} de exámenes de admisión UNMSM. Primero intenta sin ayuda; si fallas, lee la explicación y anota por qué.`:"Aún no hay preguntas de esta unidad en el banco: usa la teoría de apoyo y las preguntas del libro."}</p>
     <div class="row"><button class="btn ${prim==="p"?"":"ghost"}" data-act="unq" data-id="${id}" ${u.ids.length?"":"disabled"}>${u.ids.length?`Resolver ${Math.min(8,u.ids.length)} preguntas`:"Sin preguntas aún"}</button>${calc||!u.ids.length?"":`<button class="btn ghost" data-act="flash" data-deck="u:${id}">Tarjetas</button>`}</div></section>
+  ${(()=>{const tms=[...new Set(u.ids.map(i=>Q[i]&&Q[i].tm).filter(x=>x&&TM[x]&&TM[x].c===u.c))].map(x=>TM[x]); if(!tms.length) return "";
+    return `<details class="card plegable"><summary><h2>Temas del banco en esta unidad · ${tms.length}</h2></summary><p class="muted small">Cómo agrupa el banco las preguntas reales de esta unidad. Los puntos muestran en cuántos de los ${NEX} exámenes vino cada tema.</p><div>${tms.map(x=>filaTema(x,false)).join("")}</div></details>`})()}
   <section class="card"><h2>3 · Cierra la unidad</h2><p class="muted small">La unidad queda lista cuando la consolidas en las preguntas (aciertos en preguntas nuevas) o apruebas su lección. Si la estudiaste con tu libro y aquí no hay suficientes preguntas, márcala tú: no cuenta como «dominado», solo avanza tu ruta.</p>
     <div class="row"><button class="btn sm ${e.h?"ghost":""}" data-act="u-hecha" data-id="${id}">${e.h?"Quitar la marca":"Ya la estudié"}</button></div></section>
   <div class="row">${ant?`<a class="btn ghost sm" href="#u-${ant.id}">← ${esc(ant.n)}</a>`:""}${sig?`<a class="btn sm" href="#u-${sig.id}">Siguiente: ${esc(sig.n)} →</a>`:`<a class="btn ghost sm" href="#c-${u.c}">Volver al curso</a>`}</div>
@@ -4285,7 +4343,7 @@ function vMapa(cid){const c=C[cid], lista=UC[cid]||[];
       ${u.pr&&!externo?`<text class="mp-s" x="${p.x+NW/2}" y="${p.y+NH-7}" text-anchor="middle">${"★".repeat(u.pr)}</text>`:""}</g></a>`};
   ext.forEach(u=>nodos+=nodo(u,true)); lista.forEach(u=>nodos+=nodo(u,false));
   const hechas=lista.filter(u=>estU(u).ok).length, cruces=lista.filter(u=>u.pre.some(p=>UN[p]&&UN[p].c!==cid));
-  return topbar()+`<a class="back" href="#c-${cid}">${I.back}${esc(c.n)}</a>
+  return topbar()+`<a class="back" href="#c-${cid}">${I.back}${esc(c.n)}</a>${cvista(cid,"m")}
   <div class="pagehead"><div class="grow"><div class="kicker">Mapa de conocimientos · ${hechas} de ${lista.length} unidades listas</div><h1>${esc(c.n)}</h1>
   <p class="muted" style="margin-top:6px">Cada flecha va de lo que conviene saber antes a lo que depende de ello. Arriba están los fundamentos${ext.length?" y, en línea punteada, lo que viene de otros cursos":""}. Toca una unidad para abrirla.</p></div>${chips()}</div>
   <section class="card"><svg class="mapa" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de dependencias de ${esc(c.n)}"><defs><marker id="mp-f" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="rgba(248,244,238,.5)"/></marker></defs>${aristas}${nodos}</svg>
@@ -4305,7 +4363,7 @@ function teoriaBloque(o){const b=o.b, e=estB(b);
   <div class="row"><button class="btn sm gold" data-act="ficha" data-id="${o.f.tid}" data-b="${o.i}">${e.ok?"Repasar la lección":"Aprender paso a paso"}</button><button class="btn sm ghost" data-act="flash" data-deck="fx:${b.key}">Tarjetas de este bloque</button></div></div>`}
 function vTeoria(cid){const c=C[cid], lista=UC[cid]||[], fu=(BB[cid]||{}).f||[], con=lista.filter(u=>u.fic).length;
   const lee=[...new Map(lista.filter(u=>u.fic).flatMap(u=>(FT[u.fic.tid].lee||[])).map(x=>[x[1],x])).values()];
-  return topbar()+`<a class="back" href="#c-${cid}">${I.back}${esc(c.n)}</a>
+  return topbar()+`<a class="back" href="#c-${cid}">${I.back}${esc(c.n)}</a>${cvista(cid,"t")}
   <div class="pagehead"><div class="grow"><div class="kicker">Biblioteca de teoría · ${con} de ${lista.length} unidades desarrolladas</div><h1>${esc(c.n)}</h1>
   <p class="muted" style="margin-top:6px">Toda la teoría del curso en orden, para leer y repasar. Para aprender un tema por primera vez, usa la lección paso a paso: te hace recordar antes de mostrarte la respuesta.</p></div>${chips()}</div>
   ${lista.map(u=>{const bs=bloquesU(u), st=estadoMapa(u);
@@ -4467,6 +4525,7 @@ document.addEventListener("click",ev=>{const b=ev.target.closest("[data-act]");
   if(a.startsWith("fi-")||a==="ficha"){accionFicha(a,b); return}
   if(a==="cf"){ses.cf=b.dataset.v; draw(); return}
   if(a==="er"){ses.er=ses.er===b.dataset.v?"":b.dataset.v; draw(); return}
+  if(a==="cfil"){cfil=b.dataset.v; draw(); return}
   if(a==="modo"){S.cfg.modo=b.dataset.v==="explorar"?"explorar":"ruta"; S.cfg.t=Date.now(); save(); draw(); return}
   if(a==="u-hecha"){const id=b.dataset.id; S.un=S.un||{}; S.un[id]={v:unHecha(id)?0:1,t:Date.now()}; save(); draw(); return}
   if(a==="nivq"){const c=b.dataset.c, n=+b.dataset.lv, ids=(c?idsCursoT(c):Object.keys(Q).filter(i=>!Q[i].fx)).filter(i=>DIF[i]===n); if(ids.length) start("leccion",ordenar(ids,10),(c?C[c].n+" · ":"")+"Nivel "+NIVD[n]); return}
