@@ -549,7 +549,7 @@ table.tb{border-collapse:collapse;width:100%;font-size:var(--fs-sm);min-width:30
 .prq{padding:12px 0 4px;border-top:1px solid var(--line)} .prq:first-of-type{border-top:0}
 .prq .q{font-weight:600;margin-bottom:8px}
 .fbx{margin-top:8px} .okt b{color:var(--ok-t)} .badt b{color:var(--bad-t)}
-.mapa{width:100%;max-width:440px;height:auto;display:block;margin:4px auto 10px}
+.mapa{width:100%;max-width:520px;height:auto;display:block;margin:4px auto 10px}
 .mp-e{fill:none;stroke:rgba(var(--fg),.3);stroke-width:1.3}
 .mp-e.ok{stroke:var(--ok-t)} .mp-e.ext{stroke-dasharray:4 3}
 .mp-n rect{fill:rgba(var(--fg),.06);stroke:rgba(var(--fg),.32);stroke-width:1.2;transition:stroke-width .2s}
@@ -561,6 +561,19 @@ table.tb{border-collapse:collapse;width:100%;font-size:var(--fs-sm);min-width:30
 .mp-n.ext rect{fill:transparent;stroke-dasharray:4 3} .mp-n.ext text{fill:var(--muted)}
 .mp-n.sig rect{stroke:var(--gold);stroke-width:2.8}
 a:hover .mp-n rect,a:focus-visible .mp-n rect{stroke-width:2.6}
+.mp-n rect.mp-bg{fill:var(--surface);stroke:none}
+.mp-n .mp-c{fill:var(--muted);font:600 9.5px var(--sans)}
+.mp-b{fill:var(--surface-3);stroke:rgba(var(--fg),.45);stroke-width:1}
+.mp-b.ok{fill:var(--ok);stroke:var(--ok)}
+.mp-n .mp-bt{font:700 10.5px var(--sans);fill:var(--ink)}
+.mp-n.ok .mp-bt{fill:#fff}
+.mp-x{fill:var(--surface);stroke:rgba(var(--fg),.5);stroke-dasharray:3 2}
+.mp-n .mp-xt{font:600 9px var(--sans);fill:var(--ink-2)}
+.mp-n text{font-size:11.5px}
+.mp-l rect{fill:var(--surface-2)} .mp-l text{font:600 10.5px var(--sans);fill:var(--ink-2)}
+.mp-arr{fill:rgba(var(--fg),.5)}
+.mp-e.hot{stroke:var(--gold);stroke-width:2}
+.mp-leg .l-n{border-radius:50%;width:16px;height:16px;font-style:normal;font-size:10px;font-weight:700;text-align:center;line-height:14px;color:var(--ink);background:var(--surface-3)}
 .mp-leg{display:flex;flex-wrap:wrap;gap:8px 14px;font-size:var(--fs-xs);color:var(--muted)}
 .mp-leg i{display:inline-block;width:12px;height:12px;border-radius:4px;margin-right:5px;vertical-align:-1px;border:1px solid rgba(var(--fg),.32)}
 .mp-leg .l-ok{background:rgba(22,122,91,.6);border-color:var(--ok-t)} .mp-leg .l-cur{background:rgba(192,169,43,.35);border-color:var(--gold)}
@@ -5352,7 +5365,7 @@ const CI={hv:'<path d="M2 5h7a3 3 0 0 1 3 3v12a2 2 0 0 0-2-2H2z"/><path d="M22 5
  qui:'<path d="M9 3h6M10 3v6L4 19a1.5 1.5 0 0 0 1.3 2h13.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/><path d="M7 15h10"/>', bio:'<path d="M5 19C5 10 10 5 20 4c0 10-5 15-14 15z"/><path d="M5 19 13 11"/>'};
 const GA={Habilidades:"a1",Matemática:"a2",Comunicación:"a1",Sociales:"a2",Ciencias:"a1"};
 const icoC=(cid,big)=>`<span class="cic ${GA[C[cid].g]||"a1"}${big?" big":""}" aria-hidden="true">${sv(CI[cid]||CI.hv,1.8)}</span>`;
-function sigUnidad(cid){const l=UC[cid]||[]; return l.find(u=>{const e=estU(u); return !e.ok&&!e.vacia})||null}
+function sigUnidad(cid){const l=ordenU(cid); return l.find(u=>{const e=estU(u); return !e.ok&&!e.vacia})||null}
 const cvista=(cid,v)=>`<nav class="seg vsel" aria-label="Vista del curso"><a href="#c-${cid}" class="${v==="l"?"on":""}" ${v==="l"?'aria-current="page"':""}>Lista</a><a href="#m-${cid}" class="${v==="m"?"on":""}" ${v==="m"?'aria-current="page"':""}>Mapa</a><a href="#t-${cid}" class="${v==="t"?"on":""}" ${v==="t"?'aria-current="page"':""}>Teoría</a></nav>`;
 let cfil="todas";
 function vCursos(){let h=head("Cursos","Tus 18 cursos",`<p class="muted" style="margin-top:6px">Cada curso es una ruta de unidades en el orden en que conviene aprenderlas.</p>`), g="";
@@ -5370,8 +5383,8 @@ function vCurso(cid){if(vCurso.last!==cid){cfil="todas"; vCurso.last=cid} const 
   const lista=UC[cid]||[], u=sigUnidad(cid), listas=lista.filter(v=>estU(v).ok).length;
   const enU=new Set(lista.flatMap(v=>v.ids)), otros=TC[cid].filter(t=>!t.ids.some(id=>enU.has(id)));
   const sigCard=u?(()=>{const e=estU(u), l=lecU(u);
-      return `<section class="card wine"><div class="kicker">Siguiente recomendada · unidad ${u.i+1} de ${lista.length}</div><h2>${esc(u.n)}</h2>
-      <p class="small" style="color:var(--ink-2)">${esc(u.sub)}</p><p class="small">${difTag(DIFU[u.id],true)} ${u.pr?`<span class="stars">${"★".repeat(u.pr)}</span>`:""} · ${etiquetaU(e,u)}${l?` · lección ${l.ok?"aprobada":l.p?"empezada":"disponible"}`:""}</p>
+      return `<section class="card wine"><div class="kicker">Siguiente recomendada · paso ${posRuta(u)} de ${lista.length}</div><h2>${esc(u.n)}</h2>
+      <p class="small" style="color:var(--ink-2)">${esc(u.sub)}</p>${POR_QUE[cid]&&!lista.some(v=>estU(v).ok)?`<p class="small" style="color:var(--ink-2)"><b>Por dónde empezar:</b> ${esc(POR_QUE[cid])}</p>`:""}${(()=>{const f=u.pre.map(p=>UN[p]).filter(p=>p&&p.c!==cid&&!estU(p).ok); return f.length?`<p class="small" style="color:var(--ink-2)">Antes, un repaso de: ${f.map(p=>`<a href="#u-${p.id}">${esc(p.n)}</a> (${esc(C[p.c].n)})`).join(" · ")}</p>`:""})()}<p class="small">${difTag(DIFU[u.id],true)} ${u.pr?`<span class="stars">${"★".repeat(u.pr)}</span>`:""} · ${etiquetaU(e,u)}${l?` · lección ${l.ok?"aprobada":l.p?"empezada":"disponible"}`:""}</p>
       <a class="btn wide" href="#u-${u.id}">${l&&!l.ok?(l.p?"Continuar la unidad":"Empezar la unidad"):"Practicar la unidad"}</a></section>`})()
     :lista.length?`<section class="card wine"><div class="kicker">Ruta completa</div><h2>Terminaste las ${lista.length} unidades</h2><p class="small" style="color:var(--ink-2)">Mantén lo aprendido con preguntas de todo el curso y tus repasos.</p><button class="btn wide" data-act="cursoq" data-id="${cid}">Preguntas de todo el curso</button></section>`:"";
   return topbar()+`<a class="back" href="#cursos">${I.back}Cursos</a>
@@ -5804,6 +5817,61 @@ function avanceFicha(f){const ok=f.bloques.filter(b=>estB(b).ok).length; return 
 // ---- biblioteca: curso → unidad → subtemas → lección → práctica (datos en BIBLIO, biblioteca.js)
 // Una unidad agrupa preguntas reales del banco por etiqueta y, si existe, enlaza al bloque de su ficha.
 // Prerrequisitos y orden: solo recomiendan; nunca bloquean (modo Explorar = todo abierto, por prioridad).
+// ---- Prerrequisitos reales (22 nov 2026). Reemplazan la cadena «cada unidad pide la anterior» de los cursos con seq:true
+// y dan estructura a HLM, HV y Biología. Criterio: qué concepto usa de verdad cada tema (propuesta editorial, no oficial).
+const PRE2={
+ // Aritmética: dos troncos (lógica-conjuntos y números) que se juntan en probabilidades
+ "ari.u01":[],"ari.u02":["ari.u01"],"ari.u03":[],"ari.u04":["ari.u03"],"ari.u05":["ari.u04"],"ari.u06":["ari.u05"],
+ "ari.u07":["ari.u06"],"ari.u08":["ari.u07"],"ari.u09":["ari.u08"],"ari.u10":["ari.u08"],"ari.u11":["ari.u10"],
+ "ari.u12":["ari.u03"],"ari.u13":["ari.u07"],"ari.u14":["ari.u03"],"ari.u15":["ari.u14","ari.u02"],
+ // Álgebra: exponentes abre dos caminos (ecuaciones y polinomios)
+ "alg.u01":[],"alg.u02":["alg.u01"],"alg.u03":["alg.u02"],"alg.u04":["alg.u01"],"alg.u05":["alg.u04"],"alg.u06":["alg.u04"],
+ "alg.u07":["alg.u06","alg.u02"],"alg.u08":["alg.u02","alg.u06"],"alg.u09":["alg.u02"],"alg.u10":["alg.u02","alg.u08"],
+ "alg.u11":["alg.u10"],"alg.u12":["alg.u08","alg.u09"],
+ // Geometría: triángulos abre congruencia, polígonos y circunferencia; todo confluye en áreas y sólidos
+ "geo.u01":[],"geo.u02":["geo.u01"],"geo.u03":["geo.u02"],"geo.u04":["geo.u02"],"geo.u05":["geo.u02"],"geo.u06":["geo.u03"],
+ "geo.u07":["geo.u04","geo.u05","geo.u06"],"geo.u08":["geo.u07"],"geo.u09":["geo.u07"],"geo.u10":["geo.u06","alg.u02"],"geo.u11":["geo.u10","alg.u10"],
+ // Trigonometría: razones de ángulos agudos es el centro
+ "tri.u01":["geo.u01"],"tri.u02":["tri.u01"],"tri.u03":["tri.u01","geo.u02"],"tri.u04":["tri.u03"],"tri.u05":["tri.u03"],
+ "tri.u06":["tri.u05","alg.u01"],"tri.u07":["tri.u06"],"tri.u08":["tri.u07"],"tri.u09":["tri.u07","alg.u02"],
+ "tri.u10":["tri.u05"],"tri.u11":["tri.u05"],"tri.u12":["tri.u11"],
+ // Física: mecánica primero; electricidad, calor, fluidos y ondas salen de energía y dinámica
+ "fis.u01":["tri.u03"],"fis.u02":["fis.u01","alg.u02"],"fis.u03":["fis.u02"],"fis.u04":["fis.u02"],"fis.u05":["fis.u04"],
+ "fis.u06":["fis.u05","fis.u03"],"fis.u07":["fis.u04"],"fis.u08":["fis.u05"],"fis.u09":["fis.u05"],"fis.u10":["fis.u09"],
+ "fis.u11":["fis.u10"],"fis.u12":["fis.u11"],"fis.u13":["fis.u05"],"fis.u14":["fis.u13","fis.u12"],"fis.u15":["fis.u14"],
+ // Química: general → inorgánica → cálculos; orgánica sale de enlace
+ "qui.u01":[],"qui.u02":["qui.u01"],"qui.u03":["qui.u02"],"qui.u04":["qui.u03"],"qui.u05":["qui.u02","ari.u08"],
+ "qui.u06":["qui.u04"],"qui.u07":["qui.u05","qui.u06"],"qui.u08":["qui.u06","qui.u07"],"qui.u09":["qui.u05"],
+ "qui.u10":["qui.u05","ari.u10"],"qui.u11":["qui.u10"],"qui.u12":["qui.u11"],"qui.u13":["qui.u03"],"qui.u14":["qui.u13"],"qui.u15":["qui.u06"],
+ // Lógico-Matemática: casi todo se puede empezar sin base; lo numérico pide un poco de Aritmética o Álgebra
+ "hlm.u01":[],"hlm.u02":["hlm.u01"],"hlm.u03":["hlm.u01"],"hlm.u04":["alg.u02"],"hlm.u05":["hlm.u06"],"hlm.u06":["ari.u03"],
+ "hlm.u07":["ari.u04"],"hlm.u08":["hlm.u03"],"hlm.u09":["hlm.u03"],"hlm.u10":["hlm.u04"],"hlm.u11":["geo.u01"],
+ "hlm.u12":["hlm.u11"],"hlm.u13":["geo.u01"],"hlm.u14":["hlm.u13","ari.u09"],"hlm.u15":["hlm.u04"],
+ // Habilidad Verbal: idea principal es la base de casi todo
+ "hv.u04":[],"hv.u05":["hv.u04"],"hv.u06":["hv.u04"],"hv.u07":["hv.u04"],"hv.u08":["hv.u04"],"hv.u09":["hv.u08"],
+ "hv.u10":["hv.u04"],"hv.u01":["hv.u08"],"hv.u02":["hv.u10","hv.u07"],"hv.u03":["hv.u04"],
+ // Biología: de la célula a los sistemas, la herencia y la ecología
+ "bio.u01":[],"bio.u02":["bio.u01"],"bio.u03":["bio.u02"],"bio.u04":["bio.u02"],"bio.u05":["bio.u03"],"bio.u06":["bio.u03"],
+ "bio.u07":["bio.u06"],"bio.u08":["bio.u03"],"bio.u09":["bio.u03"],"bio.u10":["bio.u02"],"bio.u11":["bio.u02"],
+ "bio.u12":["bio.u11"],"bio.u13":["bio.u12"],"bio.u14":["bio.u07"],"bio.u15":["bio.u04","bio.u13"]};
+// Prioridad corregida con FIJAS 2015-2025: puntos cardinales (8) + ruedas y engranajes (5) = 13 preguntas.
+const PR2={"hlm.u14":2};
+// Orden sugerido para aprender cuando no basta el orden del temario. HLM: primero lo que no pide base y más cae
+// (ordenamiento 26, situaciones lógicas 22), luego lo numérico (planteo 23, cronometría y calendarios 21…).
+const ORDEN_UN={
+ hlm:["u01","u03","u04","u07","u08","u06","u02","u10","u09","u14","u05","u13","u11","u12","u15"],
+ hv:["u04","u08","u07","u03","u06","u10","u09","u01","u02","u05"]};
+// En los cursos de números el orden respeta los prerrequisitos y, entre lo que ya se puede estudiar, va primero lo que más cae (★).
+const ORD_AUTO=new Set(["ari","alg","geo","tri","fis","qui","bio"]), ORDC={};
+function ordenU(cid){if(ORDC[cid]) return ORDC[cid]; const l=UC[cid]||[], o=ORDEN_UN[cid]; let r;
+  if(o){const m=o.map(s=>UN[cid+"."+s]).filter(Boolean); r=[...m,...l.filter(u=>!m.includes(u))]}
+  else if(ORD_AUTO.has(cid)){r=[]; const hecho=new Set(), listo=u=>u.pre.every(p=>UN[p].c!==cid||hecho.has(p)), ef={};
+    // prioridad efectiva: una unidad que abre paso a algo ★★★ vale como ★★★
+    const efp=u=>{if(ef[u.id]!==undefined) return ef[u.id]; ef[u.id]=u.pr; ef[u.id]=Math.max(u.pr,...l.filter(v=>v.pre.includes(u.id)).map(efp)); return ef[u.id]};
+    while(r.length<l.length){const c=l.filter(u=>!hecho.has(u.id)&&listo(u)).sort((a,b)=>efp(b)-efp(a)||b.pr-a.pr||a.i-b.i)[0]||l.find(u=>!hecho.has(u.id)); r.push(c); hecho.add(c.id)}}
+  else r=l;
+  return ORDC[cid]=r}
+const posRuta=u=>ordenU(u.c).indexOf(u)+1;
 const BB=(typeof BIBLIO!=="undefined")?BIBLIO:{};
 const UN={}, UC={};
 const PRIO=["Cae poco en admisión","★ Cae a veces en admisión","★★ Cae con frecuencia en admisión","★★★ De lo que más cae en admisión"];
@@ -5811,6 +5879,7 @@ const PRIO=["Cae poco en admisión","★ Cae a veces en admisión","★★ Cae c
   UC[c]=cb.u.map((u,i)=>{const id=c+".u"+String(i+1).padStart(2,"0"), x=u[4]||{};
     const o={id,c,i,n:u[0],sub:u[1],re:u[2],pr:u[3]||0,pre:[...(x.pre||[])],fi:x.fi||null,fic:null,ids:[]}; UN[id]=o; return o});
   if(cb.seq) UC[c].forEach((u,i)=>{if(i) u.pre.unshift(UC[c][i-1].id)})});
+  Object.entries(PRE2).forEach(([id,ps])=>{if(UN[id]) UN[id].pre=[...ps]}); Object.entries(PR2).forEach(([id,v])=>{if(UN[id]) UN[id].pr=v});
   DATA.preguntas.forEach(p=>{const t=(p.t||"").toLowerCase(); (UC[p.c]||[]).forEach(u=>{if(u.re.test(t)) u.ids.push(p.id)})});
   Object.values(UN).forEach(u=>{u.pre=u.pre.filter(p=>UN[p]&&p!==u.id);
     if(u.fi){const [k,bid]=u.fi.split("#"), [c,n]=k.split(":"), tm=(TC[c]||[]).find(t=>t.n===n), f=tm&&FT[tm.id];
@@ -5825,20 +5894,20 @@ function estU(u){const x=nivel(u.ids), l=lecU(u), lec=!!(l&&l.ok), h=unHecha(u.i
 function etiquetaU(e,u){return e.x.nF?NIVELES[e.x.l]:e.lec?"Lección aprobada":e.h?"Estudiada":u.ids.length?"Sin practicar":"Sin preguntas aún"}
 function rutaCurso(cid){const lista=UC[cid]; if(!lista||!lista.length) return "";
   const modo=S.cfg.modo==="explorar"?"explorar":"ruta", es=lista.map(u=>({u,e:estU(u)}));
-  const orden=modo==="ruta"?es:[...es].sort((a,b)=>b.u.pr-a.u.pr||b.u.ids.length-a.u.ids.length);
+  const orden=modo==="ruta"?ordenU(cid).map(u=>es.find(o=>o.u===u)):[...es].sort((a,b)=>b.u.pr-a.u.pr||b.u.ids.length-a.u.ids.length);
   const sig=es.find(o=>!o.e.ok&&!o.e.vacia), hechas=es.filter(o=>o.e.ok).length;
   const FIL={todas:["Todas",()=>true],pend:["Por hacer",o=>!o.e.ok],listas:["Listas",o=>o.e.ok],ref:["Refuerzo",o=>o.e.x.l===4]};
   const f=FIL[cfil]?cfil:"todas", vis=orden.filter(FIL[f][1]);
   const fila=o=>{const u=o.u, e=o.e, s=sig&&sig.u===u;
     const falta=e.ok||!(e.x.v||(lecU(u)||{}).p)?[]:u.pre.map(p=>UN[p]).filter(p=>{const q=estU(p); return !q.ok&&!q.vacia});
-    return `<a class="un ${e.ok?"ok":""} ${s?"sig":""}" href="#u-${u.id}"><span class="nu">${e.ok?"✓":u.i+1}</span><div><b>${esc(u.n)}</b>${u.pr?`<span class="stars" title="${PRIO[u.pr]}">${"★".repeat(u.pr)}</span>`:""}${s?`<span class="sigue">Sigue aquí</span>`:""}<small class="usub">${esc(u.sub)}</small><span class="umeta"><span class="lvl l${e.x.l}">${etiquetaU(e,u)}</span>${difTag(DIFU[u.id],true)}${u.fic?`<span class="lecd">Lección</span>`:""}</span>${falta.length?`<span class="aviso">Antes conviene: ${esc(falta[0].n)}${falta[0].c!==cid?` (${esc(C[falta[0].c].n)})`:""}${falta.length>1?` y ${falta.length-1} más`:""}</span>`:""}</div>${I.chev}</a>`};
+    return `<a class="un ${e.ok?"ok":""} ${s?"sig":""}" href="#u-${u.id}"><span class="nu">${e.ok?"✓":posRuta(u)}</span><div><b>${esc(u.n)}</b>${u.pr?`<span class="stars" title="${PRIO[u.pr]}">${"★".repeat(u.pr)}</span>`:""}${s?`<span class="sigue">Sigue aquí</span>`:""}<small class="usub">${esc(u.sub)}</small><span class="umeta"><span class="lvl l${e.x.l}">${etiquetaU(e,u)}</span>${difTag(DIFU[u.id],true)}${u.fic?`<span class="lecd">Lección</span>`:""}</span>${falta.length?`<span class="aviso">Antes conviene: ${esc(falta[0].n)}${falta[0].c!==cid?` (${esc(C[falta[0].c].n)})`:""}${falta.length>1?` y ${falta.length-1} más`:""}</span>`:""}</div>${I.chev}</a>`};
   return `<section class="card"><div class="row"><h2 class="grow">Unidades</h2><span class="muted small">${hechas} de ${lista.length} listas</span></div>${cvista(cid,"l")}
     <div class="filtros"><div class="seg" role="group" aria-label="Mostrar">${Object.entries(FIL).filter(([k,[n,fn]])=>k==="todas"||k===f||orden.filter(fn).length).map(([k,[n,fn]])=>`<button data-act="cfil" data-v="${k}" class="${f===k?"on":""}" aria-pressed="${f===k}">${n} · ${orden.filter(fn).length}</button>`).join("")}</div>
       <div class="seg" role="group" aria-label="Orden"><button data-act="modo" data-v="ruta" class="${modo==="ruta"?"on":""}" aria-pressed="${modo==="ruta"}">Orden de la ruta</button><button data-act="modo" data-v="explorar" class="${modo==="explorar"?"on":""}" aria-pressed="${modo!=="ruta"}">Más frecuentes</button></div></div>
     <p class="muted small">${modo==="ruta"?"En el orden en que conviene aprenderlas; nada se bloquea.":"De la que más cae en el examen (★★★) a la que menos."}</p>
     <div class="ulist">${vis.length?vis.map(fila).join(""):`<p class="muted small">No hay unidades con este filtro.</p>`}</div></section>`}
 function vUnidad(id){const u=UN[id], c=C[u.c], lista=UC[u.c], e=estU(u), x=e.x, calc=CALC.has(u.c), fu=(BB[u.c]||{}).f||[];
-  const ant=lista[u.i-1], sig=lista[u.i+1], pre=u.pre.map(p=>UN[p]), l=lecU(u), prim=l&&!l.ok?"a":"p"; // un solo botón principal: el siguiente paso
+  const rr=ordenU(u.c), ant=rr[rr.indexOf(u)-1], sig=rr[rr.indexOf(u)+1], pre=u.pre.map(p=>UN[p]), l=lecU(u), prim=l&&!l.ok?"a":"p"; // un solo botón principal: el siguiente paso
   const fuentes=fu.length?`<p class="small fuentes">Teoría de apoyo en tu Drive: ${fu.map(([t,h])=>`<a href="${esc(h)}" target="_blank" rel="noopener">${esc(t)}</a>`).join(" · ")}</p>`:"";
   const aprende=l?`<p class="muted small">Lección interactiva en 7 pasos: concepto, explicación, ejemplo resuelto con una pregunta real, práctica guiada con pistas, ejercicios sin ayuda, evaluación y tarjetas de repaso.</p>
       <p class="small"><b>${esc(l.t)}</b> · ${l.ok?`<span style="color:var(--ok-t)">✓ Aprobada</span>`:u.fic.b>=0?(l.p?`vas en el paso ${Math.min(l.p+1,7)} de 7`:"sin empezar"):`${l.p} de ${l.f.bloques.length} bloques aprobados`}</p>
@@ -5846,7 +5915,7 @@ function vUnidad(id){const u=UN[id], c=C[u.c], lista=UC[u.c], e=estU(u), x=e.x, 
     :`<p class="muted small">La lección interactiva de esta unidad todavía está en preparación. Mientras tanto, estúdiala así:</p>
       <ol class="pasos"><li>Lee la teoría de los subtemas en el libro (enlaces abajo) y anota fórmulas o ideas clave.</li><li>Cierra el libro y explícala en voz alta o por escrito con tus palabras, como si se la enseñaras a alguien (técnica Feynman). Donde te trabes, vuelve a leer.</li><li>Resuelve las preguntas reales de abajo sin mirar la teoría.</li></ol>${fuentes}`;
   return topbar()+`<a class="back" href="#c-${u.c}">${I.back}${esc(c.n)}</a>
-  <div class="pagehead"><div class="grow"><div class="kicker">${esc(c.n)} · Unidad ${u.i+1} de ${lista.length}</div><h1>${esc(u.n)}</h1><p class="muted" style="margin-top:6px">${PRIO[u.pr]} (exámenes 2015–2025)</p><p style="margin-top:6px">${difTag(DIFU[id])} <span class="muted small">${esc(NIVD_TXT[DIFU[id]])}</span></p></div>${chips()}</div>
+  <div class="pagehead"><div class="grow"><div class="kicker">${esc(c.n)} · Paso ${posRuta(u)} de ${lista.length} en la ruta</div><h1>${esc(u.n)}</h1><p class="muted" style="margin-top:6px">${PRIO[u.pr]} (exámenes 2015–2025)</p><p style="margin-top:6px">${difTag(DIFU[id])} <span class="muted small">${esc(NIVD_TXT[DIFU[id]])}</span></p></div>${chips()}</div>
   <section class="card wine"><h3>Qué vas a aprender</h3><div class="subs">${u.sub.split(/,\s*|;\s*|:\s*/).filter(Boolean).map(s=>`<span>${esc(s)}</span>`).join("")}</div>
     ${barNivel(x)}<p class="small" style="color:var(--ink-2)">${x.nF?`${x.okF} de ${x.nF} preguntas nuevas bien${x.sp+x.sf?` · recordadas días después: ${x.sp} de ${x.sp+x.sf}`:""}`:u.ids.length?"Aún no practicas esta unidad.":"Todavía no hay preguntas de esta unidad en el banco."}${e.h?" · marcaste que ya la estudiaste":""}</p></section>
   ${pre.length?`<section class="card"><h3>Antes de esta unidad</h3><p class="muted small">Es una recomendación: puedes seguir igual, pero si algo de aquí no lo sabes, esta unidad se te hará más difícil.</p><div class="tlist">${pre.map(p=>{const q=estU(p); return `<a href="#u-${p.id}"><span><b>${esc(p.n)}</b><small>${esc(C[p.c].n)}${q.ok||q.vacia?"":" · conviene reforzarla"}</small></span><span class="lvl l${q.x.l}">${q.ok?"✓ ":""}${etiquetaU(q,p)}</span></a>`}).join("")}</div></section>`:""}
@@ -6002,35 +6071,79 @@ function estadoMapa(u){const e=estU(u), l=lecU(u);
 function lineasTexto(s,max,n){const out=[]; let cur="";
   s.split(/\s+/).forEach(w=>{if((cur+" "+w).trim().length>max&&cur){out.push(cur); cur=w} else cur=(cur+" "+w).trim()}); if(cur) out.push(cur);
   if(out.length>n){out.length=n; out[n-1]=out[n-1].replace(/\s*\S*$/,"")+"…"} return out}
-function vMapa(cid){const c=C[cid], lista=UC[cid]||[];
+function vMapa(cid){const c=C[cid], lista=UC[cid]||[], ruta=ordenU(cid), rk=u=>ruta.indexOf(u);
   const prof={}, dep=u=>{if(prof[u.id]!==undefined) return prof[u.id]; prof[u.id]=0;
     const ps=u.pre.map(p=>UN[p]).filter(p=>p&&p.c===cid); prof[u.id]=ps.length?1+Math.max(...ps.map(dep)):0; return prof[u.id]};
   lista.forEach(dep);
   const ext=[...new Set(lista.flatMap(u=>u.pre).filter(p=>UN[p]&&UN[p].c!==cid))].map(p=>UN[p]);
-  const capas=[]; if(ext.length) capas.push(ext);
+  const capas=[];
   const maxD=Math.max(0,...lista.map(u=>prof[u.id]));
-  for(let d=0;d<=maxD;d++){const cap=lista.filter(u=>prof[u.id]===d); if(cap.length) capas.push(cap)}
-  const W=300,NW=138,NH=62,GX=W-16-2*NW,GY=30, pos={}; let y=8;
-  capas.forEach(cap=>{for(let i=0;i<cap.length;i+=2){const fila=cap.slice(i,i+2), ancho=fila.length*NW+(fila.length-1)*GX; let x=(W-ancho)/2;
-    fila.forEach(u=>{pos[u.id]={x,y}; x+=NW+GX}); y+=NH+GY}});
-  const H=y-GY+8, sig=(S.cfg.modo!=="explorar")?lista.find(u=>{const e=estU(u); return !e.ok&&!e.vacia}):null;
-  let aristas="", nodos="";
-  lista.forEach(u=>u.pre.forEach(p=>{const a=pos[p], b=pos[u.id]; if(!a||!b) return; const x1=a.x+NW/2, y1=a.y+NH, x2=b.x+NW/2, y2=b.y, dy=Math.max(18,(y2-y1)/2);
-    aristas+=`<path class="mp-e ${UN[p].c!==cid?"ext":""} ${estU(UN[p]).ok?"ok":""}" d="M${x1} ${y1} C${x1} ${y1+dy} ${x2} ${y2-dy} ${x2} ${y2-3}" marker-end="url(#mp-f)"/>`}));
-  const nodo=(u,externo)=>{const p=pos[u.id], st=externo?"ext":estadoMapa(u), t=externo?C[u.c].n+": "+u.n:u.n, ls=lineasTexto(t,externo?22:20,3), y0=p.y+NH/2-(ls.length-1)*7+(u.pr&&!externo?-3:4);
-    return `<a href="#u-${u.id}" aria-label="${esc(t)}${externo?"":" · "+esc(etiquetaU(estU(u),u))}"><g class="mp-n ${st} ${sig===u?"sig":""}"><rect x="${p.x}" y="${p.y}" width="${NW}" height="${NH}" rx="10"/>
-      ${ls.map((l,i)=>`<text x="${p.x+NW/2}" y="${y0+i*14}" text-anchor="middle">${esc(l)}</text>`).join("")}
-      ${u.pr&&!externo?`<text class="mp-s" x="${p.x+NW/2}" y="${p.y+NH-7}" text-anchor="middle">${"★".repeat(u.pr)}</text>`:""}</g></a>`};
-  ext.forEach(u=>nodos+=nodo(u,true)); lista.forEach(u=>nodos+=nodo(u,false));
+  for(let d=0;d<=maxD;d++){const us=lista.filter(u=>prof[u.id]===d); if(us.length) capas.push({lab:"Etapa "+(d+1)+(d===0?": la base":""),us})}
+  // geometría: 2 columnas con pasillos a los lados por donde bajan las flechas largas (nunca cruzan una caja)
+  const W=300,M=18,CG=14,NW=(W-2*M-CG)/2,NH=60,GY=30,LAB=24, pos={}; let y=6, fila=0;
+  const hijos={}; lista.forEach(u=>u.pre.forEach(p=>{(hijos[p]=hijos[p]||[]).push(u)}));
+  capas.forEach((cap,ci)=>{cap.y=y; y+=LAB;
+    // baricentro: cada unidad se pone cerca de sus prerrequisitos (o de sus dependientes, si es externa) para que las flechas crucen menos
+    const bar=u=>{const ref=cap.ext?(hijos[u.id]||[]).map(h=>rk(h)/ruta.length*W):u.pre.map(p=>pos[p]).filter(Boolean).map(p=>p.x+NW/2);
+      return ref.length?ref.reduce((a,b)=>a+b,0)/ref.length:W/2};
+    const nh=u=>(hijos[u.id]||[]).filter(h=>h.c===cid).length>0?1:0; // las que tienen dependientes van abajo, cerca de la etapa siguiente
+    const us=[...cap.us].sort((a,b)=>nh(a)-nh(b)||bar(a)-bar(b)||rk(a)-rk(b));
+    for(let i=0;i<us.length;i+=2){const par=us.slice(i,i+2); if(par.length===2&&bar(par[0])>bar(par[1])){us[i]=par[1]; us[i+1]=par[0]}}
+    for(let i=0;i<us.length;i+=2){const par=us.slice(i,i+2);
+      par.forEach((u,j)=>{const col=par.length===2?j:(bar(u)>W/2?1:0); pos[u.id]={x:M+col*(NW+CG),y,fila,col,ci,pr:i>0}});
+      y+=NH+GY; fila++}
+    y+=4});
+  const H=y-GY+4, sig=(S.cfg.modo!=="explorar")?ruta.find(u=>{const e=estU(u); return !e.ok&&!e.vacia}):null;
+  // puertos: si una caja tiene varias flechas, salen y entran separadas
+  const sal={}, ent={}; lista.forEach(u=>u.pre.forEach(p=>{if(UN[p].c===cid&&pos[p]&&pos[u.id]){(sal[p]=sal[p]||[]).push(u.id); (ent[u.id]=ent[u.id]||[]).push(p)}}));
+  Object.values(sal).forEach(a=>a.sort((i,j)=>pos[i].x-pos[j].x)); Object.values(ent).forEach(a=>a.sort((i,j)=>pos[i].x-pos[j].x));
+  const port=(arr,id)=>{const n=arr.length, i=arr.indexOf(id); return n<2?0:(i-(n-1)/2)*Math.min(14,(NW-30)/(n-1))};
+  let aristas="";
+  lista.forEach(u=>u.pre.forEach(p=>{const a=pos[p], b=pos[u.id]; if(!a||!b||UN[p].c!==cid) return;
+    const x1=a.x+NW/2+port(sal[p],u.id), y1=a.y+NH, x2=b.x+NW/2+port(ent[u.id],p), y2=b.y-3;
+    const cls=`mp-e ${UN[p].c!==cid?"ext":""} ${estU(UN[p]).ok?"ok":""} ${sig===u?"hot":""}`;
+    let d;
+    if(b.fila===a.fila+1){const dy=Math.max(14,(y2-y1)/2); d=`M${x1} ${y1} C${x1} ${y1+dy} ${x2} ${y2-dy} ${x2} ${y2}`}
+    else{ // baja por el pasillo del lado de la caja destino y entra por arriba
+      const xg=b.col===0?M/2:W-M/2, ya=y1+GY/2-4, yb=b.pr?b.y-GY/2:b.y-LAB-4-GY/2, r=6, sx=Math.sign(xg-x1)||1, sx2=Math.sign(x2-xg)||1;
+      d=`M${x1} ${y1} V${ya-r} Q${x1} ${ya} ${x1+sx*r} ${ya} H${xg-sx*r} Q${xg} ${ya} ${xg} ${ya+r} V${yb-r} Q${xg} ${yb} ${xg+sx2*r} ${yb} H${x2-sx2*r} Q${x2} ${yb} ${x2} ${yb+r} V${y2}`}
+    aristas+=`<path class="${cls}" d="${d}" marker-end="url(#mp-f)"/>`}));
+  const nodo=(u,externo)=>{const p=pos[u.id], st=externo?"ext":estadoMapa(u), n=externo?0:rk(u)+1, ok=!externo&&estU(u).ok;
+    const ls=lineasTexto(u.n,17,externo?2:3), top=externo?p.y+NH/2-(ls.length-1)*7+8:p.y+NH/2-(ls.length-1)*7+(u.pr?-2:4);
+    return `<a href="#u-${u.id}" aria-label="${externo?esc(C[u.c].n)+": ":"Paso "+n+": "}${esc(u.n)}${externo?"":" · "+esc(etiquetaU(estU(u),u))}"><g class="mp-n ${st} ${sig===u?"sig":""}"><rect class="mp-bg" x="${p.x}" y="${p.y}" width="${NW}" height="${NH}" rx="10"/><rect x="${p.x}" y="${p.y}" width="${NW}" height="${NH}" rx="10"/>
+      ${externo?`<text class="mp-c" x="${p.x+NW/2}" y="${p.y+14}" text-anchor="middle">${esc(C[u.c].n)}</text>`:""}
+      ${ls.map((l,i)=>`<text x="${p.x+NW/2}" y="${top+i*14}" text-anchor="middle">${esc(l)}</text>`).join("")}
+      ${u.pr&&!externo?`<text class="mp-s" x="${p.x+NW/2}" y="${p.y+NH-7}" text-anchor="middle">${"★".repeat(u.pr)}</text>`:""}
+      ${(()=>{const xc=[...new Set(u.pre.map(q=>UN[q]).filter(q=>q&&q.c!==cid).map(q=>q.c))]; if(externo||!xc.length) return ""; const t=xc.map(k=>ABR[k]||k).join("+"), w=t.length*5.6+12;
+        return `<rect class="mp-x" x="${p.x+NW-w+4}" y="${p.y-7}" width="${w}" height="14" rx="7"/><text class="mp-xt" x="${p.x+NW-w/2+4}" y="${p.y+3}" text-anchor="middle">${esc(t)}</text>`})()}
+      ${externo?"":`<circle class="mp-b ${ok?"ok":""}" cx="${p.x+3}" cy="${p.y+3}" r="10"/><text class="mp-bt" x="${p.x+3}" y="${p.y+7}" text-anchor="middle">${ok?"✓":n}</text>`}</g></a>`};
+  const etiquetas=capas.map(cap=>{const t=cap.lab, w=Math.min(W-2*M,t.length*6.2+16);
+    return `<g class="mp-l"><rect x="${M}" y="${cap.y+3}" width="${w}" height="17" rx="8.5"/><text x="${M+8}" y="${cap.y+15}">${esc(t)}</text></g>`}).join("");
+  let nodos=""; lista.forEach(u=>nodos+=nodo(u,false));
   const hechas=lista.filter(u=>estU(u).ok).length, cruces=lista.filter(u=>u.pre.some(p=>UN[p]&&UN[p].c!==cid));
   return topbar()+`<a class="back" href="#c-${cid}">${I.back}${esc(c.n)}</a>${cvista(cid,"m")}
   <div class="pagehead"><div class="grow"><div class="kicker">Mapa de conocimientos · ${hechas} de ${lista.length} unidades listas</div><h1>${esc(c.n)}</h1>
-  <p class="muted" style="margin-top:6px">Cada flecha va de lo que conviene saber antes a lo que depende de ello. Arriba están los fundamentos${ext.length?" y, en línea punteada, lo que viene de otros cursos":""}. Toca una unidad para abrirla.</p></div>${chips()}</div>
-  <section class="card"><svg class="mapa" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de dependencias de ${esc(c.n)}"><defs><marker id="mp-f" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0L8 4L0 8z" fill="rgba(248,244,238,.5)"/></marker></defs>${aristas}${nodos}</svg>
-  <div class="mp-leg"><span><i class="l-ok"></i>Lista</span><span><i class="l-cur"></i>En curso</span><span><i class="l-ref"></i>Necesita refuerzo</span><span><i class="l-no"></i>Sin empezar</span><span><i class="l-sig"></i>Sigue aquí</span><span><i class="l-ext"></i>Otro curso</span></div></section>
+  <p class="muted" style="margin-top:6px">Arriba está la base del curso; cada flecha va de lo que conviene saber a lo que depende de ello. El número de cada caja es el orden sugerido. Toca una unidad para abrirla.</p></div>${chips()}</div>
+  ${porDonde(cid)}
+  <section class="card"><svg class="mapa" viewBox="0 0 ${W} ${H}" role="img" aria-label="Mapa de dependencias de ${esc(c.n)}"><defs><marker id="mp-f" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto"><path class="mp-arr" d="M0 0L8 4L0 8z"/></marker></defs>${aristas}${etiquetas}${nodos}</svg>
+  <div class="mp-leg"><span><i class="l-ok"></i>Lista</span><span><i class="l-cur"></i>En curso</span><span><i class="l-ref"></i>Necesita refuerzo</span><span><i class="l-no"></i>Sin empezar</span><span><i class="l-sig"></i>Sigue aquí</span><span><i class="l-ext"></i>Pide algo de otro curso</span><span><i class="l-n">1</i>Orden sugerido</span></div></section>
   ${cruces.length?`<section class="card"><h3>Conexiones con otros cursos</h3><div class="tlist">${cruces.map(u=>`<a href="#u-${u.id}"><span><b>${esc(u.n)}</b><small>Antes conviene: ${u.pre.filter(p=>UN[p]&&UN[p].c!==cid).map(p=>esc(UN[p].n)+" ("+esc(C[UN[p].c].n)+")").join(" · ")}</small></span>${I.chev}</a>`).join("")}</div></section>`:""}
   <div class="row"><a class="btn ghost sm" href="#c-${cid}">Ver la ruta en lista</a><a class="btn ghost sm" href="#t-${cid}">Leer la teoría del curso</a></div>
-  <p class="muted small">Prerrequisitos: propuesta editorial de Ruta 1250 a partir del orden del temario CEPRE y de qué conceptos usa cada tema. Son recomendaciones: nada se bloquea.</p>`}
+  <p class="muted small">Prerrequisitos y orden: propuesta de Ruta 1250 según qué conceptos usa cada tema y cuánto cae en admisión (FIJAS 2015–2025). Son recomendaciones: nada se bloquea.</p>`}
+const ABR={hv:"HV",hlm:"RM",ari:"Arit",alg:"Álg",geo:"Geom",tri:"Trig",len:"Leng",lit:"Lit",psi:"Psic",civ:"Cív",hpe:"HPerú",hun:"HUniv",gfa:"Geog",eco:"Eco",fil:"Fil",fis:"Fís",qui:"Quím",bio:"Bio"};
+// «Por dónde empezar»: las 3 próximas unidades del orden sugerido, con lo que conviene saber antes si viene de otro curso
+const POR_QUE={hlm:"Empieza por lo que no pide fórmulas y más cae: ordenar información (26 preguntas en 2015–2025) y situaciones lógicas (22). Después pasa a lo numérico: planteo de ecuaciones (23) pide saber resolver una ecuación de primer grado, y cronometría y calendarios (21) usa divisibilidad.",
+  hv:"Todo parte de reconocer el tema y la idea principal; inferencia y compatibilidad se apoyan en eso.",
+  ari:"Numeración y cuatro operaciones es la base de casi todo; lógica y conjuntos van por un camino aparte y se juntan en probabilidades.",
+  alg:"Exponentes y productos notables abren dos caminos: ecuaciones (lo que más cae: sistemas, funciones) y polinomios.",
+  geo:"Segmentos, ángulos y triángulos son la base; congruencia (★★★) va antes de semejanza y áreas.",
+  tri:"Razones trigonométricas de ángulos agudos (★★★) es el centro: casi todo lo demás sale de ahí.",
+  fis:"Primero mecánica (vectores, movimiento, dinámica, energía). Electricidad, ondas y fluidos salen de energía y dinámica.",
+  qui:"Átomo, enlace y nomenclatura antes de reacciones; estequiometría y soluciones (★★★) piden unidades químicas de masa."};
+function porDonde(cid){const ruta=ordenU(cid), pend=ruta.filter(u=>{const e=estU(u); return !e.ok&&!e.vacia}).slice(0,3); if(!pend.length) return "";
+  return `<section class="card wine"><h3>Por dónde empezar</h3>${POR_QUE[cid]?`<p class="small" style="color:var(--ink-2)">${esc(POR_QUE[cid])}</p>`:""}
+  <div class="tlist">${pend.map((u,i)=>{const falta=u.pre.map(p=>UN[p]).filter(p=>p&&p.c!==cid&&!estU(p).ok);
+    return `<a href="#u-${u.id}"><span><b>${i===0?"Ahora: ":""}${esc(u.n)}</b> ${u.pr?`<span class="stars">${"★".repeat(u.pr)}</span>`:""}<small>${falta.length?`Antes, un repaso de: ${falta.map(p=>esc(p.n)+" ("+esc(C[p.c].n)+")").join(" · ")}`:esc(u.sub)}</small></span>${I.chev}</a>`}).join("")}</div></section>`}
 
 // ---- biblioteca de teoría: toda la teoría de un curso para leer (sin pasos), y buscador global
 const bloquesU=u=>{if(!u.fic) return []; const f=FT[u.fic.tid]; return u.fic.b>=0?[{f,b:f.bloques[u.fic.b],i:u.fic.b}]:f.bloques.map((b,i)=>({f,b,i}))};
