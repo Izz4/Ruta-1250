@@ -721,6 +721,26 @@ details.plegable>summary h2{font-size:var(--fs-lg)}
 .rate .r0,.rate .r2{color:#fff}
 .rate .btn{box-shadow:none}
 .rate .btn{min-height:64px}
+/* Mi ruta */
+.ru-dias{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.ru-dia{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:var(--fs-xs);color:var(--ink-2)}
+.ru-dia i{width:34px;height:34px;border-radius:50%;border:1.5px solid var(--line-2);display:grid;place-items:center;font-style:normal;font-weight:700;color:var(--ink)}
+.ru-dia.meta i{background:var(--ok);border-color:var(--ok);color:#fff}
+.ru-dia.algo i{background:rgba(var(--acc),.2);border-color:rgba(var(--acc),.7)}
+.ru-dia.hoy i{outline:2px solid var(--gold);outline-offset:2px}
+.ru-dia.fut i{border-style:dashed}
+.ru-frase{font-family:var(--serif);font-size:var(--fs-lg);line-height:1.35;margin:0}
+.ru-fases{display:flex;flex-direction:column;gap:8px}
+.ru-fase{display:flex;flex-direction:column;gap:4px;padding:12px 14px;border-radius:var(--r-s);border:1px solid var(--line);background:rgba(var(--fg),.04)}
+.ru-fase.now{border-color:rgba(var(--acc),.6);background:rgba(var(--acc),.1)}
+.ru-rampa{display:flex;gap:6px;flex-wrap:wrap}
+.ru-rampa span{padding:6px 12px;border-radius:var(--r-full);border:1px solid var(--line-2);font-size:var(--fs-xs);font-weight:600}
+.ru-rampa span.now{background:var(--gold);color:var(--on-gold);border-color:var(--gold)}
+.ru-fuentes{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:8px}
+.ru-mapa .er2 .pct{min-width:44px;text-align:right;font-weight:700}
+.ru-mapa .er2 .btn{min-width:84px}
+.ru-sig b{color:var(--accent)}
+details.plegable .ru-fuentes{margin-top:10px}
 </style>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -4943,7 +4963,7 @@ const DECO=[{"c":"len","n":22,"u":"len.u03","tn":"Acentuación y fonología","q"
 // Actitudinales (1–10): la app no les da puntaje. Andina (2026-II) dice que pueden otorgar hasta 20 puntos sin puntaje en contra:
 // confirmar en el reglamento 2027-II y cambiar actPuntos (y la meta) si corresponde.
 const EXAMEN={area:"C",preguntas:100,conPuntaje:90,actitudinales:10,actPuntos:20,minutos:180,ok:20,mal:-1.125,blanco:0,
-  fechaRef:"2027-03-07",fechaNota:"estimada: el 2026-II fue del 7 al 15 de marzo; la fecha oficial aún no se publica"};
+  fechaRef:"2027-03-07",fechaNota:"estimada: el 2026-II fue del 7 al 15 de marzo (Área C el domingo 8) y el 2025-II del 1 al 9 de marzo; la oficial aún no se publica"};
 const META=1250, MAXC=EXAMEN.conPuntaje*EXAMEN.ok, MAXP=MAXC+EXAMEN.actitudinales*EXAMEN.actPuntos, KEY="ruta1250-v1", SKEY="ruta1250-sync", DKEY="ruta1250-dev", L="ABCDE", NOMBRE="Jean Carlo", FOTO="assets/campus.webp";
 const RITMO=EXAMEN.minutos*6e4/EXAMEN.preguntas;           // 108 s por pregunta en el examen real
 const EVAZAR=EXAMEN.ok/5+EXAMEN.mal*4/5;                    // valor esperado de marcar al azar entre 5 (+3,1)
@@ -5001,7 +5021,7 @@ const I={
 const VISTAS=[["inicio","Inicio"],["tarjetas","Tarjetas"],["cursos","Cursos"],["progreso","Progreso"],["banco","Banco"]];
 
 // ---- estado (misma clave de siempre: no se pierde el progreso). v2 agrega log, cfg y FSRS sin borrar nada.
-const BASE=()=>({xp:0,racha:0,dia:"",r:{},hechas:{},hist:[],dias:{},metaDia:20,log:[],cfg:{fecha:"",min:45,t:0},diags:[],diag:null,diagT:0,res:[],plan:null,borrado:0,fi:{},un:{},v:2});
+const BASE=()=>({xp:0,racha:0,dia:"",r:{},hechas:{},hist:[],dias:{},metaDia:20,log:[],cfg:{fecha:"",min:45,t:0},diags:[],diag:null,diagT:0,res:[],plan:null,borrado:0,fi:{},un:{},ruta:null,v:2});
 let DEV=""; try{DEV=localStorage.getItem(DKEY)||""; if(!DEV){DEV=Math.random().toString(36).slice(2,8); localStorage.setItem(DKEY,DEV)}}catch(e){DEV="x"}
 let S=BASE();
 // un estado guardado sin "v" es de la versión 1 (antes del 16 nov): hay que migrarlo
@@ -5185,8 +5205,10 @@ function armarPlan(){const min=S.cfg.min||45, presu=min*6e4, tK=velocidad("k",35
   const maxTemas=pesada?1:3, porTema=6;
   if(S.diag&&S.diag.bl){const b=S.diag.hecho.indexOf(false); if(min>=60){usado+=60*6e4; it.push({k:"diag",act:"dg-go",b,t:`Simulacro diagnóstico: bloque ${b+1} de 3`,s:"Terminarlo te da tu puntaje medido con preguntas que nunca viste."})}}
   else{const ult=(S.diags||[]).slice(-1)[0], hace=ult?Math.floor((Date.now()-(ult.ini||Date.parse(ult.f)))/DIA):null;
-    if((hace===null||hace>=14)&&min>=60&&presu-usado>=55*6e4){usado+=60*6e4; it.push({k:"diag",act:"dg-new",t:"Simulacro diagnóstico: bloque 1 de 3",s:hace===null?"Aún no tienes un puntaje medido. Sin él, todo lo demás es estimado.":`Tu último puntaje medido es de hace ${hace} días. Medir cada 2 semanas muestra si de verdad subes.`})}}
-  const cand=Object.values(TM).filter(t=>nuevasDe(t.ids)>=2||nivel(t.ids).l===4).map(t=>({t,x:nivel(t.ids),v:valorTema(t)})).filter(o=>o.v>0).sort((a,b)=>b.v-a.v);
+    if((hace===null||hace>=(rutaOn()&&faseRuta()===3?7:14))&&min>=60&&!(rutaOn()&&faseRuta()<=1&&sigDx())&&presu-usado>=55*6e4){usado+=60*6e4; it.push({k:"diag",act:"dg-new",t:"Simulacro diagnóstico: bloque 1 de 3",s:hace===null?"Aún no tienes un puntaje medido. Sin él, todo lo demás es estimado.":`Tu último puntaje medido es de hace ${hace} días. Medir cada 2 semanas muestra si de verdad subes.`})}}
+  if(rutaOn()&&faseRuta()<=1){const pend=ORDEN_DX.filter(c=>C[c]&&!dxHecho(c)&&libres(idsCurso(c)).length>=3).slice(0,min>=40?2:1);
+    pend.forEach(c=>{usado+=RDXN*tQ; it.push({k:"rdx:"+c,act:"rdx",id:c,n:RDXN,t:`Mapa de partida: ${C[c].n}`,s:`${RDXN} preguntas de ${C[c].n} sin ayuda, para saber cómo estás hoy. Marca todas, aunque dudes; al final ves qué te conviene hacer en este curso.`})})}
+  const cand=Object.values(TM).filter(t=>nuevasDe(t.ids)>=2||nivel(t.ids).l===4).map(t=>({t,x:nivel(t.ids),v:valorTema(t)*factorFase(t.c)})).filter(o=>o.v>0).sort((a,b)=>b.v-a.v);
   for(const o of cand){if(it.filter(x=>x.k.startsWith("tema")).length>=maxTemas) break; if(presu-usado<3*tQ&&it.length) break;
     const n=Math.min(porTema,Math.max(3,Math.floor((presu-usado)/tQ))); usado+=n*tQ;
     const c=C[o.t.c], ev=o.x.nF?`Aciertas ${o.x.okF} de ${o.x.nF} preguntas nuevas.`:"Aún no lo practicas.";
@@ -5197,12 +5219,13 @@ function armarPlan(){const min=S.cfg.min||45, presu=min*6e4, tK=velocidad("k",35
   if(pesada) it.push({k:"nota",t:"Hoy, pocos temas nuevos",s:`Tus repasos de los próximos días ya ocupan ≈${Math.round(carga*tK/6e4)} min diarios. Aprender más hoy te dejaría sin tiempo para repasar.`});
   if(!it.some(x=>x.k!=="nota")) it.push({k:"sim",act:"sim",t:"Simulacro rápido de 20",s:"Ya repasaste todo. Practica con la calificación real."});
   return {d:hoy(),min,it,t:Date.now()}}
-function plan(){if(!S.plan||S.plan.d!==hoy()||S.plan.min!==(S.cfg.min||45)){S.plan=armarPlan(); save()} return S.plan}
+function plan(){aplicarRampa(); if(!S.plan||S.plan.d!==hoy()||S.plan.min!==(S.cfg.min||45)){S.plan=armarPlan(); save()} return S.plan}
 function hechoHoy(x){const a=new Date(); a.setHours(0,0,0,0); const lg=S.log.filter(e=>e.t>=+a);
   if(x.k==="rep") return !pendConcepto().length||lg.filter(e=>e.m==="k").length>=x.n;
   if(x.k==="esp") return !pendCalculo().length||lg.filter(e=>e.px||(e.m==="r"&&esCalc(e.id))).length>=x.n;
   if(x.k.startsWith("tema:")&&x.act==="ficha"){const f=FT[x.k.slice(5)]; return !!f&&f.bloques.some(b=>{const e=estB(b); return e.t>=+a&&(e.ok||e.ej)})}
   if(x.k.startsWith("tema:")) {const tid=x.k.slice(5); return lg.filter(e=>Q[e.id]&&Q[e.id].tm===tid&&e.m!=="k").length>=x.n}
+  if(x.k.startsWith("rdx:")){const r=S.ruta&&S.ruta.dx&&S.ruta.dx[x.k.slice(4)]; return !!r&&ymd(new Date(r.t))===hoy()}
   if(x.k==="diag") return (S.hist||[]).some(h=>h.d===hoy()&&(h.tipo==="diagb"||h.tipo==="diag"));
   if(x.k==="sim") return (S.hist||[]).some(h=>h.d===hoy()&&h.tipo==="sim");
   return true}
@@ -5275,6 +5298,7 @@ function vInicio(){const e=estimado(), pl=plan(), mins=minutosHoy(), dx=diasAlEx
     </section>
   </div>
   <div class="ini-b">
+    ${rutaCardInicio()}
     <section class="card"><div class="row"><h2 class="grow">Puntaje estimado</h2><a class="small" href="#progreso">Ver progreso</a></div>
       ${scoreBand()}
       <p class="small muted">${e.ok?(falta?`Te faltan <b>${fmt(falta)} puntos</b>: unas ${Math.ceil(falta/20)} correctas más. Cuenta solo tus primeros intentos; repetir preguntas no lo sube.`:"Estás sobre la meta con lo que mediste. Confírmalo con un simulacro diagnóstico."):(e.cub?`Datos de ${e.cub} de 90 preguntas; con 30 aparece.`:"Aparece al responder preguntas nuevas de 3 cursos.")}</p>
@@ -5284,7 +5308,7 @@ function vInicio(){const e=estimado(), pl=plan(), mins=minutosHoy(), dx=diasAlEx
   </div>
   <section class="card"><div class="row"><h2 class="grow">Cursos</h2><a class="small" href="#cursos">Ver todos</a></div>
     <div class="cursos-row" aria-label="Acierto en preguntas nuevas por curso">${cursos}</div></section>`}
-function attrs(s){return s.act==="ficha"?`data-act="ficha" data-id="${s.id}"`:s.act==="temaq"?`data-act="temaq" data-id="${s.id}"`:s.act==="flash"?`data-act="flash" data-deck="${s.deck}"`:s.act==="dg-go"?`data-act="dg-go" data-b="${s.b}"`:`data-act="${s.act}"`}
+function attrs(s){return s.act==="rdx"?`data-act="rdx" data-id="${s.id}"`:s.act==="ficha"?`data-act="ficha" data-id="${s.id}"`:s.act==="temaq"?`data-act="temaq" data-id="${s.id}"`:s.act==="flash"?`data-act="flash" data-deck="${s.deck}"`:s.act==="dg-go"?`data-act="dg-go" data-b="${s.b}"`:`data-act="${s.act}"`}
 
 let repMin=5;
 function vTarjetas(){const p=pendConcepto(), pc=pendCalculo().length, t=Date.now(), box=[0,0,0,0,0];
@@ -5390,6 +5414,7 @@ function vProgreso(){let g="";const e=estimado(), sem=semanas(), errs={}; S.log.
   ${(()=>{const st=statsDif(Object.keys(Q).filter(i=>!Q[i].fx)); return `<section class="card"><h2>Tus aciertos por nivel</h2>${[1,2,3,4].map(n=>{const o=st[n], p=o.n?o.ok/o.n:0; return `<div class="crow"><span class="n">${difTag(n,true)} ${NIVD[n]} <small>· ${o.n} de ${o.tot}</small></span><div class="bar"><i class="${p<.5?"low":p<.75?"mid":"hi"}" style="width:${o.n?Math.max(2,Math.round(p*100)):0}%"></i></div><span class="pct">${o.n?Math.round(p*100)+"%":"—"}</span></div>`}).join("")}<p class="muted small">Primeros intentos en preguntas de cada nivel. Si vas bien en un nivel, la app te sube al siguiente en las preguntas nuevas. El nivel de cada pregunta es una estimación de la app (por tipo de pregunta, cuánto hay que leer y pasos de la resolución), no un dato oficial.</p></section>`})()}
   <section class="card"><h2>Tu ritmo</h2><p class="small">${vq?`Tardas <b>${Math.round(vq/1e3)} s</b> por pregunta (mediana). En el examen tienes ≈${Math.round(RITMO/1e3)} s por pregunta.${vq>RITMO*1.2?" Vas lento: practica con reloj.":""}`:"Aún no hay tiempos suficientes. Se miden solos mientras respondes."}</p></section>
   <section class="card"><h2>Últimas sesiones</h2>${S.hist.length?S.hist.slice(-8).reverse().map(x=>`<div class="crow"><span class="n">${esc(x.t)} <small>· ${x.d}</small></span><div class="bar"><i class="hi" style="width:${Math.round(x.ok/Math.max(1,x.n)*100)}%"></i></div><span class="pct">${x.ok}/${x.n}</span></div>`).join(""):`<p class="muted">Todavía no hay sesiones. Empieza por tu plan de hoy en Inicio.</p>`}</section>
+  <section class="card"><div class="row"><div class="grow"><h2>Mi ruta</h2><p class="muted small">Rampa de hábito, mapa de partida y fases hasta el examen.</p></div><a class="btn ghost sm" href="#miruta">Abrir</a></div></section>
   <section class="card"><div class="row"><div class="grow"><h2>Ajustes</h2><p class="muted small">Fecha del examen, minutos por día, actitudinales, apariencia, sincronización y respaldo.</p></div><a class="btn ghost sm" href="#ajustes">Abrir</a></div></section>`;
   return h}
 
@@ -5457,12 +5482,12 @@ function vSesion(){const id=ses.cola[0], p=Q[id], tx=p.x?DATA.textos[p.x]:null;
   h+=`${enun(p)}<div class="opts">`+ord.map((i,k)=>{let cls=""; if(ses.done){if(i===p.a) cls="ok"; else if(i===ses.sel) cls="bad"} else if(i===ses.sel) cls="sel";
     return `<button class="opt ${cls}" data-act="pick" data-i="${i}" ${ses.done?"disabled":""}><span class="l">${L[k]}</span><span class="t">${esc(p.o[i])}</span></button>`}).join("")+`</div>`;
   if(ses.done){const ok=ses.sel===p.a, bl=ses.sel===null;
-    h+=`<div class="fb ${ok?"ok":"bad"}"><h3>${ok?"¡Correcto!":bl?"En blanco":"Respuesta: "+L[ord.indexOf(p.a)]}${ses.tipo==="sim"?(ok?" · +20":bl?" · 0":" · −1,125"):""}</h3>${ok?"":`<p><b>${L[ord.indexOf(p.a)]}.</b> ${esc(p.o[p.a])}</p>`}${resol(p)}${p.nota?`<p class="muted small">${esc(p.nota)}</p>`:""}${bl&&ses.tipo==="sim"?`<p class="small muted">En blanco vale 0. Marcar al azar vale +${dec(EVAZAR)} en promedio: casi siempre conviene marcar.</p>`:""}${!ok&&ses.tipo!=="sim"&&!bl?`<p class="small muted">Esta pregunta vuelve al final de la lección.</p>`:""}${qaPanel()}</div>
+    h+=`<div class="fb ${ok?"ok":"bad"}"><h3>${ok?"¡Correcto!":bl?"En blanco":"Respuesta: "+L[ord.indexOf(p.a)]}${ses.tipo==="sim"?(ok?" · +20":bl?" · 0":" · −1,125"):""}</h3>${ok?"":`<p><b>${L[ord.indexOf(p.a)]}.</b> ${esc(p.o[p.a])}</p>`}${resol(p)}${p.nota?`<p class="muted small">${esc(p.nota)}</p>`:""}${bl&&ses.tipo==="sim"?`<p class="small muted">En blanco vale 0. Marcar al azar vale +${dec(EVAZAR)} en promedio: casi siempre conviene marcar.</p>`:""}${!ok&&ses.tipo!=="sim"&&ses.tipo!=="rdx"&&!bl?`<p class="small muted">Esta pregunta vuelve al final de la lección.</p>`:""}${qaPanel()}</div>
     <div class="dock"><button class="btn" data-act="next">Continuar</button></div>`}
   else {if(ses.tipo!=="sim"&&ses.sel!==null) h+=`<div class="qa pre"><span class="small muted">Antes de comprobar: ¿qué tan seguro estás?</span><div class="seg"><button data-act="cf" data-v="s" class="${ses.cf==="s"?"on":""}" aria-pressed="${ses.cf==="s"}">Seguro</button><button data-act="cf" data-v="d" class="${ses.cf==="d"?"on":""}" aria-pressed="${ses.cf==="d"}">Dudo</button></div></div>`;
     h+=`<p class="kb muted small">Teclado: A–E o 1–5 para elegir · Enter para comprobar</p><div class="dock">${ses.tipo==="sim"?`<button class="btn dash" data-act="blank">En blanco</button>`:""}<button class="btn" data-act="check" ${ses.sel===null?"disabled":""}>Comprobar</button></div>`}
   return h}
-function vFin(){const pts=ses.ok*20-ses.bad*1.125, n=ses.total;
+function vFin(){if(ses.tipo==="rdx"&&ses.rdx) return vFinRdx(); const pts=ses.ok*20-ses.bad*1.125, n=ses.total;
   return `<section class="card wine fin-card"><img src="${ESCUDO}" alt=""><h1>${ses.ok===n?"Todas al primer intento":ses.ok/n>=.6?"Buen tramo":"A repasar este tramo"}</h1>
   <div class="tiles" style="width:100%"><div class="tile"><b>${ses.ok}/${n}</b><span>al primer intento</span></div><div class="tile"><b>${dec(pts,3).replace(/,?0+$/,"")}</b><span>puntos de examen</span></div></div>
   ${(()=>{const min=Math.max(1,Math.round((Date.now()-(ses.ini||Date.now()))/6e4)), mal=[...new Set(Object.keys(ses.first).filter(id=>!ses.first[id]).map(id=>Q[id].tm).filter(Boolean))].slice(0,3);
@@ -5479,9 +5504,10 @@ function responder(sel){const id=ses.cola[0], p=Q[id]; ses.sel=sel; ses.done=tru
     ses.pend={id,ok:sel===null?null:ok,ms:Date.now()-ses.t0}; if(ses.tipo==="sim") cerrarIntento()}
   draw()}
 function avanzar(){cerrarIntento(); const id=ses.cola.shift(), p=Q[id]; const ok=ses.sel===p.a; if(p.x) ses.ctxOpen=p.x;
-  if(!ok&&ses.tipo!=="sim"&&ses.sel!==null) ses.cola.push(id); else ses.hechas++;
+  if(!ok&&ses.tipo!=="sim"&&ses.tipo!=="rdx"&&ses.sel!==null) ses.cola.push(id); else ses.hechas++;
   ses.sel=null; ses.done=false; ses.t0=Date.now();
   if(!ses.cola.length){if(ses.lid&&ses.lid.startsWith("fi:")) fichaEjHecho(ses.lid.slice(3)); else if(ses.lid){S.hechas[ses.lid]=Math.max(S.hechas[ses.lid]||0,ses.ok)}
+    if(ses.rdx&&S.ruta){S.ruta.dx=S.ruta.dx||{}; S.ruta.dx[ses.rdx]={t:Date.now(),ok:ses.ok,n:ses.total}; S.ruta.t=Date.now(); S.plan=null}
     S.hist.push({t:ses.titulo,d:hoy(),ok:ses.ok,n:ses.total,tipo:ses.tipo,ts:Date.now()}); if(S.hist.length>60) S.hist.shift(); save(); ses.fin=true}
   draw(); window.scrollTo(0,0)}
 // simulacro rápido: 20 preguntas en la proporción del examen (sin la reserva)
@@ -5673,6 +5699,8 @@ function fusionar(a,b){a=cargar(a); b=cargar(b);
   Object.keys(a.hechas).forEach(k=>{o.hechas[k]=Math.max(a.hechas[k]||0,b.hechas[k]||0)});
   o.fi=Object.assign({},a.fi); Object.entries(b.fi||{}).forEach(([k,v])=>{if(!o.fi[k]||(v.t||0)>(o.fi[k].t||0)) o.fi[k]=v});
   o.un=Object.assign({},a.un); Object.entries(b.un||{}).forEach(([k,v])=>{if(!o.un[k]||(v.t||0)>(o.un[k].t||0)) o.un[k]=v});
+  {const ra=a.ruta, rb=b.ruta, g=!ra?rb:!rb?ra:((rb.t||0)>(ra.t||0)?rb:ra);
+    if(g&&vivo(g.t)){o.ruta=Object.assign({},g,{dx:{}}); [ra,rb].forEach(x=>Object.entries((x&&x.dx)||{}).forEach(([k,v])=>{const y=o.ruta.dx[k]; if(vivo(v.t)&&(!y||(v.t||0)>(y.t||0))) o.ruta.dx[k]=v}))}}
   o.res=[...new Set([...(a.res||[]),...(b.res||[])])].filter(id=>!o.r[id]);
   // racha recalculada con los días combinados
   let r=0; const d=new Date(); if(!o.dias[ymd(d)]) d.setDate(d.getDate()-1); while(o.dias[ymd(d)]){r++; d.setDate(d.getDate()-1)}
@@ -6120,10 +6148,136 @@ function cardNiveles(ids,titulo,cid){const st=statsDif(ids), t=nivelObjetivo(ids
   return `<section class="card"><h2>${titulo||"Practica por nivel"}</h2><p class="muted small">Cada pregunta tiene un nivel propio estimado (de Fundamental a Avanzado). Tu ruta te va subiendo de nivel: las preguntas nuevas que te tocan ahora son de nivel <b>${NIVD[t]}</b>.</p>
   <div class="nivs">${[1,2,3,4].map(n=>{const s=st[n], p=s.n?Math.round(s.ok/s.n*100):null; return `<button class="niv ${n===t?"on":""}" data-act="nivq" data-c="${cid||""}" data-lv="${n}" ${s.tot?"":"disabled"}>${difTag(n,true)}<b>${NIVD[n]}</b><small>${s.tot} preg.${p!==null?` · ${p} % bien`:""}</small></button>`}).join("")}</div></section>`}
 
+// ---- Mi ruta (22 nov 2026): plan por semanas según cómo aprende el cerebro.
+// Rampa de hábito (empezar corto y subir), señal fija (plan si-entonces), mapa de partida con 10 preguntas
+// por curso, 4 fases hasta el examen y rutina de cada sesión. S.ruta se combina entre dispositivos en fusionar().
+const RAMPAS={gradual:{n:"Gradual",m:[20,40,60,90,120],s:"Llegas a 2 horas en la semana 5"},corta:{n:"Corta",m:[20,60,120],s:"Llegas a 2 horas en la semana 3"}};
+const SENALES=["Después de almorzar","Al llegar a casa","En mi primera espera del día","Después de cenar","Al despertar"];
+const ORDEN_DX=["hv","hlm","len","ari","alg","hpe","civ","lit","psi","gfa","eco","fil","hun","fis","qui","bio","geo","tri"];
+const RDXN=10;
+const FASES=[
+  {n:"Diagnóstico y hábito",obj:"Saber dónde estás y armar el hábito",que:"10 preguntas por curso, sin ayuda y marcando todas. Uno o dos cursos por día.",sale:"Tener el mapa de partida de los 18 cursos"},
+  {n:"Puntos baratos",obj:"Subir lo que más rinde por hora",que:"Habilidad Verbal y Lógico-Matemática a diario. Letras: unidades ★★★ de cada curso. Aritmética y Álgebra como base.",sale:"Cerca de 70 % en preguntas nuevas de letras ★★★"},
+  {n:"Ciencias y matemática",obj:"Comprender, no memorizar",que:"Física, Química, Biología, Geometría y Trigonometría: lección, ejemplo resuelto y ejercicios. Letras sigue solo con tarjetas.",sale:"Subir frente a tu primer diagnóstico completo"},
+  {n:"Simulacros",obj:"Medir, ajustar y llegar descansado",que:"Un simulacro completo por semana, mejor en papel. Repasa según tus errores. La última semana, repaso ligero y dormir bien.",sale:"Dos simulacros seguidos cerca de tu meta"}];
+const rutaOn=()=>!!(S.ruta&&S.ruta.ini);
+const dLocal=s=>{const [y,m,d]=String(s).split("-").map(Number); return new Date(y,m-1,d)};
+function diasRuta(){return Math.max(0,Math.round((dLocal(hoy())-dLocal(S.ruta.ini))/DIA))}
+function semRuta(){return Math.floor(diasRuta()/7)+1}
+function minRampa(s){const r=RAMPAS[S.ruta&&S.ruta.rampa]||RAMPAS.gradual; return r.m[Math.min((s||semRuta())-1,r.m.length-1)]}
+// la meta diaria sube sola al empezar cada semana de la ruta (si la cambias a mano a mitad de semana, se respeta)
+function aplicarRampa(){if(!rutaOn()) return; const s=semRuta(); if(S.ruta.semAp===s) return;
+  S.ruta.semAp=s; S.ruta.t=Date.now(); const m=minRampa(s); if(S.cfg.min!==m){S.cfg.min=m; S.cfg.t=Date.now(); S.plan=null} save()}
+// fases: la 0 dura la primera semana, la 3 son las 4 semanas antes del examen y lo del medio se reparte en dos
+function fasesRuta(){const ini=dLocal(S.ruta.ini), ex=dLocal(fechaExamen()), f0=new Date(Math.min(+ini+7*DIA,+ex));
+  let f3=new Date(+ex-28*DIA); if(f3<f0) f3=f0;
+  const mid=new Date(+f0+Math.round((f3-f0)/2/DIA)*DIA);
+  return [[ini,f0],[f0,mid],[mid,f3],[f3,ex]].map(([a,b],i)=>({...FASES[i],i,a,b}))}
+function faseRuta(){const h=dLocal(hoy()), f=fasesRuta(); for(let i=0;i<4;i++) if(h<f[i].b) return i; return 3}
+const GRUPO_FASE={hv:"h",hlm:"h",ari:"m1",alg:"m1",geo:"m2",tri:"m2",fis:"c",qui:"c",bio:"c"};
+function factorFase(cid){if(!rutaOn()) return 1; const f=faseRuta(), g=GRUPO_FASE[cid]||"l";
+  if(f<=1) return {h:1.6,l:1.4,m1:1.2,m2:.5,c:.5}[g];
+  if(f===2) return {h:1.1,l:.7,m1:1,m2:1.5,c:1.6}[g];
+  return 1}
+function minutosDia(k){const a=+dLocal(k), b=a+DIA; return Math.round(S.log.filter(e=>e.t>=a&&e.t<b).reduce((s,e)=>s+Math.min(e.ms||(e.m==="k"?30e3:90e3),5*6e4),0)/6e4)}
+function diasSemRuta(){const s=semRuta(), ini=dLocal(S.ruta.ini), meta=minRampa(s), h=hoy(), out=[];
+  for(let i=0;i<7;i++){const d=new Date(+ini+((s-1)*7+i)*DIA+12*36e5), k=ymd(d), min=k>h?0:minutosDia(k);
+    out.push({k,d,min,st:k>h?"fut":min>=meta?"meta":min>0||(S.dias[k]||0)>0?"algo":"no",hoy:k===h})}
+  return out}
+// mapa de partida: 10 preguntas nuevas por curso, sin la reserva del diagnóstico
+const dxHecho=c=>!!(S.ruta&&S.ruta.dx&&S.ruta.dx[c]);
+function idsRdx(c){const nuevas=libres(idsCurso(c)).filter(id=>!S.r[id]&&!FEJ.has(id));
+  return nuevas.length>=5?shuffle(nuevas).slice(0,RDXN):ordenar(idsCurso(c),RDXN)}
+const sigDx=()=>ORDEN_DX.find(c=>C[c]&&!dxHecho(c)&&libres(idsCurso(c)).length>=3);
+const nDx=()=>ORDEN_DX.filter(dxHecho).length;
+function recDx(p){return p<.3?["Empieza por la lección","Lee la lección de las unidades ★★★ y después practica."]
+  :p<.6?["Practica y lee solo lo que fallas","Haz preguntas del curso y abre la lección de los temas donde fallaste."]
+  :["Mantén con tarjetas","Tarjetas y práctica mezclada. Pon tu tiempo en los cursos más flojos."]}
+function iniciarRdx(c){const ids=idsRdx(c); if(!ids.length) return; start("rdx",ids,"Mapa de partida · "+C[c].n); if(ses) ses.rdx=c}
+// cuánto dura cada parte de la sesión según la meta del día
+function rutina(m){const des=m>=60?10:m>=40?5:0, r=m-des, t=Math.max(3,Math.round(r*.15)), er=Math.max(2,Math.round(r*.1)), mez=m>=40?Math.round(r*.27):0, tema=r-t-er-mez;
+  const out=[["Tarjetas del día",t,"Primero lo viejo: recuperar antes de que se olvide."],["Tema nuevo",tema,faseRuta()===0?"Esta semana es el diagnóstico de un curso: 10 preguntas sin ayuda.":"Un solo curso. Primero intenta las preguntas, luego la lección, luego ejercicios sin ayuda."]];
+  if(des) out.push(["Descanso",des,"Camina o toma agua, sin celular."]);
+  if(mez) out.push(["Práctica mezclada",mez,"Preguntas de varios cursos. Intenta responder antes de mirar las alternativas."]);
+  out.push(["Revisa tus errores",er,"Marca qué pasó en cada uno: no sabía, procedimiento, descuido…"]);
+  return out}
+const fCorta=d=>d.toLocaleDateString("es-PE",{day:"numeric",month:"short"}).replace(".","");
+function rutaCardInicio(){
+  if(!rutaOn()) return `<section class="card cont"><div class="row"><div class="grow"><div class="kicker">Mi ruta</div><b>Arma tu ruta hasta el examen</b><div class="muted small">Empiezas con 20 min al día y subes de a poco.</div></div><a class="btn sm" href="#miruta">Armar</a></div></section>`;
+  const s=semRuta(), f=faseRuta(), d=diasSemRuta().filter(x=>x.st==="meta"||x.st==="algo").length, nd=nDx();
+  return `<section class="card cont"><div class="row"><div class="grow"><div class="kicker">Mi ruta · semana ${s}</div><b>Fase ${f}: ${esc(FASES[f].n)}</b><div class="muted small">Meta ${minRampa()} min al día · ${d} de 6 días esta semana${nd<ORDEN_DX.length?` · mapa ${nd}/${ORDEN_DX.length}`:""}</div></div><a class="btn sm" href="#miruta">Ver</a></div></section>`}
+let ruArmed=false, ruMsg="";
+function vMiRuta(){aplicarRampa();
+  const fuentes=`<details class="card plegable"><summary><h2>Por qué funciona</h2></summary><ul class="ru-fuentes small">
+    <li><b>Practicar recordando.</b> Hacer preguntas rinde más que releer; junto con el repaso espaciado es la técnica de mayor utilidad en la revisión de Dunlosky (<a href="https://www.psychologicalscience.org/news/releases/which-study-strategies-make-the-grade.html" target="_blank" rel="noopener">APS</a>, <a href="https://education.wsu.edu/documents/2018/01/rethinking-use-tests.pdf/" target="_blank" rel="noopener">Adesope 2017</a>).</li>
+    <li><b>Repaso espaciado.</b> Recordar en días distintos supera a hacerlo todo junto: g = 0,74 en un meta-análisis (<a href="https://link.springer.com/10.1007/s10648-020-09572-8" target="_blank" rel="noopener">Educ. Psychol. Review</a>). Tus tarjetas lo calculan solas.</li>
+    <li><b>Recordar bien varias veces.</b> Volver a acertar en sesiones separadas frena el olvido (re-aprendizaje sucesivo, <a href="https://www.retrievalpractice.org/archive/2018/successive-relearning" target="_blank" rel="noopener">Rawson y Dunlosky</a>). Por eso un error vuelve hasta que lo aciertas.</li>
+    <li><b>Intentar antes de estudiar.</b> Responder antes de la lección ayuda, aunque falles, si después ves la respuesta correcta (<a href="https://link.springer.com/10.1007/s10648-023-09814-5" target="_blank" rel="noopener">revisión 2023</a>). Por eso el diagnóstico va primero.</li>
+    <li><b>Mezclar temas.</b> En un estudio con 140 alumnos, practicar mezclado dio 72 % frente a 38 % dos semanas después (<a href="https://link.springer.com/article/10.3758/s13423-014-0588-3" target="_blank" rel="noopener">Rohrer 2014</a>).</li>
+    <li><b>Hábito.</b> Lo nuevo tardó en volverse automático 66 días en promedio, con un rango de 18 a 254; fallar un día casi no afectó, fallar seguido sí (<a href="https://bps.org.uk/research-digest/how-form-habit" target="_blank" rel="noopener">Lally 2010</a>). No existe la regla de 21 días.</li>
+    <li><b>Plan si-entonces.</b> Decidir cuándo y dónde («cuando pase X, hago Y») tuvo un efecto de d = 0,65 en 94 pruebas (<a href="https://kops.uni-konstanz.de/entities/publication/2e749bfb-8533-437c-8203-7e788c910c5f" target="_blank" rel="noopener">Gollwitzer y Sheeran 2006</a>).</li>
+    <li><b>Sueño, ejercicio y papel.</b> Dormir después de aprender ayuda a consolidar (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7953205" target="_blank" rel="noopener">Sleep 2020</a>); el ejercicio aeróbico moderado mejoró la memoria verbal (<a href="https://www.pubmed.gov/29513092/" target="_blank" rel="noopener">estudio en aula</a>); con tiempo limitado se comprende un poco mejor en papel (<a href="https://cris.haifa.ac.il/en/publications/dont-throw-away-your-printed-books-a-meta-analysis-on-the-effects/" target="_blank" rel="noopener">Delgado 2018</a>).</li>
+    </ul><p class="muted small">Son estudios con otros estudiantes y otras materias: los minutos y los porcentajes de la ruta son reglas prácticas, no garantías. Tu diagnóstico y tus simulacros dirán si vas bien.</p></details>`;
+  if(!rutaOn()) return head("Mi ruta","Tu plan para llegar a 1250",`<p class="muted" style="margin-top:6px">Un plan por semanas armado con lo que se sabe de cómo aprende el cerebro.</p>`)+`
+  <section class="card wine"><h2>Empieza pequeño, sin fallar días</h2>
+    <ol class="steps">
+      <li class="step"><span class="ck">1</span><div class="grow"><b>Rampa de hábito</b><small>20 min al día la primera semana y la meta sube sola cada semana hasta 2 horas.</small></div></li>
+      <li class="step"><span class="ck">2</span><div class="grow"><b>Mapa de partida</b><small>10 preguntas por curso, uno por sesión, para saber dónde estás sin saturarte.</small></div></li>
+      <li class="step"><span class="ck">3</span><div class="grow"><b>Cuatro fases hasta el examen</b><small>Diagnóstico, puntos baratos, ciencias y simulacros. Tu plan de Inicio sigue la fase.</small></div></li>
+    </ol>
+    <p class="small" style="color:var(--ink-2)">Tu plan de hoy en Inicio pasará a ${RAMPAS.gradual.m[0]} min. Tu progreso no cambia.</p>
+    <button class="btn wide" data-act="ru-on">Empezar mi ruta hoy</button></section>${fuentes}`;
+  const R=S.ruta, s=semRuta(), fx=faseRuta(), fs=fasesRuta(), meta=minRampa(), dias=diasSemRuta(), hechos=dias.filter(x=>x.st==="meta"||x.st==="algo").length;
+  const rp=RAMPAS[R.rampa]||RAMPAS.gradual, nd=nDx(), sig=sigDx(), dx=diasAlExamen();
+  const senal=R.senal||"", frase=senal?`<b>${esc(senal)}</b>, estudio ${meta} minutos${R.lugar?` en <b>${esc(R.lugar)}</b>`:""}.`:"Elige abajo el momento fijo de tu día para estudiar.";
+  const filas=ORDEN_DX.filter(c=>C[c]).map(c=>{const r=R.dx&&R.dx[c];
+    if(r){const p=r.ok/Math.max(1,r.n), rc=recDx(p); return `<div class="er2"><div><b>${esc(C[c].n)}</b><span class="small muted">${esc(rc[0])}</span></div><span class="pct">${r.ok}/${r.n}</span><a class="btn sm ghost" href="#c-${c}">Curso</a></div>`}
+    return `<div class="er2${c===sig?" ru-sig":""}"><div><b>${esc(C[c].n)}</b><span class="small muted">${c===sig?"Siguiente":"Pendiente"} · ${C[c].peso} preg. en el examen</span></div><span class="pct">—</span><button class="btn sm${c===sig?" gold":""}" data-act="rdx" data-id="${c}">Medir</button></div>`});
+  const pend=ORDEN_DX.filter(c=>C[c]&&!dxHecho(c)).length, corte=ORDEN_DX.length-pend+3, mapa=filas.slice(0,corte).join("")+(filas.length>corte?`<details class="plegable"><summary><span class="small">Ver los ${filas.length-corte} cursos que siguen</span></summary>${filas.slice(corte).join("")}</details>`:"");
+  return head("Mi ruta","Tu plan para llegar a 1250",`<p class="muted" style="margin-top:6px">Semana ${s} · ${dx>0?`faltan ${dx} ${plural(dx,"día")} para el examen${S.cfg.fecha?"":" (fecha estimada)"}`:"día del examen"}</p>`)+`
+  <section class="card wine" aria-labelledby="ru-sem"><div class="row"><span class="kicker grow">Semana ${s} · Fase ${fx}</span><span class="muted small">meta ${meta} min al día</span></div>
+    <h2 id="ru-sem">${esc(FASES[fx].n)}</h2>
+    <div class="ru-dias" role="img" aria-label="${hechos} de 7 días con estudio esta semana">${dias.map(x=>`<div class="ru-dia ${x.st}${x.hoy?" hoy":""}"><i>${x.st==="meta"?"✓":x.d.getDate()}</i><span>${esc(x.d.toLocaleDateString("es-PE",{weekday:"short"}).replace(".",""))}</span></div>`).join("")}</div>
+    <p class="small" style="color:var(--ink-2)"><b>${hechos} de 6 días</b> esta semana. El séptimo es de descanso. Fallar un día no arruina el hábito; fallar varios seguidos sí lo frena.</p>
+    <div class="row"><a class="btn" style="flex:1 1 150px" href="#inicio">Estudiar ahora</a><button class="btn sm" style="flex:1 1 150px" data-act="ru-min">Día difícil: 10 min</button></div></section>
+  <section class="card"><h2>Tu plan si-entonces</h2><p class="ru-frase">${frase}</p>
+    ${R.hab?`<p class="small">Si me dan ganas de abrir <b>${esc(R.hab)}</b>, primero hago 5 tarjetas.</p>`:""}
+    <p class="small muted">Decidir cuándo y dónde, siempre igual, hace que empezar cueste menos.</p>
+    <p class="small">¿En qué momento de tu día?</p>
+    <div class="seg" role="group" aria-label="Momento fijo para estudiar">${SENALES.map(x=>`<button data-act="ru-senal" data-v="${esc(x)}" class="${senal===x?"on":""}" aria-pressed="${senal===x}">${esc(x)}</button>`).join("")}</div>
+    <div class="row"><input class="cfg" id="ru-lugar" style="flex:1;min-width:0" maxlength="40" placeholder="Dónde (ej.: la mesa de mi cuarto)" value="${esc(R.lugar||"")}" aria-label="Lugar donde estudias"></div>
+    <div class="row"><input class="cfg" id="ru-hab" style="flex:1;min-width:0" maxlength="30" placeholder="Hábito a reemplazar (ej.: TikTok)" value="${esc(R.hab||"")}" aria-label="Hábito que quieres reemplazar"></div>
+    <button class="btn sm" data-act="ru-save">Guardar</button>${ruMsg?`<span class="small estado">${esc(ruMsg)}</span>`:""}</section>
+  <section class="card"><h2>Rampa de hábito</h2><p class="small muted">Cada semana de la ruta la meta diaria sube sola. Si un día no puedes, haz los 10 minutos del día difícil y sigue.</p>
+    <div class="ru-rampa" aria-label="Minutos por semana">${rp.m.map((m,i)=>`<span class="${Math.min(s,rp.m.length)===i+1?"now":""}">Sem. ${i+1}${i===rp.m.length-1?"+":""}: ${m} min</span>`).join("")}</div>
+    <div class="seg" role="group" aria-label="Tipo de rampa">${Object.entries(RAMPAS).map(([k,o])=>`<button data-act="ru-rampa" data-v="${k}" class="${(R.rampa||"gradual")===k?"on":""}" aria-pressed="${(R.rampa||"gradual")===k}">${o.n}</button>`).join("")}</div>
+    <p class="small muted">${esc(rp.s)}. La corta te da unas 2 semanas más a ritmo completo; úsala solo si te sientes bien.</p></section>
+  <section class="card ru-mapa"><div class="row"><h2 class="grow">Mapa de partida</h2><span class="muted small">${nd} de ${ORDEN_DX.length} cursos</span></div>
+    <p class="small muted">10 preguntas por curso, sin buscar ni releer. Marca todas, aunque dudes, y di qué tan seguro estás antes de comprobar. Con 10 preguntas tienes una idea, no una medida exacta.</p>
+    ${mapa}
+    <p class="small muted">Menos de 30 %: empieza por la lección. De 30 a 60 %: practica y lee solo lo que fallas. Más de 60 %: mantén con tarjetas. ${nd>=ORDEN_DX.length?"Ya puedes hacer el diagnóstico completo de 90 en Progreso.":"Cuando estudies 1 hora o más al día, haz también el diagnóstico completo de 90."}</p></section>
+  <section class="card"><h2>Las 4 fases</h2><div class="ru-fases">${fs.map(f=>`<div class="ru-fase${f.i===fx?" now":f.i<fx?" past":""}"><div class="row"><b class="grow">Fase ${f.i}: ${esc(f.n)}</b><span class="small muted">${fCorta(f.a)} – ${fCorta(new Date(+f.b-DIA))}</span></div><span class="small">${esc(f.que)}</span><span class="small muted">Para pasar: ${esc(f.sale)}.</span></div>`).join("")}</div>
+    <p class="small muted">Tu plan de Inicio da más peso a los cursos de la fase actual. Las fechas dependen de la fecha del examen (${esc(fechaExamen())}${S.cfg.fecha?"":", estimada"}); cámbiala en Ajustes cuando salga la oficial.</p></section>
+  <section class="card"><h2>Cada sesión, en este orden</h2><ol class="steps">${rutina(meta).map(([t,m,d],i)=>`<li class="step"><span class="ck">${i+1}</span><div class="grow"><b>${esc(t)} · ${m} min</b><small>${esc(d)}</small></div></li>`).join("")}</ol>
+    ${meta>=90?`<p class="small muted">Con ${meta} minutos, mejor en dos bloques: lo nuevo cuando estés fresco y el repaso más tarde.</p>`:""}</section>
+  <section class="card"><h2>Cuida lo que no es estudio</h2><ul class="ru-fuentes small">
+    <li><b>Duerme 7 a 8 horas.</b> Dormir es cuando se fija lo aprendido; trasnochar lo recorta.</li>
+    <li><b>Muévete 3 o 4 veces por semana.</b> Caminar rápido o nadar basta.</li>
+    <li><b>Nunca estudies manejando.</b> Las tarjetas, solo con la moto detenida.</li>
+    <li><b>Simulacros en papel</b> cuando llegue la fase 3: el examen también lo es.</li>
+    <li><b>Si te sientes saturado</b>, anota en un papel lo que tienes en la cabeza y elige un solo curso para hoy.</li></ul></section>
+  ${fuentes}
+  <section class="card"><h3>Reiniciar la ruta</h3><p class="muted small">Vuelve a la semana 1 desde hoy. Tu mapa de partida y tu progreso se mantienen.</p><button class="btn ghost" data-act="ru-reset">${ruArmed?"Toca otra vez para confirmar":"Reiniciar desde hoy"}</button></section>`}
+function vFinRdx(){const n=ses.total, p=ses.ok/Math.max(1,n), r=recDx(p), sig=sigDx();
+  return `<section class="card wine fin-card"><img src="${ESCUDO}" alt=""><div class="kicker">Mapa de partida</div><h1>${esc(C[ses.rdx].n)}: ${ses.ok} de ${n}</h1>
+  <p class="small" style="color:var(--ink-2)"><b>${esc(r[0])}.</b> ${esc(r[1])}</p>
+  <p class="small muted">Con ${n} preguntas es una primera idea, no una medida exacta. Las que fallaste vuelven en tus repasos.</p>
+  ${sig?`<button class="btn gold wide" data-act="ru-fin">Listo por ahora</button><button class="btn ghost wide" data-act="rdx" data-id="${sig}">Seguir con ${esc(C[sig].n)}</button>`:`<button class="btn gold wide" data-act="ru-fin">Ver mi mapa completo</button>`}</section>`}
+
 // ---- render y eventos
 let lastKey="";
 function view(){const h=(location.hash||"#inicio").slice(1); if(h==="repaso") return "tarjetas"; if(h==="ruta") return "cursos";
-  if(h.startsWith("c-")&&C[h.slice(2)]) return h; if(h.startsWith("f-")&&FT[h.slice(2)]) return h; if(h.startsWith("u-")&&UN[h.slice(2)]) return h; if((h.startsWith("m-")||h.startsWith("t-"))&&UC[h.slice(2)]) return h; if(h==="biblioteca"||h==="historial"||h==="ajustes"||h==="errores") return h; return VISTAS.some(v=>v[0]===h)?h:"inicio"}
+  if(h.startsWith("c-")&&C[h.slice(2)]) return h; if(h.startsWith("f-")&&FT[h.slice(2)]) return h; if(h.startsWith("u-")&&UN[h.slice(2)]) return h; if((h.startsWith("m-")||h.startsWith("t-"))&&UC[h.slice(2)]) return h; if(h==="biblioteca"||h==="historial"||h==="ajustes"||h==="errores"||h==="miruta") return h; return VISTAS.some(v=>v[0]===h)?h:"inicio"}
 function navs(v){const pend=pendientes().length, e=estimado();
   $("#side").innerHTML=`<a class="brand" href="#inicio"><img src="${ESCUDO}" alt="Ruta 1250"><div><b>Ruta 1250</b><span>Área C · Computación</span></div></a>
   <nav>${VISTAS.map(([k,t])=>`<a href="#${k}" class="${k===v?"on":""}">${I[k]}${k==="tarjetas"?"Repasos":t}${k==="tarjetas"&&pend?`<span class="badge">${pend}</span>`:""}</a>`).join("")}<a href="#ajustes" class="${v==="ajustes"?"on":""}">${I.ajustes}Ajustes</a></nav>
@@ -6137,8 +6291,8 @@ function draw(){const app=$("#app"), nav=$("#nav"), side=$("#side"); const enSes
     if(dg){key=dg.res?"dgfin":dg.fin?"dgentre":"dg"; app.innerHTML=dg.res?vDiagFin():dg.fin?vDiagEntre():vDiag()}
     else if(ses){key=ses.fin?"fin":"ses"; app.innerHTML=ses.fin?vFin():vSesion()}
     else {key=fl.fin?"ffin":"fl"; app.innerHTML=fl.fin?vFlashFin():vFlash(); fl.anim=false}}
-  else {nav.style.display=""; side.style.display=""; const v=view(); key=v+(v.startsWith("f-")&&fz?"|"+fz.b+"|"+fz.paso:""); navs(v.startsWith("c-")||v.startsWith("f-")||v.startsWith("u-")||v.startsWith("m-")||v.startsWith("t-")||v==="biblioteca"?"cursos":v==="historial"?"progreso":v==="errores"?"tarjetas":v);
-    app.innerHTML=v.startsWith("f-")?vFicha(v.slice(2)):v.startsWith("u-")?vUnidad(v.slice(2)):v.startsWith("m-")?vMapa(v.slice(2)):v.startsWith("t-")?vTeoria(v.slice(2)):v==="biblioteca"?vBiblio():v==="historial"?vHistorial():v==="ajustes"?vAjustes():v==="errores"?vErrores():v.startsWith("c-")?vCurso(v.slice(2)):{inicio:vInicio,tarjetas:vTarjetas,cursos:vCursos,progreso:vProgreso,banco:vBanco}[v]()}
+  else {nav.style.display=""; side.style.display=""; const v=view(); key=v+(v.startsWith("f-")&&fz?"|"+fz.b+"|"+fz.paso:""); navs(v.startsWith("c-")||v.startsWith("f-")||v.startsWith("u-")||v.startsWith("m-")||v.startsWith("t-")||v==="biblioteca"?"cursos":v==="historial"?"progreso":v==="errores"?"tarjetas":v==="miruta"?"inicio":v);
+    app.innerHTML=v.startsWith("f-")?vFicha(v.slice(2)):v.startsWith("u-")?vUnidad(v.slice(2)):v.startsWith("m-")?vMapa(v.slice(2)):v.startsWith("t-")?vTeoria(v.slice(2)):v==="biblioteca"?vBiblio():v==="historial"?vHistorial():v==="ajustes"?vAjustes():v==="errores"?vErrores():v==="miruta"?vMiRuta():v.startsWith("c-")?vCurso(v.slice(2)):{inicio:vInicio,tarjetas:vTarjetas,cursos:vCursos,progreso:vProgreso,banco:vBanco}[v]()}
   document.body.classList.toggle("enficha",!enSes&&String(key).startsWith("f-"));
   const nueva=key!==lastKey; app.classList.toggle("enter",nueva&&key!=="ses"&&key!=="fl"); if(nueva) contar(); lastKey=key}
 function salir(){if(dg){guardarTiempo(); clearInterval(reloj); dg=null; cpMsg=""}
@@ -6170,6 +6324,15 @@ document.addEventListener("click",ev=>{const b=ev.target.closest("[data-act]");
   if(a==="sy-copy"){copiarTexto(SYNC.tok).then(ok=>{SYNC.cp=ok?"Copiada ✓ · pégala en el otro dispositivo":"No se pudo copiar"; pintarSync(); setTimeout(()=>{SYNC.cp=""; pintarSync()},6e3)}); return}
   if(a==="sy-off"){SYNC={tok:"",gist:"",last:0,est:"",msg:""}; guardarSync(); draw(); return}
   if(a==="tema"){fijarTema(b.dataset.v); draw(); return}
+  if(a!=="ru-reset"&&ruArmed) ruArmed=false;
+  if(a==="ru-on"){S.ruta={ini:hoy(),rampa:"gradual",senal:"",lugar:"",hab:"",dx:(S.ruta&&S.ruta.dx)||{},semAp:0,t:Date.now()}; aplicarRampa(); save(); draw(); window.scrollTo(0,0); return}
+  if(a==="ru-rampa"&&S.ruta){S.ruta.rampa=RAMPAS[b.dataset.v]?b.dataset.v:"gradual"; S.ruta.semAp=0; S.ruta.t=Date.now(); aplicarRampa(); save(); draw(); return}
+  if(a==="ru-senal"&&S.ruta){S.ruta.senal=b.dataset.v; S.ruta.t=Date.now(); ruMsg=""; save(); draw(); return}
+  if(a==="ru-save"&&S.ruta){const l=$("#ru-lugar"), hb=$("#ru-hab"); S.ruta.lugar=(l&&l.value||"").trim().slice(0,40); S.ruta.hab=(hb&&hb.value||"").trim().slice(0,30); S.ruta.t=Date.now(); ruMsg="Guardado ✓"; save(); draw(); return}
+  if(a==="ru-reset"&&S.ruta){if(ruArmed){S.ruta.ini=hoy(); S.ruta.semAp=0; S.ruta.t=Date.now(); ruArmed=false; aplicarRampa(); save()} else ruArmed=true; draw(); return}
+  if(a==="ru-min"){if(pendConcepto().length) startFlash("hoy",10); else startFlash("mezcla",10); return}
+  if(a==="ru-fin"){ses=null; fl=null; if(location.hash!=="#miruta") location.hash="#miruta"; else draw(); window.scrollTo(0,0); return}
+  if(a==="rdx"){iniciarRdx(b.dataset.id); return}
   if(a==="min"){S.cfg.min=+b.dataset.m; S.cfg.t=Date.now(); S.plan=null; save(); draw(); return}
   if(a==="replan"){S.plan=null; save(); draw(); return}
   if(a==="cfg-act"){S.cfg.act=+b.dataset.m; S.cfg.t=Date.now(); save(); draw(); return}
